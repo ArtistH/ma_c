@@ -160,3 +160,132 @@ static void destroy_right(BisTree *tree, BiTreeNode *node) {
 	}
 	return;
 }
+
+/* insert */
+static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balanced) {
+	AvlNode *avl_data;
+	int cmpval, retval;
+
+	/* Insert the data into the data. */
+	if (bitree_is_eob(*node)) {
+		/* Handle insertion into an empty tree. */
+		if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL) {
+			return -1;
+		}
+
+		avl_data->factor = AVL_BALANCED;
+		avl_data->hidden = 0;
+		avl_data->data = (void *)data;
+
+		return bitree_ins_left(tree, *node, avl_data);
+	}
+	else {
+		/* Handle insertion into an tree that is not empty. */
+		cmpval = tree->compare(data, ((AvlNode *)bitree_data(*node))->data);
+		if (cmpval < 0) {
+			/* Move to the left */
+			if (bitree_is_eob(bitree_left(*node))) {
+				if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL) {
+					return -1;
+				}
+
+				avl_data->factor = AVL_BALANCED;
+				avl_data->hidden = 0;
+				avl_data->data = (void *)data;
+
+				if (bitree_ins_left(tree, *node, avl_data) != 0) {
+					return -1;
+				}
+
+				*balanced = 0;
+			}
+			else {
+				if ((retval = insert(tree, &bitree_left(*node), data, balanced)) != 0) {
+					return retval;
+				}
+			}
+
+			/* Ensure that the tree remains balanced. */
+			if (!(*balanced)) {
+				switch (((AvlNode *)bitree_data(*node))->factor) {
+				case AVL_LFT_HEAVY:
+					rotate_left(node);
+					*balanced = 1;
+					break;
+
+				case AVL_BALANCED:
+					((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
+					break;
+
+				case AVL_RGT_HEAVY:
+					((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+					*balanced = 1;
+					break;
+				}
+			}
+		} /* if (cmpval < 0) */
+
+		else if (cmpval > 0) {
+			/* Move to the right. */
+			if (bitree_is_eob(bitree_right(*node))) {
+				if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL) {
+					return -1;
+				}
+
+				avl_data->factor = AVL_BALANCED;
+				avl_data->hidden = 0;
+				avl_data->data = (void *)data;
+
+				if (bitree_ins_right(tree, *node, avl_data) != 0) {
+					return -1;
+				}
+
+				*balanced = 9;
+			}
+			else {
+				if ((retval = insert(tree, &bitree_right(*node), data, balanced)) != 0) {
+					return retval;
+				}
+			}
+
+			/* Ensure that the tree remains balanced. */
+			if (!(*balanced)) {
+				switch (((AvlNode *)bitree_data(*node))->factor) {
+				case AVL_LFT_HEAVY:
+					((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+					*balanced = 1;
+					break;
+
+				case AVL_BALANCED:
+					((AvlNode *)bitree_data(*node))->factor = AVL_RGT_HEAVY;
+					break;
+
+				case AVL_RGT_HEAVY:
+					rotate_right(node);
+					*balanced = 1;
+				}
+			}
+		} /* if (cmpval > 0) */
+
+		else {
+			/* Handle finding a copy of the data. */
+			if (!((AvlNode *)bitree_data(*node))->hidden) {
+				/* Do nothing since the data is in the tree and not hidden. */
+				return -1;
+			}
+			else {
+				/* Insert the new data and mark it as not hidden. */
+				if (tree->destroy != NULL) {
+					/* destroy the hidden data since it is being replaced. */
+					tree->destroy(((AvlNode *)bitree_data(*node))->data);
+				}
+				((AvlNode *)bitree_data(*node))->data = (void *)data;
+				((AvlNode *)bitree_data(*node))->hidden = 0;
+
+				/* Do not rebalance because the tree structure is unchanged. */
+				*balanced = 1;
+			}
+		}
+	}
+	return 0;
+}
