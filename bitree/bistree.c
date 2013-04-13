@@ -6,7 +6,8 @@
 static void destroy_right(BisTree *tree, BiTreeNode *node);
 
 /* rotate_left */
-static void rotate_left(BiTreeNode **node) {
+static void rotate_left(BiTreeNode **node)
+{
 	BiTreeNode *left, *grandchild;
 
 	left = bitree_left(*node);
@@ -17,8 +18,7 @@ static void rotate_left(BiTreeNode **node) {
 		((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
 		((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
 		*node = left;
-	}
-	else {
+	} else {
 		/* Perform an LR rotation. */
 		grandchild = bitree_right(left);
 		bitree_right(left) = bitree_left(grandchild);
@@ -48,7 +48,8 @@ static void rotate_left(BiTreeNode **node) {
 }
 
 /* rotate_right */
-static void rotate_right(BiTreeNode **node) {
+static void rotate_right(BiTreeNode **node)
+{
 	BiTreeNode *right, *grandchild;
 	right = bitree_data(*node);
 
@@ -59,8 +60,7 @@ static void rotate_right(BiTreeNode **node) {
 		((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
 		((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
 		*node = right;
-	}
-	else {
+	} else {
 		/* Perform an RL rotation. */
 		grandchild = bitree_left(right);
 		bitree_left(right) = bitree_right(grandchild);
@@ -89,7 +89,8 @@ static void rotate_right(BiTreeNode **node) {
 }
 
 /* destroy_left */
-static void destroy_left(BisTree *tree, BiTreeNode *node) {
+static void destroy_left(BisTree *tree, BiTreeNode *node)
+{
 	BiTreeNode **position;
 
 	/* Do not allow destruction of an empty tree. */
@@ -126,7 +127,8 @@ static void destroy_left(BisTree *tree, BiTreeNode *node) {
 }
 
 /* destroy_right */
-static void destroy_right(BisTree *tree, BiTreeNode *node) {
+static void destroy_right(BisTree *tree, BiTreeNode *node)
+{
 	BiTreeNode **position;
 	
 	/* Do not allow destruction of an empty tree. */
@@ -162,7 +164,8 @@ static void destroy_right(BisTree *tree, BiTreeNode *node) {
 }
 
 /* insert */
-static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balanced) {
+static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balanced)
+{
 	AvlNode *avl_data;
 	int cmpval, retval;
 
@@ -178,8 +181,7 @@ static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balan
 		avl_data->data = (void *)data;
 
 		return bitree_ins_left(tree, *node, avl_data);
-	}
-	else {
+	} else {
 		/* Handle insertion into an tree that is not empty. */
 		cmpval = tree->compare(data, ((AvlNode *)bitree_data(*node))->data);
 		if (cmpval < 0) {
@@ -198,8 +200,7 @@ static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balan
 				}
 
 				*balanced = 0;
-			}
-			else {
+			} else {
 				if ((retval = insert(tree, &bitree_left(*node), data, balanced)) != 0) {
 					return retval;
 				}
@@ -241,8 +242,7 @@ static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balan
 				}
 
 				*balanced = 9;
-			}
-			else {
+			} else {
 				if ((retval = insert(tree, &bitree_right(*node), data, balanced)) != 0) {
 					return retval;
 				}
@@ -272,8 +272,7 @@ static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balan
 			if (!((AvlNode *)bitree_data(*node))->hidden) {
 				/* Do nothing since the data is in the tree and not hidden. */
 				return -1;
-			}
-			else {
+			} else {
 				/* Insert the new data and mark it as not hidden. */
 				if (tree->destroy != NULL) {
 					/* destroy the hidden data since it is being replaced. */
@@ -288,4 +287,102 @@ static int insert(BisTree *tree, BiTreeNode **node, const void *data, int *balan
 		}
 	}
 	return 0;
+}
+
+/* hide */
+static int hide(BisTree *tree, BiTreeNode *node, const void *data)
+{
+	int cmpval, retval;
+
+	if (bitree_is_eob(node)) {
+		/* Return that the data was not found. */
+		return -1;
+	}
+
+	cmpval = tree->compare(data, ((AvlNode *)bitree_data(node))->data);
+	if (cmpval < 0) {
+		/* Move to the left. */
+		retval = hide(tree, bitree_left(node), data);
+	} else if (cmpval > 0) {
+		/* Move to the right. */
+		retval = hide(tree, bitree_right(node), data);
+	} else {
+		/* Mark the node as hidden. */
+		((AvlNode *)bitree_data(node))->hidden = 1;
+		retval = 0;
+	}
+	return retval;
+}
+
+/* lookup */
+static int lookup(BisTree *tree, BiTreeNode *node, void **data)
+{
+	int cmpval, retval;
+
+	if (bitree_is_eob(node)) {
+		/* Return that the data was not found. */
+		return -1;
+	}
+
+	cmpval = tree->compare(data, ((AvlNode *)bitree_data(node))->data);
+	if (cmpval < 0) {
+		/* Move to the left. */
+		retval = lookup(tree, bitree_left(node), data);
+	} else if (cmpval > 0) {
+		/* Move tp the right. */
+		retval = lookup(tree, bitree_right(node), data);
+	} else {
+		if (!((AvlNode *)bitree_data(node))->hidden) {
+			/* Pass back the data from the tree. */
+			*data = ((AvlNode *)bitree_data(node))->data;
+			retval = 0;
+		} else {
+			/* Return that the data was not found. */
+			return -1;
+		}
+	}
+
+	return retval;
+}
+
+/* bistree_init */
+void bistree_init(BisTree *tree, int (*compare)(const void *key1, const void
+	*key2), void (*destroy)(void *data))
+{
+	/* Initialize the tree. */
+	bitree_init(tree, destroy);
+	tree->compare = compare;
+
+	return;
+}
+
+/* bistree_destory */
+void bistree_destory(BisTree *tree)
+{
+	/* Destory all nodes in the tree. */
+	destroy_left(tree, NULL);
+
+	/* No operation are allowed now, but clear the structure 
+	 * as a precaution. */
+	memset(tree, 0, sizeof(BisTree));
+	return;
+}
+
+/* bistree_insert */
+int bistree_insert(BisTree *tree, const void *data)
+{
+	int balanced = 0;
+	return insert(tree, &bitree_root(tree), data, &balanced);
+}
+
+/* bistree_remove */
+int bistree_remove(BisTree *tree, const void *data)
+{
+	return hide(tree, bitree_root(tree), data);
+}
+
+/* bistree_lookup */
+int bistree_lookup(BisTree *tree, void **data)
+{
+	return lookup(tree, bitree_root(tree), data);
 }
