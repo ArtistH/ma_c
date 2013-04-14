@@ -90,7 +90,7 @@ int heap_extract(Heap *heap, void **data)
 	void *save, *temp;
 	int ipos, lpos, rpos, mpos;
 
-	/* Do not allow extraction from an empty headp. */
+	/* Do not allow extraction from an empty heap. */
 	if (heap_size(heap) == 0) {
 		return -1;
 	}
