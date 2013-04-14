@@ -19,7 +19,7 @@ typedef struct OHTbl_ {
 
 /* Public Interface */
 int ohtbl_init(OHTbl *htbl, int positions, int (*h1)(const void *key), int (*h2)(const void *key2), int (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
-void ohtbl_destory(OHTbl *htbl);
+void ohtbl_destroy(OHTbl *htbl);
 int ohtbl_insert(OHTbl *htbl, const void *data);
 int ohtbl_remove(OHTbl *htbl, void **data);
 int ohtbl_lookup(const OHTbl *htbl, void **data);

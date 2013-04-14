@@ -41,8 +41,8 @@ int ohtbl_init(OHTbl *htbl, int positions, int (*h1)(const void *key1), int (*h2
 	return 0;
 }
 
-/* ohtbl_destory */
-void ohtbl_destory(OHTbl *htbl) {
+/* ohtbl_destroy */
+void ohtbl_destroy(OHTbl *htbl) {
 	int i;
 
 	if (htbl->destroy != NULL) {
