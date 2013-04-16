@@ -1,7 +1,9 @@
 # examples code download from [oreilly](http://examples.oreilly.com/9781565924536/)
 
-1. *examples_unix/* refer to the examples codes
+### Mastering Algorithms with C
 
-2. *1/* refer to the first exercise
+1. **examples_unix/** refer to the examples codes
 
-3. *2/* the second
+2. **1/** refer to the first exercise
+
+3. **2/** the second
