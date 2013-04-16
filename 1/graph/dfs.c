@@ -66,7 +66,8 @@ int dfs(Graph *graph, List *ordered)
 		vertex = ((AdjList *)list_data(element))->vertex;
 
 		if (vertex->color == white) {
-			if (dfs_main(graph, (AdjList *)list_data(element), ordered) != 0) {
+			if (dfs_main(graph, (AdjList *)list_data(element), 
+				     ordered) != 0) {
 				list_destroy(ordered);
 				return -1;
 			}
