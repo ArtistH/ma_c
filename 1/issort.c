@@ -2,34 +2,35 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sort.h"
 
 /* issort */
-int issort(void *data, int size, int esize, int (* compare)(const void *key1, const void *key2))
+int issort(void *data, int size, int esize, 
+	   int (*compare)(const void *key1, const void *key2))
 {
 	char *a = data;
-	void * key;
-	int i,j;
+	void *key;
+	int i, j;
 
 	/* Allocate storage for the key element. */
-	if ((key = (char *)malloc(esize)) == NULL){
+	if ((key = (char *)malloc(sizeof(esize))) == NULL) {
 		return -1;
 	}
 
-	/* Repeatedly insert a key element among the sorted elements. */
-	for (j = 1; j < size; j++) {
+	/* Repeatly insert a key element among the sorted elements. */
+	for (j = 0; j < size; j++) {
 		memcpy(key, &a[j * esize], esize);
-		i = j -1;
+		i = j - 1;
 
 		/* Determine the position at which to insert the key element. */
 		while (i >= 0 && compare(&a[i * esize], key) > 0) {
-			memcpy(&a[(i + 1) * esize], &a[i * esize], esize);
+			memcpy(&a[(i + 1)*esize], &a[i * esize], esize);
 			i--;
 		}
-
-		memcpy(&a[(i + 1) * esize], key, esize);
+		memcpy(&a[(i + 1)*esize], key, esize);
 	}
 
-	/* free the storage allocated for sorting. */
+	/* Free the storage allocated for sorting. */
 	free(key);
 
 	return 0;
