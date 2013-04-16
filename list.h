@@ -1,4 +1,4 @@
-/* list.c */
+/* list.h */
 
 #ifndef LIST_H
 #define LIST_H
@@ -11,7 +11,7 @@ typedef struct ListElmt_ {
 	struct ListElmt_ *next;
 }ListElmt;
 
-/* Define a structure for linked listd. */
+/* Define a structure for linked list. */
 typedef struct List_ {
 	int size;
 	int (*match)(const void *key1, const void *key2);
