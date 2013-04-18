@@ -66,6 +66,8 @@ static int merge(void *data, int esize, int i, int j, int k,
 }
 
 /* mgsort */
+/* i, k begin with 0, size-1 
+ * after mgsort, data filled with sored elements. */
 int mgsort(void *data, int size, int esize, int i, int k, int (*compare)
 	   (const void *key1, const void *key2))
 {
