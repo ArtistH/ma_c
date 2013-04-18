@@ -77,6 +77,7 @@ static int partition(void *data, int esize, int i, int k, int (*compare)
 }
 
 /* qksort */
+/* i, k begin with 0, size-1 */
 int qksort(void *data, int size, int esize, int i, int k, int (*compare)
 	   (const void *key1, const void *key2))
 {
