@@ -31,3 +31,54 @@
 		每放一个元素就将C(i)减去1
 */
 
+#include <stdlib.h>
+#include <string.h>
+#include "sort.h"
+
+/* ctsort */
+/* O(n + k), n is the size of data; k is max(data)+1 */
+int ctsort(int *data, int size, int k)
+{
+	int *counts, *temp;
+	int i, j;
+
+	/* Allocate storage for the counts. */
+	if ((counts = (int *)malloc(k * sizeof(int))) == NULL) {
+		return -1;
+	}
+
+	/* Allocate storage for the sored elements. */
+	if ((temp = (int *)malloc(size * sizeof(int))) == NULL) {
+		return -1;
+	}
+
+	/* Initialize the counts. */
+	for (i = 0; i < k; i++) {
+		counts[i] = 0;
+	}
+
+	/* Count the occurrences of each element. */
+	for (j = 0; j < size; j++) {
+		counts[data[j]] = counts[data[j]] + 1;
+	}
+
+	/* Adjust each count to reflect the counts before it. */
+	for (i = 0; i < k; i++) {
+		counts[i] = counts[i] + counts[i - 1];
+	}
+
+	/* use the counts to position each element where it belongs. */
+	for (j = size; j >= 0; j++) {
+		temp[counts[data[j]] - 1] = data[j];
+		counts[data[j]] = counts[data[j]] - 1;
+	}
+
+	/* Prepare to pass back the sorted data. */
+	memcpy(data, temp, size * sizeof(int));
+
+	/* Free the storage allocated for sorting. */
+	free(counts);
+	free(temp);
+
+	return 0;
+}
