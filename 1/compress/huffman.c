@@ -31,7 +31,7 @@ static int compare_freq(const void *tree1, const void *tree2)
 /* destroy_tree */
 static void destroy_tree(void *tree)
 {
-	/* Destroy and free one binary from the 
+	/* Destroy and free one binary from the
 		* priority queue of trees */
 	bitree_destory(tree);
 	free(tree);
@@ -61,7 +61,7 @@ static int build_tree(int *freqs, BiTree **tree)
 			}
 
 			bitree_init(init, free);
-			if ((data = (HuffNode *)malloc(sizeof(HuffNode))) 
+			if ((data = (HuffNode *)malloc(sizeof(HuffNode)))
 			    == NULL) {
 				pqueue_destroy(&pqueue);
 				return -1;
@@ -98,7 +98,7 @@ static int build_tree(int *freqs, BiTree **tree)
 			return -1;
 		}
 
-		/* Extract the two trees whose root nodes have 
+		/* Extract the two trees whose root nodes have
 		 * the smallest frequencies. */
 		if (pqueue_extract(&pqueue, (void **)&left) != 0) {
 			pqueue_destroy(&pqueue);
@@ -134,7 +134,7 @@ static int build_tree(int *freqs, BiTree **tree)
 			return -1;
 		}
 
-		/* Insert the merged tree into the priority queue and 
+		/* Insert the merged tree into the priority queue and
 		 * free the others. */
 		if (pqueue_insert(&pqueue, merge) != 0) {
 			pqueue_destroy(&pqueue);
@@ -156,3 +156,153 @@ static int build_tree(int *freqs, BiTree **tree)
 	}
 	return 0;
 }
+
+/* build_tree */
+static void build_table(BiTreeNode *node, unsigned short code, unsigned
+		       char size, HuffCode *table)
+{
+	if (!bitree_is_eob(node)) {
+		if (!bitree_is_eob(bitree_left(node))) {
+			/* Move to the left and append 0
+			 * to the current code.*/
+			build_table(bitree_left(node), code << 1,
+				    size + 1, table);
+		}
+
+		if (!bitree_is_eob(bitree_right(node))) {
+			/* Move to the right and append 1
+			 * to the current code.*/
+			build_table(bitree_right(node),
+				    ((code << 1) | 0x0001), size + 1, table);
+		}
+
+		if (bitree_is_eob(bitree_left(node))
+		    && bitree_is_eob(bitree_right(node))) {
+			/* Ensure that the current code is
+			 * in big-endian format. */
+			code = htons(code);
+
+			/* Assign the current code to the symbol
+			 * in the leaf mode. */
+			table[((HuffNode *)bitree_data(node))->symbol].
+				used = 1;
+			table[((HuffNode *)bitree_data(node))->symbol].
+				code = code;
+			table[((HuffNode *)bitree_data(node))->symbol].
+				size = size;
+		}
+	}
+	return;
+}
+
+/* huffman_compress */
+int huffman_compress(const unsigned char *original, unsigned char
+		     **compressed, int size)
+{
+	BiTree *tree;
+	HuffCode table[UCHAR_MAX + 1];
+	int freqs[UCHAR_MAX + 1];
+	int max, scale, hsize, ipos, opos, cpos, c, i;
+	unsigned char *comp, *temp;
+
+	/* Initially , there is no buffer of compressed data. */
+	*compressed = NULL;
+
+	/* Get the frequency of each symbol in the original data. */
+	for (c = 0; c <= UCHAR_MAX; c++) {
+		freqs[c] = 0;
+	}
+
+	ipos = 0;
+
+	if (size > 0) {
+		while (ipos < size) {
+			freqs[original[ipos]]++;
+			ipos++;
+		}
+	}
+
+	/* Scale the frequencies to fit into one byte. */
+	max = UCHAR_MAX;
+
+	for (c = 0; c < UCHAR_MAX; c++) {
+		if (freqs[c] > max) {
+			max = freqs[c];
+		}
+	}
+
+	for (c = 0; c <= UCHAR_MAX; c++) {
+		scale = (int)(freqs[c] / ((double)max / (double)UCHAR_MAX));
+
+		if (scale == 0 && freqs[c] != 0) {
+			freqs[c] = 1;
+		} else {
+			freqs[c] = scale;
+		}
+	}
+
+	/* Build the Huffman tree and table of codes for the data. */
+	if (build_tree(freqs, &tree) != 0) {
+		return -1;
+	}
+
+	for (c = 0; c <= UCHAR_MAX; c++) {
+		memset(&table[c], 0, sizeof(HuffCode));
+	}
+
+	build_table(bitree_root(tree), 0x0000, 0, table);
+
+	bitree_destory(tree);
+	free(tree);
+
+	/* Write the header information. */
+	hsize = sizeof(int) + (UCHAR_MAX + 1);
+
+	if ((comp = (unsigned char *)malloc(hsize)) == NULL) {
+		return -1;
+	}
+
+	memcpy(comp, &size, sizeof(int));
+
+	for (c = 0; c <= UCHAR_MAX; c++) {
+		comp[sizeof(int) + c] = (unsigned char)freqs[c];
+	}
+
+	/* Compress the data. */
+	ipos = 0;
+	opos = hsize * 8;
+
+	while (ipos < size) {
+		/* Get the next symbol in the original data. */
+		c = original[ipos];
+
+		/* Write the code for the symbol to the buffer of
+		 * compressed data. */
+		for (i = 0; i < table[c].size; i++) {
+			if (opos % 8 == 0) {
+				/* Allocate another byte for
+				 * the buffer of compressed data. */
+				if ((temp = (unsigned char *)realloc(comp,
+					(opos / 8) + 1)) == NULL) {
+					free(comp);
+					return -1;
+				}
+				comp = temp;
+			}
+			cpos = (sizeof(short) * 8) - table[c].size + i;
+			bit_set(comp, opos, bit_get((unsigned char *)
+						&table[c].code, cpos));
+			opos++;
+		}
+		ipos++;
+	}
+
+	/* Point to the buffer of compressed data. */
+	*compressed = comp;
+
+	/* Return the number of bytes in the compressed data. */
+	return ((opos - 1) / 8) + 1;
+}
+
+/* huffman_uncompress */
+
