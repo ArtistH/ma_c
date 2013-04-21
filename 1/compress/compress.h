@@ -38,9 +38,9 @@ typedef struct HuffCode_ {
 
 /* Public interface */
 int Huffman_compress(const unsigned char *original, unsigned char
-		     **compressed, int size);
+		     **compressed, int size); // O(n)
 int Huffman_uncompress(const unsigned char *compressed, unsigned char
-		       **original);
+		       **original); // O(n)
 int lz77_compress(const unsigned char *original, unsigned char 
 		  **compressed, int size);
 int lz77_uncompress(const unsigned char *compressed, unsigned char
