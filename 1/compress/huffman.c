@@ -305,4 +305,98 @@ int huffman_compress(const unsigned char *original, unsigned char
 }
 
 /* huffman_uncompress */
+int huffman_uncompress(const unsigned char *compressed, unsigned char
+		       **original)
+{
+	BiTree *tree;
+	BiTreeNode *node;
+	int freqs[UCHAR_MAX + 1];
+	int hsize, size, ipos, opos, state, c;
+	unsigned char *orig, *temp;
 
+	/* Initially there is no buffer of original data. */
+	*original = orig = NULL;
+
+	/* Get the header information from the buffer of compressed data. */
+	hsize = sizeof(int) + (UCHAR_MAX + 1);
+	memcpy(&size, compressed, sizeof(int));
+
+	for (c = 0; c <= UCHAR_MAX; c++) {
+		freqs[c] = compressed[sizeof(int) + c];
+	}
+
+	/* Rebuild the huffman tree used previously to compressed the data. */
+	if (build_tree(freqs, &tree) != 0) {
+		return -1;
+	}
+
+	/* Uncompress the data. */
+	ipos = hsize * 8;
+	opos = 0;
+	node = bitree_root(tree);
+
+	while (opos < size) {
+		/* Get the next bit in the compressed data. */
+		state = bit_get(compressed, ipos);
+		ipos++;
+
+		if (state == 0) {
+			/* Move to the left. */
+			if (bitree_is_eob(node) 
+			    || bitree_is_eob(bitree_left(node))) {
+				bitree_destory(tree);
+				free(tree);
+				return -1;
+			} else {
+				node = bitree_left(node);
+			}
+		} else {
+			/* Move to the right. */
+			if (bitree_is_eob(node) 
+			    || bitree_is_eob(bitree_right(node))) {
+				bitree_destory(tree);
+				free(tree);
+				return -1;
+			} else {
+				node = bitree_right(node);
+			}
+		}
+
+		if (bitree_is_eob(bitree_left(node))
+		    && bitree_is_eob(bitree_right(node))) {
+			/* Write the symbol in the leaf mode to the buffer
+			 * of original data. */
+			if (opos > 0) {
+				if ((temp = (unsigned char *)
+				     realloc(orig, opos + 1)) == NULL) {
+					bitree_destory(tree);
+					free(tree);
+					free(orig);
+					return -1;
+				}
+				orig = temp;
+			} else {
+				if ((orig = (unsigned char *)
+				     malloc(1)) == NULL) {
+					bitree_destory(tree);
+					free(tree);
+					return -1;
+				}
+			}
+
+			orig[opos] = ((HuffNode *)bitree_data(node))->symbol;
+			opos++;
+
+			/* Move back to the top of the tree. */
+			node = bitree_root(tree);
+		}
+	}
+	bitree_destory(tree);
+	free(tree);
+
+	/* point to the buffer of original data. */
+	*original = orig;
+
+	/* Return the number of bytes in the original data. */
+	return opos;
+}
