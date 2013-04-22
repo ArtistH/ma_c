@@ -195,8 +195,8 @@ static void build_table(BiTreeNode *node, unsigned short code, unsigned
 	return;
 }
 
-/* huffman_compress */
-int huffman_compress(const unsigned char *original, unsigned char
+/* Huffman_compress */
+int Huffman_compress(const unsigned char *original, unsigned char
 		     **compressed, int size)
 {
 	BiTree *tree;
@@ -304,8 +304,8 @@ int huffman_compress(const unsigned char *original, unsigned char
 	return ((opos - 1) / 8) + 1;
 }
 
-/* huffman_uncompress */
-int huffman_uncompress(const unsigned char *compressed, unsigned char
+/* Huffman_uncompress */
+int Huffman_uncompress(const unsigned char *compressed, unsigned char
 		       **original)
 {
 	BiTree *tree;
