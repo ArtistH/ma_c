@@ -7,3 +7,5 @@
 2. **1/** refer to the first exercise
 
 3. **2/** the second and clear the examples codes
+
+3. **3/** the third
