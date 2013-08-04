@@ -89,7 +89,7 @@ int list_rem_next(List *list, ListElmt *element, void **data) {
 		list->head = list->head->next;
 
 		if (list_size(list) == 1) {
-			list->tail == NULL;
+			list->tail = NULL;
 		}
 	}
 	else {
