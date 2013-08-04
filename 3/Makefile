@@ -3,16 +3,16 @@ default: all
 
 MAKE=make
 CC=gcc
-CFLAGS= -g -O -Wall
-TOPDIR=$(shell pwd)
+CCFLAGS= -g -O2 -Wall
+LDFLAGS= -lm
 export
 
 all:
-	cd $(TOPDIR)/src && $(MAKE) all
-	cd $(TOPDIR)/examples && $(MAKE) all
+	cd src && $(MAKE) all
+	cd examples && $(MAKE) all
 
 clean:
-	cd $(TOPDIR)/src && $(MAKE) clean
-	cd $(TOPDIR)/examples && $(MAKE) clean
+	cd src && $(MAKE) clean
+	cd examples && $(MAKE) clean
 
 # cd src && $(MAKE) 等价于 $(MAKE) -C src
