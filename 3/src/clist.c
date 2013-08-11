@@ -1,11 +1,10 @@
 /* clist.c */
 #include <stdlib.h>
 #include <string.h>
-
 #include "clist.h"
 
 /* clist_init */
-void clist_init(CList *list, void (*destroy)(void *data)){
+void clist_init(CList *list, void (*destroy)(void *data)) {
 	/* Initialize the list. */
 	list->size = 0;
 	list->destroy = destroy;
@@ -13,27 +12,26 @@ void clist_init(CList *list, void (*destroy)(void *data)){
 
 	return;
 }
-
 /* clist_destroy */
-void clist_destroy(CList *list){
+void clist_destroy(CList *list) {
 	void *data;
 
 	/* Remove each element. */
-	while (clist_size(list) > 0) {
+	while(clist_size(list) > 0) {
 		if (clist_rem_next(list, list->head, (void **)&data) == 0
-		    && list->destroy != NULL) {
+			&& list->destroy != NULL) {
 			list->destroy(data);
 		}
 	}
-	
-	/* No operations are allowed now, but clear the structure as a precaution. */
+
+	/* No operations are allowed now,but clear the structure as a precaution.*/
 	memset(list, 0, sizeof(CList));
 
 	return;
 }
 
 /* clist_ins_next */
-int clist_ins_next(CList *list, CListElmt *element, const void *data){
+int clist_ins_next(CList *list, CListElmt *element, const void *data) {
 	CListElmt *new_element;
 
 	/* Allocate storage for the element. */
@@ -44,11 +42,11 @@ int clist_ins_next(CList *list, CListElmt *element, const void *data){
 	/* Insert the element into the list. */
 	new_element->data = (void *)data;
 	if (clist_size(list) == 0) {
-		/* Handle insertion when the list is empty. */
+		/* handle insertion when the list is empty. */
 		new_element->next = new_element;
 		list->head = new_element;
 	} else {
-		/* Handle insertion when the list is not empty. */
+		/* handle insertion when the list is not empty. */
 		new_element->next = element->next;
 		element->next = new_element;
 	}
@@ -60,7 +58,7 @@ int clist_ins_next(CList *list, CListElmt *element, const void *data){
 }
 
 /* clist_rem_next */
-int clist_rem_next(CList *list, CListElmt *element, void **data){
+int clist_rem_next(CList *list, CListElmt *element, void **data) {
 	CListElmt *old_element;
 
 	/* Don't allow removal from an empty list. */
@@ -83,7 +81,7 @@ int clist_rem_next(CList *list, CListElmt *element, void **data){
 		}
 	}
 
-	/* Free the storage allocated by the abstract datatype. */
+	/* free the allocated by the abstract datatype. */
 	free(old_element);
 
 	/* Adjust the size of the list to account for the removed element. */
