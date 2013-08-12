@@ -12,7 +12,7 @@ clean_dirs := $(addprefix _clean_,$(SUBDIRS) )
 
 .PHONY: all clean subdirs $(SUBDIRS) lib
 default:all
-all:subdirs lib
+all:lib subdirs
 
 lib:
 	$(MAKE) -C ../src

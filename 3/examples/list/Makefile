@@ -7,7 +7,7 @@ TARGET = $(patsubst %.c,%.bin,$(SOURCE))
 
 VPATH = ../../src/
 
-all:$(TARGET) lib
+all:lib $(TARGET)
 
 lib:
 	$(MAKE) -C ../../src

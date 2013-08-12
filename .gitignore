@@ -4,3 +4,7 @@
 .*.swp
 *~
 tags
+
+*.bin
+*.so
+*.a
