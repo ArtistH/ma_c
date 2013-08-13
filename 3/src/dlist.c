@@ -26,7 +26,8 @@ void dlist_destroy(DList *list) {
 		}
 	}
 
-	/* On operations are allowed now, but clear the structure as a precation.*/
+	/* On operations are allowed now, but clear the structure 
+	 * as a precation.*/
 	memset(list, 0, sizeof(DList));
 
 	return;
@@ -48,6 +49,7 @@ int dlist_ins_next(DList *list, DListElmt *element, const void *data) {
 
 	/* Insert the new element into the list. */
 	new_element->data = (void *)data;
+
 	if (dlist_size(list) == 0) {
 		/* Handle insertion when the list is empty. */
 		list->head = new_element;
@@ -107,6 +109,7 @@ int dlist_ins_prev(DList *list, DListElmt *element, const void *data) {
 		} else {
 			element->prev->next = new_element;
 		}
+		element->prev = new_element;
 	}
 
 	/* Adjust the size of the list to account fo the new element. */
