@@ -64,7 +64,7 @@ int main()
 	}
 
 	data = dlist_data(element);
-	fprintf(stdout, "Removing an element after the one containing"
+	fprintf(stdout, "Removing an element that the one containing"
 			" %03d\n", *data);
 	if (dlist_remove(&list, element, (void **)&data) != 0) {
 		return 1;
