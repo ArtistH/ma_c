@@ -8,3 +8,8 @@ tags
 *.bin
 *.so
 *.a
+
+GTAGS
+GRTAGS
+GPATH
+gtags.files

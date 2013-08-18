@@ -17,6 +17,13 @@ all:lib subdirs
 lib:
 	$(MAKE) -C src
 
+GTAGS:
+	find . -name "*.[ch]" > gtags.files
+	gtags
+
+GTAGS-clean:
+	rm -rf GPATH GRTAGS GTAGS gtags.files
+
 # 执行默认make target
 $(SUBDIRS):
 	$(MAKE) -C $@

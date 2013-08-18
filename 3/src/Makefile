@@ -4,11 +4,12 @@ default: all
 
 SOURCE = $(wildcard *.c)
 TARGET = $(patsubst %.c,lib%.a,$(SOURCE))
+CC = gcc -g -Wall -O2
 
 all:$(TARGET)
 
 %.o:%.c
-	gcc -c $< -I../include
+	$(CC) -c $< -I../include
 
 lib%.a:%.o
 	ar -crv $@ $^
