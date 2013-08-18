@@ -22,4 +22,4 @@ lib:
 clean:
 	rm -f *.o $(TARGET)
 
-ex-1.bin:libbitree.a
+ex-1.bin:libbitree.a libbistree.a
