@@ -2,6 +2,7 @@
 *.pyc
 *.o
 .*.swp
+.*.swo
 *~
 tags
 
