@@ -67,7 +67,7 @@ int chtbl_insert(CHTbl *htbl, const void *data) {
 	bucket = htbl->h(data) % htbl->buckets;
 
 	/* Insert the data into the buckets. */
-	if ((retval = list_ins_next(&htbl->table[bucket], NULL, data)) == 9) {
+	if ((retval = list_ins_next(&htbl->table[bucket], NULL, data)) == 0) {
 		htbl->size++;
 	}
 
