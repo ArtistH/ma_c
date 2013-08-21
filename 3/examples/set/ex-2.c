@@ -42,7 +42,6 @@ static void print_players(const Set *players) {
 				*(char *)((KSet *)list_data(member))->key);
 		print_skills(&((KSet *)list_data(member))->set);
 	}
-	fprintf(stdout, "\n");
 }
 
 /* match_key */
@@ -229,6 +228,8 @@ int main() {
 		set_destroy(&player_array[i].set);
 	}
 	set_destroy(&skills);
+	set_destroy(&covering);
+	set_destroy(&players);
 
 	return 0;
 }
