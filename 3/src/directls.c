@@ -21,7 +21,6 @@ static int compare_dir(const void *key1, const void *key2) {
 
 int directls(const char *path, Directory **dir) {
 	DIR *dirptr;
-	Directory *temp;
 	struct dirent *curdir;
 	int count;
 
@@ -36,12 +35,10 @@ int directls(const char *path, Directory **dir) {
 
 	while ((curdir = readdir(dirptr)) != NULL) {
 		count++;
-		temp = (Directory *)realloc(*dir, count * sizeof(Directory));
-		if (temp == NULL) {
+		*dir = (Directory *)realloc(*dir, count * sizeof(Directory));
+		if (*dir == NULL) {
 			free(*dir);
 			return -1;
-		} else {
-			*dir = temp;
 		}
 		strcpy(((*dir)[count - 1]).name, curdir->d_name);
 	}

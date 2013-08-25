@@ -49,6 +49,7 @@ static int partition(void *data, int esize, int i, int k,
 			k--;
 		} while (compare(&a[k * esize], pval) > 0);
 
+		/* Move right until an element is found in the wrong partition. */
 		do {
 			i++;
 		} while (compare(&a[i * esize], pval) < 0);
