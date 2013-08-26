@@ -31,12 +31,12 @@ int ctsort(int *data, int size, int k) {
 	}
 
 	/* Adjust each count to reflect the counts before it. */
-	for (i = 0; i < k; ++i) {
+	for (i = 1; i < k; i++) {
 		counts[i] = counts[i] + counts[i - 1];
 	}
 
 	/* Use the counts to position each element where it belongs. */
-	for (j = size - 1; j >= 0; ++j) {
+	for (j = size - 1; j >= 0; j--) {
 		temp[counts[data[j]] - 1] = data[j];
 		counts[data[j]] = counts[data[j]] - 1;
 	}

@@ -33,9 +33,9 @@ static int partition(void *data, int esize, int i, int k,
 	}
 
 	/* Use the median-of-three method to find the partition value. */
-	r[0] = (rand() % (k -i + 1)) + i;
-	r[1] = (rand() % (k -i + 1)) + i;
-	r[2] = (rand() % (k -i + 1)) + i;
+	r[0] = (rand() % (k - i + 1)) + i;
+	r[1] = (rand() % (k - i + 1)) + i;
+	r[2] = (rand() % (k - i + 1)) + i;
 	issort(r, 3, sizeof(int), compare_int);
 	memcpy(pval, &a[r[1] * esize], esize);
 
@@ -61,7 +61,7 @@ static int partition(void *data, int esize, int i, int k,
 			/* Swap the elements now under the left and right counters. */
 			memcpy(temp, &a[i * esize], esize);
 			memcpy(&a[i * esize], &a[k * esize], esize);
-			memcpy(&a[k * esize], &temp, esize);
+			memcpy(&a[k * esize], temp, esize);
 		}
 	}
 

@@ -4,7 +4,7 @@ default: all
 
 SOURCE = $(wildcard *.c)
 TARGET = $(patsubst %.c,%.bin,$(SOURCE))
-CC = gcc -g -Wall -O2
+CC = gcc -g -Wall -O2 -lm
 
 VPATH = ../../src/
 
@@ -22,4 +22,5 @@ lib:
 clean:
 	rm -f *.o $(TARGET)
 
+ex-1.bin:libissort.a libqksort.a libmgsort.a libctsort.a librxsort.a
 ex-2.bin:libdirectls.a libqksort.a libissort.a
