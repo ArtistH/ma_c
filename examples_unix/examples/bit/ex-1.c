@@ -39,7 +39,7 @@ for (i = 0; i < 8; i++) {
    bits3[i] = 0x00;
 
 }
- 
+
 fprintf(stdout, "Initially\n");
 
 fprintf(stdout, "bits1: %02x %02x %02x %02x %02x %02x %02x %02x\n", bits1[0],
