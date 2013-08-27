@@ -23,3 +23,4 @@ clean:
 	rm -f *.o $(TARGET)
 
 ex-1.bin:libissort.a libspell.a libbisearch.a
+ex-2.bin:libissort.a libspell.a libbisearch.a
