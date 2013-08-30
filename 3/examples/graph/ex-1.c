@@ -18,14 +18,14 @@ static void print_graph(const Graph *graph) {
 	int j;
 
 	/* Display the graph. */
-	fprintf(stdout, "Vertices=%d, edges=%d\n",
+	fprintf(stdout, "==> Vertices=%d, edges=%d\n",
 			graph_vcount(graph), graph_ecount(graph));
 
 	for (i = 0, element = list_head(&graph_adjlists(graph));
 		 i < list_size(&graph_adjlists(graph));
 		 i++, element = list_next(element)) {
 
-		fprintf(stdout, "graph[%03d]=%s: \n", i,
+		fprintf(stdout, "\tgraph[%03d]=%s: ", i,
 				(char *)((AdjList *)list_data(element))->vertex);
 
 		adjacent = &((AdjList *)list_data(element))->adjacent;
@@ -161,17 +161,65 @@ static void local_remove_vertex(Graph *graph, char *string) {
 	return;
 }
 
+static void local_check_adjacent(Graph *graph, char *string1, char *string2) {
+	fprintf(stdout, "Testing adjacent (%s --> %s) = ", string1, string2);
+	char data1[STRSIZ];
+	if (strlen(string1) < STRSIZ) {
+		strcpy(data1, string1);
+	}
+	char data2[STRSIZ];
+	if (strlen(string2) < STRSIZ) {
+		strcpy(data2, string2);
+	}
+
+	int retval = graph_is_adjacent(graph, data1, data2);
+	if (retval == 1) {
+		fprintf(stdout, "is adjacent\n");
+	} else if (retval == 0) {
+		fprintf(stdout, "isn't adjacent\n");
+	} else if (retval == -1) {
+		fprintf(stdout, " \t --- [ERROR] : vertex not found\n");
+	}
+	return;
+}
+
+/* local_checkout_adjlist */
+static void local_check_adjlist(Graph *graph, char *string) {
+	char data[STRSIZ];
+	if (strlen(string) < STRSIZ) {
+		strcpy(data, string);
+	}
+
+	AdjList *adjlist = NULL;
+	int retval = graph_adjlist(graph, data, &adjlist);
+	if (retval == 0) {
+		fprintf(stdout, "Vertices adjacent to [%s] :  ", string);
+	} else {
+		fprintf(stdout, "Vertices [%s] not found\n", data);
+		return;
+	}
+
+	/* Output the elements in AdjList */
+	ListElmt* element = NULL;
+	int i = 0;
+	int size = set_size(&adjlist->adjacent);
+	for (element = list_head(&adjlist->adjacent);
+		 i < size;
+		 i++, element = list_next(element)) {
+		if (i > 0) {
+			fprintf(stdout, ", ");
+		}
+		fprintf(stdout, "%s", (char *)list_data(element));
+	}
+	fprintf(stdout, "\n");
+
+	return;
+}
+
+
 /* main */
 int main() {
 	Graph graph;
-	AdjList *adjlist = NULL;
-	ListElmt *element = NULL;
-	char *data = NULL;
-	char data1[STRSIZ];
-	char *data2 = NULL;
-	int retval;
-	int size;
-	int i;
 
 	/* Initialize the graph. */
 	graph_init(&graph, match_str, free);
@@ -211,6 +259,17 @@ int main() {
 	local_remove_edge(&graph, "f", "a");
 	local_remove_edge(&graph, "c", "e");
 	local_malloc_insert_vertex(&graph, "c");
+	print_graph(&graph);
+
+	/* Testing adjacent */
+	local_check_adjacent(&graph, "b", "d");
+	local_check_adjacent(&graph, "a", "e");
+	local_check_adjacent(&graph, "e", "d");
+	local_check_adjacent(&graph, "c", "a");
+
+	/* Testing graph_adjlist of one vertex */
+	local_check_adjlist(&graph, "c");
+	local_check_adjlist(&graph, "a");
 
 	/* Destroy the graph. */
 	fprintf(stdout, "Destroying the graph\n");
