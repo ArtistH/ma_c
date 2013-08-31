@@ -73,6 +73,7 @@ static void local_malloc_insert_network_vertex(Graph *network, char *string) {
 	}
 	if ((netid->data = malloc(STRSIZ)) == NULL) {
 		fprintf(stdout, "--- [ERROR] : malloc error\n");
+		free(netid);
 		return;
 	}
 
