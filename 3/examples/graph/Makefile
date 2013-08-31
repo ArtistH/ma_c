@@ -23,3 +23,4 @@ clean:
 	rm -f *.o $(TARGET)
 
 ex-1.bin:libgraph.a liblist.a libset.a
+ex-2.bin:libbfs.a libgraph.a liblist.a libset.a libqueue.a

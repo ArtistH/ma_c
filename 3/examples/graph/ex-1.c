@@ -53,10 +53,10 @@ static int match_str(const void *str1, const void *str2) {
 
 /* local_malloc_insert_vertex */
 static void local_malloc_insert_vertex(Graph *graph, char *string) {
-	fprintf(stdout, "Inserting vertex %s", string);
+	fprintf(stdout, "Inserting vertex %s\t\t", string);
 	char *data = NULL;
 	if ((data = (char *)malloc(STRSIZ)) == NULL) {
-		fprintf(stdout, "\t\t --- [ERROR] : malloc error\n");
+		fprintf(stdout, "--- [ERROR] : malloc error\n");
 		return;
 	}
 	if (strlen(string) < STRSIZ) {
@@ -69,10 +69,10 @@ static void local_malloc_insert_vertex(Graph *graph, char *string) {
 		return;
 	} else if (retval == -1) {
 		free(data);
-		fprintf(stdout, "\t\t --- [ERROR] : malloc error\n");
+		fprintf(stdout, "--- [ERROR] : malloc error\n");
 	} else if (retval == 1) {
 		free(data);
-		fprintf(stdout, "\t\t --- [ERROR] : vertex exist\n");
+		fprintf(stdout, "--- [ERROR] : vertex exist\n");
 	}
 
 	return;
@@ -81,7 +81,7 @@ static void local_malloc_insert_vertex(Graph *graph, char *string) {
 /* local_malloc_insert_edge */
 static void local_malloc_insert_edge(Graph *graph,
 									 char *string1, char *string2) {
-	fprintf(stdout, "Inserting edge %s --> %s", string1, string2);
+	fprintf(stdout, "Inserting edge %s --> %s\t\t", string1, string2);
 
 	char data1[STRSIZ];
 	if (strlen(string1) < STRSIZ) {
@@ -90,7 +90,7 @@ static void local_malloc_insert_edge(Graph *graph,
 
 	char *data2 = NULL;
 	if ((data2 = (char *)malloc(STRSIZ)) == NULL) {
-		fprintf(stdout, "\t\t --- [ERROR] : malloc error\n");
+		fprintf(stdout, "--- [ERROR] : malloc error\n");
 		return;
 	}
 	if (strlen(string2) < STRSIZ) {
@@ -104,17 +104,17 @@ static void local_malloc_insert_edge(Graph *graph,
 		return;
 	} else if (retval == -1) {
 		free(data2);
-		fprintf(stdout, "\t\t --- [ERROR] : vertex not exist\n");
+		fprintf(stdout, "--- [ERROR] : vertex not exist\n");
 	} else if (retval == 1) {
 		free(data2);
-		fprintf(stdout, "\t\t --- [ERROR] : edge already exist\n");
+		fprintf(stdout, "--- [ERROR] : edge already exist\n");
 	}
 
 	return;
 }
 
 static void local_remove_edge(Graph *graph, char *string1, char *string2) {
-	fprintf(stdout, "Removing edge %s --> %s", string1, string2);
+	fprintf(stdout, "Removing edge %s --> %s\t\t", string1, string2);
 
 	char data1[STRSIZ];
 	if (strlen(string1) < STRSIZ) {
@@ -134,7 +134,7 @@ static void local_remove_edge(Graph *graph, char *string1, char *string2) {
 		fprintf(stdout, "\n");
 		return;
 	} else if (retval == -1) {
-		fprintf(stdout, "\t\t --- [ERROR] : vertex not exist\n");
+		fprintf(stdout, "--- [ERROR] : vertex not exist\n");
 	}
 
 	return;
@@ -145,7 +145,7 @@ static void local_remove_vertex(Graph *graph, char *string) {
 	if (strlen(string) < STRSIZ) {
 		strcpy(data1, string);
 	}
-	fprintf(stdout, "Removing vertex %s", data1);
+	fprintf(stdout, "Removing vertex %s\t\t", data1);
 	char *data = data1;
 	int retval = graph_rem_vertex(graph, (void **)&data);
 
@@ -154,7 +154,7 @@ static void local_remove_vertex(Graph *graph, char *string) {
 		fprintf(stdout, "\n");
 		return;
 	} else if (retval == -1) {
-		fprintf(stdout, "\t\t --- [ERROR] : vertex in adjacent list or not exist\n");
+		fprintf(stdout, "--- [ERROR] : vertex in adjacent list or not exist\n");
 		return;
 	}
 
@@ -178,7 +178,7 @@ static void local_check_adjacent(Graph *graph, char *string1, char *string2) {
 	} else if (retval == 0) {
 		fprintf(stdout, "isn't adjacent\n");
 	} else if (retval == -1) {
-		fprintf(stdout, " \t --- [ERROR] : vertex not found\n");
+		fprintf(stdout, "\t--- [ERROR] : vertex not found\n");
 	}
 	return;
 }
