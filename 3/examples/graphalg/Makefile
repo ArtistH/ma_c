@@ -22,4 +22,4 @@ lib:
 clean:
 	rm -f *.o $(TARGET)
 
-ex-1.bin:libgraph.a libmst.a libset.a liblist.a
+ex-1.bin:libgraph.a libmst.a libshortest.a libtsp.a libset.a liblist.a
