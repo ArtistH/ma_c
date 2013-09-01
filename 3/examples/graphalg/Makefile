@@ -4,7 +4,7 @@ default: all
 
 SOURCE = $(wildcard *.c)
 TARGET = $(patsubst %.c,%.bin,$(SOURCE))
-CC = gcc -g -Wall -O2
+CC = gcc -g -Wall -O2 -lm
 
 VPATH = ../../src/
 

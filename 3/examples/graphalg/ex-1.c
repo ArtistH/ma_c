@@ -86,6 +86,17 @@ static EdgeData PthTestE[PTHECT] = {
 };
 
 /* Define data for traveling-salesman problems. */
+#define TSPVCT 7
+
+static CoordData TspTestV[TSPVCT] = {
+	{"a", 2.0, 1.0},
+	{"b", 1.0, 3.0},
+	{"c", 2.0, 4.0},
+	{"d", 4.0, 3.0},
+	{"e", 5.0, 2.0},
+	{"f", 5.0, 5.0},
+	{"g", 6.0, 3.0}
+};
 
 /* print_graph_mst */
 static void print_graph_mst(const Graph *graph) {
@@ -174,6 +185,32 @@ static int match_pth(const void *pth1, const void *pth2) {
 				   ((const PathVertex *)pth2)->data);
 }
 
+/* print_list_tsp */
+static void print_list_tsp(List *vertices) {
+	TspVertex *vertex = NULL;
+	ListElmt *element = NULL;
+	int i;
+
+	/* Display the list of vertices in a traveling-salesman problem. */
+	fprintf(stdout, "Vertices=%d\n", list_size(vertices));
+
+	for (i = 0, element = list_head(vertices);
+		 i < list_size(vertices);
+		 i++, element = list_next(element)) {
+		vertex = list_data(element);
+		fprintf(stdout, "vertices[%03d]=%s: (%.1f, %.1lf)\n",
+				i, (char *)vertex->data, vertex->x, vertex->y);
+	}
+	return;
+}
+
+/* match_tsp */
+static int match_tsp(const void *tsp1, const void *tsp2) {
+	/* Determine whether the data in two TspVertex vertices match. */
+	return !strcmp(((const TspVertex *)tsp1)->data,
+				   ((const TspVertex *)tsp2)->data);
+}
+
 /* main */
 int main() {
 	Graph graph;
@@ -188,11 +225,20 @@ int main() {
 	PathVertex pth_vertex1;
 	PathVertex *pth_vertex2 = NULL;
 
+	TspVertex *tsp_start = NULL;
+	TspVertex *tsp_vertex = NULL;
+
 	List span;
 	List paths;
+	List vertices;
+	List tour;
 
 	ListElmt *element = NULL;
 
+	double distance;
+	double total;
+	double x = 0;
+	double y = 0;
 
 	int i;
 
@@ -243,7 +289,7 @@ int main() {
 
 	/* Compute shortest paths. */
 	graph_init(&graph, match_pth, free);
-	fprintf(stdout, "Computing shortest paths\n");
+	fprintf(stdout, "\nComputing shortest paths\n");
 
 	for (i = 0; i < PTHVCT; i++) {
 		if ((pth_vertex = (PathVertex *)malloc(sizeof(PathVertex))) == NULL) {
@@ -288,6 +334,54 @@ int main() {
 
 	list_destroy(&paths);
 	graph_destroy(&graph);
+
+	/* Solve the traveling-salesman problem. */
+	list_init(&vertices, free);
+	fprintf(stdout, "\nSolving a traveling-salesman problem\n");
+
+	for (i = 0; i <TSPVCT; i++) {
+		if ((tsp_vertex = (TspVertex *)malloc(sizeof(TspVertex))) == NULL) {
+			return 1;
+		}
+		if (i == 0) {
+			tsp_start = tsp_vertex;
+		}
+		tsp_vertex->data = TspTestV[i].vertex;
+		tsp_vertex->x = TspTestV[i].x;
+		tsp_vertex->y = TspTestV[i].y;
+		if (list_ins_next(&vertices, list_tail(&vertices), tsp_vertex) != 0) {
+			return 1;
+		}
+	}
+
+	print_list_tsp(&vertices);
+
+	if (tsp(&vertices, tsp_start, &tour, match_tsp) != 0) {
+		return 1;
+	}
+
+	total = 0;
+	for (element = list_head(&tour);
+		 element != NULL;
+		 element = list_next(element)) {
+		tsp_vertex = list_data(element);
+		if (!list_is_head(&tour, element)) {
+			distance = sqrt(pow(tsp_vertex->x - x, 2.0)
+							+ pow(tsp_vertex->y - y, 2.0));
+			total += distance;
+		}
+		x = tsp_vertex->x;
+		y = tsp_vertex->y;
+		if (!list_is_head(&tour, element)) {
+			fprintf(stdout, "\t vertex=%s, distance=%.2lf\n",
+					(char *)tsp_vertex->data, distance);
+		} else {
+			fprintf(stdout, "\t vertex=%s\n", (char *)tsp_vertex->data);
+		}
+	}
+	fprintf(stdout, "total=%.2lf\n", total);
+	list_destroy(&vertices);
+	list_destroy(&tour);
 
 	return 0;
 }
