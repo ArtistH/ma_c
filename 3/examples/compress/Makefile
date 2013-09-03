@@ -22,5 +22,4 @@ lib:
 clean:
 	rm -f *.o $(TARGET)
 
-ex-1.bin:libhuffman.a libbit.a libbitree.a libheap.a
-# liblz77.a
+ex-1.bin:libhuffman.a libbit.a libbitree.a libheap.a liblz77.a
