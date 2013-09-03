@@ -27,8 +27,6 @@ int main() {
 		original[i] = c;
 		i++;
 	}
-	osize = i;
-	fclose(fp);
 
 	/* Compress the data using Huffman coding. */
 	fprintf(stdout, "Compressing with Huffman coding\n");
