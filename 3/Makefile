@@ -10,7 +10,7 @@ dirs := $(filter-out $(exclude_dirs),$(dirs))
 SUBDIRS := $(dirs)
 clean_dirs := $(addprefix _clean_,$(SUBDIRS) )
 
-.PHONY: all clean subdirs $(SUBDIRS) lib
+.PHONY: all clean subdirs $(SUBDIRS) lib GTAGS GTAGSCLEAN
 default:all
 all:lib subdirs
 
@@ -21,7 +21,7 @@ GTAGS:
 	find . -name "*.[ch]" > gtags.files
 	gtags
 
-GTAGS-clean:
+GTAGSCLEAN:
 	rm -rf GPATH GRTAGS GTAGS gtags.files
 
 # 执行默认make target
