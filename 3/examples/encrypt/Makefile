@@ -22,4 +22,5 @@ lib:
 clean:
 	rm -f *.o $(TARGET)
 
+ex-1.bin:libdes.a libbit.a librsa.a
 ex-2.bin:libcbc.a libbit.a libdes.a
