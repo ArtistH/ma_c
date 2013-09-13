@@ -17,17 +17,9 @@
 
 global var Array;
 
-data {
-	var type;
-	var item_type;
-	int num_items;
-	int num_slots;
-	var items;
-} ArrayData;
-
-/** Array_New(var self, var type, int count, ... items) */
-var Array_New(var self, va_list* args);
+var Array_New(var self, var_list vl);
 var Array_Delete(var self);
+size_t Array_Size(void);
 void Array_Assign(var self, var obj);
 var Array_Copy(var self);
 
@@ -58,17 +50,17 @@ void Array_Sort(var self);
 
 int Array_Show(var self, var output, int pos);
 
-instance(Array, New) = {sizeof(ArrayData), Array_New, Array_Delete};
-instance(Array, Assign) = {Array_Assign};
-instance(Array, Copy) = {Array_Copy};
-instance(Array, Eq) = {Array_Eq};
-instance(Array, Collection) = {Array_Len, Array_Clear, Array_Contains, Array_Discard};
-instance(Array, Push) = {Array_Push_Back, Array_Push_At, Array_Push_Back, Array_Push_Front, Array_Pop_Back, Array_Pop_At, Array_Pop_Back, Array_Pop_Front};
-instance(Array, At) = {Array_At, Array_Set};
-instance(Array, Iter) = {Array_Iter_Start, Array_Iter_End, Array_Iter_Next};
-instance(Array, Reverse) = {Array_Reverse};
-instance(Array, Sort) = {Array_Sort};
-instance(Array, Append) = {Array_Push_Back};
-instance(Array, Show) = {Array_Show, NULL};
+instance(Array, New) = { Array_New, Array_Delete, Array_Size };
+instance(Array, Assign) = { Array_Assign };
+instance(Array, Copy) = { Array_Copy };
+instance(Array, Eq) = { Array_Eq };
+instance(Array, Collection) = { Array_Len, Array_Clear, Array_Contains, Array_Discard };
+instance(Array, Push) = { Array_Push_Back, Array_Push_At, Array_Push_Back, Array_Push_Front, Array_Pop_Back, Array_Pop_At, Array_Pop_Back, Array_Pop_Front };
+instance(Array, At) = { Array_At, Array_Set };
+instance(Array, Iter) = { Array_Iter_Start, Array_Iter_End, Array_Iter_Next };
+instance(Array, Reverse) = { Array_Reverse };
+instance(Array, Sort) = { Array_Sort };
+instance(Array, Append) = { Array_Push_Back };
+instance(Array, Show) = { Array_Show, NULL };
 
 #endif

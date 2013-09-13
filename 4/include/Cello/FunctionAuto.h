@@ -1,5 +1,5 @@
-#ifndef CelloFunction_h
-#define CelloFunction_h
+#ifndef CelloFunctionAuto_h
+#define CelloFunctionAuto_h
 
 
 #define auto_lambda0(func) \

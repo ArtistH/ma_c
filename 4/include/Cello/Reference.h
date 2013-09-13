@@ -22,9 +22,9 @@ data {
 	var ref;
 } ReferenceData;
 
-/** Reference_New(var self, var obj); */
-var Reference_New(var self, va_list* args);
+var Reference_New(var self, var_list vl);
 var Reference_Delete(var self);
+size_t Reference_Size(void);
 void Reference_Assign(var self, var obj);
 var Reference_Copy(var self);
 var Reference_Eq(var self, var obj);
@@ -35,13 +35,13 @@ void Reference_Exit(var self);
 
 int Reference_Show(var self, var output, int pos);
 
-instance(Reference, New) = {sizeof(ReferenceData), Reference_New, Reference_Delete};
-instance(Reference, Assign) = {Reference_Assign};
-instance(Reference, Copy) = {Reference_Copy};
-instance(Reference, Eq) = {Reference_Eq};
-instance(Reference, Hash) = {Reference_Hash};
-instance(Reference, At) = {Reference_At, Reference_Set};
-instance(Reference, With) = {NULL, Reference_Exit};
-instance(Reference, Show) = {Reference_Show, NULL};
+instance(Reference, New) = { Reference_New, Reference_Delete, Reference_Size };
+instance(Reference, Assign) = { Reference_Assign };
+instance(Reference, Copy) = { Reference_Copy };
+instance(Reference, Eq) = { Reference_Eq };
+instance(Reference, Hash) = { Reference_Hash };
+instance(Reference, At) = { Reference_At, Reference_Set };
+instance(Reference, With) = { NULL, Reference_Exit };
+instance(Reference, Show) = { Reference_Show, NULL };
 
 #endif
