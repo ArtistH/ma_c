@@ -9,13 +9,14 @@
 
 var Type = type_data {
 	type_begin(Type),
-	type_entry(Type, New),
-	type_entry(Type, AsStr),
-	type_entry(Type, Show),
-	type_end(Type),
+		type_entry(Type, New),
+		type_entry(Type, AsStr),
+		type_entry(Type, Show),
+		type_end(Type),
 };
 
 var Type_Cast(var obj, var t, const char* func, const char* file, int line) {
+
 	if (type_of(obj) is t) {
 		return obj;
 	} else {
@@ -32,6 +33,7 @@ var Type_Cast(var obj, var t, const char* func, const char* file, int line) {
 }
 
 var Type_New(var self, var_list vl) {
+
 	const char* name = as_str(var_list_get(vl));
 	int count = as_long(var_list_get(vl));
 	var* ifaces = var_list_get(vl);
@@ -129,7 +131,7 @@ var Type_Implements(var self, const char* class_name, const char* func, const ch
 }
 
 var Type_Implements_Method(var self, int offset, const char* class_name, const char* func, const char* file, int line) {
-	
+
 	if (not Type_Implements(self, class_name, func, file, line)) {
 		return Type_Implements_Method(Type_Parent(self), offset, class_name, func, file, line);
 	} else {
@@ -139,7 +141,7 @@ var Type_Implements_Method(var self, int offset, const char* class_name, const c
 }
 
 var Type_Class(var self, const char* class_name, const char* func, const char* file, int line) {
-	
+
 	TypeData* t = self;
 
 	if (t[0].class_object != NULL) {
@@ -174,4 +176,50 @@ var Type_Class(var self, const char* class_name, const char* func, const char* f
 				 $(Int, line),
 				 $(String, (char*)Type_Name(self)),
 				 $(String, (char*)class_name));
+}
+
+var Type_Class_Method(var self, int offset, const char* class_name, const char* method_name, const char* func, const char* file, int line) {
+
+	if (Type_Implements_Method(self, offset, class_name, func, file, line)) {
+		return Type_Class(self, class_name, func, file, line);
+	}
+
+	var parent = Type_Parent(self);
+
+	if (Type_Implements_Method(parent, offset, class_name, func, file, line)) {
+		return Type_Class(parent, class_name, func, file, line);
+	}
+
+	return throw(ClassError,
+				 "Function '%s' at '%s:%i' :: "
+				 "Type '%s' implements class '%s' "
+				 "but not the specific method '%s' required",
+				 $(String, (char*)func),
+				 $(String, (char*)file),
+				 $(Int, line),
+				 self,
+				 $(String, (char*)class_name),
+				 $(String, (char*)method_name));
+}
+
+int Type_Show(var self, var output, int pos) {
+	return print_to(output, pos, "%s", self);
+}
+
+void Type_Inherit(var self, var parent) {
+
+	TypeData* t = self;
+
+	while (t->class_name) {
+		if (strcmp(t->class_name, "__Parent") == 0) {
+			t->class_object = parent;
+		}
+		t++;
+	}
+
+	throw(ClassError,
+		  "Cannot find Class '__Parent' for object '%p' :: "
+		  "Was is correctly constructed? :: "
+		  "Does the data start with a 'type' entry? :: "
+		  "Was 'type_begin' used?", self);
 }
