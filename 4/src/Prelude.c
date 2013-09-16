@@ -115,3 +115,230 @@ var eq(var lhs, var rhs) {
 var neq(var lhs, var rhs) {
 	return bool_var(not eq(lhs, rhs));
 }
+
+var gt(var lhs, var rhs) {
+	return type_class_method(type_of(lhs), Ord, gt, lhs, rhs);
+}
+
+var lt(var lhs, var rhs) {
+	return type_class_method(type_of(lhs), Ord, lt, lhs, rhs);
+}
+
+var ge(var lhs, var rhs) {
+	return bool_var(not lt(lhs, rhs));
+}
+
+var le(var lhs, var rhs) {
+	return bool_var(not gt(lhs, rhs));
+}
+
+int len(var self) {
+	return type_class_method(type_of(self), Collection, len, self);
+}
+
+var is_empty(var self) {
+	return bool_var(len(self) == 0);
+}
+
+void clear(var self) {
+	type_class_method(type_of(self), Collection, clear, self);
+}
+
+var contains(var self, var obj) {
+	return type_class_method(type_of(self), Collection, contains, self, obj);
+}
+
+void discard(var self, var obj) {
+	type_class_method(type_of(self), Collection, discard, self, obj);
+}
+
+var maximum(var self) {
+
+	if (len(self) == 0) {
+		return None;
+	}
+
+	var best = at(self, 0);
+	foreach(item in self) {
+		if_gt(item, best) {
+			best = item;
+		}
+	}
+
+	return best;
+}
+
+var minimum(var self) {
+
+	if (len(self) == 0) {
+		return None;
+	}
+
+	var best = at(self, 0);
+	foreach(item in self) {
+		if_lt(item, best) {
+			best = item;
+		}
+	}
+
+	return best;
+}
+
+void reverse(var self) {
+	type_class_method(type_of(self), Reverse, reverse, self);
+}
+
+void sort(var self) {
+	type_class_method(type_of(self), Sort, sort, self);
+}
+
+void append(var self, var obj) {
+	type_class_method(type_of(self), Append, append, self, obj);
+}
+
+var iter_start(var self) {
+	return type_class_method(type_of(self), Iter, iter_start, self);
+}
+
+var iter_end(var self) {
+	return type_class_method(type_of(self), Iter, iter_end, self);
+}
+
+var iter_next(var self, var curr) {
+	return type_class_method(type_of(self), Iter, iter_next, self, curr);
+}
+
+var at(var self, int index) {
+	return type_class_method(type_of(self), At, at, self, index);
+}
+
+void set(var self, int index, var value) {
+	type_class_method(type_of(self), At, set, self, index, value);
+}
+
+void push(var self, var val) {
+	type_class_method(type_of(self), Push, push, self, val);
+}
+
+void push_at(var self, var val, int index) {
+	type_class_method(type_of(self), Push, push_at, self, val, index);
+}
+
+void push_back(var self, var val) {
+	type_class_method(type_of(self), Push, push_back, self, val);
+}
+
+void push_front(var self, var val) {
+	type_class_method(type_of(self), Push, push_front, self, val);
+}
+
+var pop(var self) {
+	return type_class_method(type_of(self), Push, pop, self);
+}
+
+var pop_at(var self, int index) {
+	return type_class_method(type_of(self), Push, pop_at, self, index);
+}
+
+var pop_back(var self) {
+	return type_class_method(type_of(self), Push, pop_back, self);
+}
+
+var pop_front(var self) {
+	return type_class_method(type_of(self), Push, pop_front, self);
+}
+
+long hash(var self) {
+
+	if (not type_implements(type_of(self), Hash)) {
+		return (long)(intptr_t)self;
+	} else {
+		return type_class_method(type_of(self), Hash, hash, self);
+	}
+}
+
+var get(var self, var key) {
+	return type_class_method(type_of(self), Dict, get, self, key);
+}
+
+void put(var self, var key, var val) {
+	type_class_method(type_of(self), Dict, put, self, key, val);
+}
+
+char as_char(var self) {
+	return type_class_method(type_of(self), AsChar, as_char, self);
+}
+
+const char* as_str(var self) {
+	return type_class_method(type_of(self), AsStr, as_str, self);
+}
+
+long as_long(var self) {
+	return type_class_method(type_of(self), AsLong, as_long, self);
+}
+
+double as_double(var self) {
+	return type_class_method(type_of(self), AsDouble, as_double, self);
+}
+
+var stream_open(var self, const char* name, const char* access) {
+	return type_class_method(type_of(self), Stream, stream_open, self, name, access);
+}
+
+void stream_close(var self) {
+	type_class_method(type_of(self), Stream, stream_close, self);
+}
+
+void stream_seek(var self, int pos, int origin) {
+	type_class_method(type_of(self), Stream, stream_seek, self, pos, origin);
+}
+
+int stream_tell(var self) {
+	return type_class_method(type_of(self), Stream, stream_tell, self);
+}
+
+void stream_flush(var self) {
+	type_class_method(type_of(self), Stream, stream_flush, self);
+}
+
+bool stream_eof(var self) {
+	return type_class_method(type_of(self), Stream, stream_eof, self);
+}
+
+int stream_read(var self, void* output, int size) {
+	return type_class_method(type_of(self), Stream, stream_read, self, output, size);
+}
+
+int stream_write(var self, void* input, int size) {
+	return type_class_method(type_of(self), Stream, stream_write, self, input, size);
+}
+
+void serial_read(var self, var input) {
+	type_class_method(type_of(self), Serialize, serial_read, self, input);
+}
+
+void serial_write(var self, var output) {
+	type_class_method(type_of(self), Serialize, serial_write, self, output);
+}
+
+void enter_with(var self) {
+	if (type_implements_method(type_of(self), With, enter)) {
+		type_class_method(type_of(self), With, enter, self);
+	}
+}
+
+void exit_with(var self) {
+	if (type_implements_method(type_of(self), With, exit)) {
+		type_class_method(type_of(self), With, exit, self);
+	}
+}
+
+var enter_for(var self) {
+	enter_with(self);
+	return self;
+}
+
+var exit_for(var self) {
+	exit_with(self);
+	return Undefined;
+}
