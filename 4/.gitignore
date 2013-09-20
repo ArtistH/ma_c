@@ -1,0 +1,23 @@
+# Main
+*.log
+*~
+*.libs
+*.o
+*.la
+*.so*
+*.a
+*.lo
+*.dll
+*.exe
+*.gz
+.*.swp
+.*.swo
+
+# Tests
+test.bin
+test.txt
+test.exe
+test
+
+# Dist
+libCello*
