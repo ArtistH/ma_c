@@ -244,7 +244,7 @@ var Thread_Current(void) {
 #if defined(__unix__) ||defined(__APPLE__)
 		main_thread_wrapper.thread = pthread_self();
 #elif defined(_WIN32)
-		main_thread_wrapper.thread = pthread_self();
+		main_thread_wrapper.thread = GetCurrentThread();
 #endif
 		return &main_thread_wrapper;
 	}

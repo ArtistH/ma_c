@@ -84,7 +84,6 @@ var Int_Gt(var self, var other) {
 	IntData* io = cast(self, Int);
 	return bool_var(io->value > as_long(other));
 }
-
 var Int_Lt(var self, var other) {
 	IntData* io = cast(self, Int);
 	return bool_var(io->value < as_long(other));

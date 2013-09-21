@@ -99,6 +99,7 @@ int File_Read(var self, void* output, int size) {
 	int num = fread(output, size, 1, fd->f);
 	if (num == -1) {
 		throw(IOError, "Failed to read from file: %i", $(Int, num));
+		return num;
 	}
 
 	return num;

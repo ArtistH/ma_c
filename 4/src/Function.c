@@ -14,7 +14,7 @@ var call_vl(var self, var_list vl) {
 
 	delete(wrapped);
 
-	return(res);
+	return res;
 }
 
 var call_with(var self, var args) {

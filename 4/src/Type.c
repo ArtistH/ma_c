@@ -84,8 +84,8 @@ const char* Type_Name(var self) {
 	return throw(ClassError,
 				 "Cannot find Class '__Name' for object '%p' :: "
 				 "Was is correctly constructed? :: "
-				 "Does the data start with a 'type' entry? :: "
-				 "Was 'type_begin' used?", self);
+				 "Does the data start with a 'type' entry? ::"
+				 "Was `type_begin` used?", self);
 }
 
 var Type_Parent(var self) {
@@ -102,8 +102,8 @@ var Type_Parent(var self) {
 	return throw(ClassError,
 				 "Cannot find Class '__Parent' for object '%p' :: "
 				 "Was is correctly constructed? :: "
-				 "Does the data start with a 'type' entry? :: "
-				 "Was 'type_begin' used?", self);
+				 "Does the data start with a 'type' entry? ::"
+				 "Was `type_begin` used?", self);
 }
 
 var Type_Implements(var self, const char* class_name, const char* func, const char* file, int line) {
@@ -122,7 +122,10 @@ var Type_Implements(var self, const char* class_name, const char* func, const ch
 	}
 
 	while (t->class_name) {
-		if (strcmp(t->class_name, class_name) == 0) { return True; }
+		if (strcmp(t->class_name, class_name) == 0) {
+			return True;
+		}
+		t++;
 	}
 
 	var parent = Type_Parent(self);
@@ -213,6 +216,7 @@ void Type_Inherit(var self, var parent) {
 	while (t->class_name) {
 		if (strcmp(t->class_name, "__Parent") == 0) {
 			t->class_object = parent;
+			return;
 		}
 		t++;
 	}
