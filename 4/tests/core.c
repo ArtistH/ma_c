@@ -180,4 +180,129 @@ PT_SUITE(suite_core) {
 		delete(tab1);
 		delete(tab2);
 	}
+
+	PT_TEST(test_ord) {
+		PT_ASSERT(gt($(Int, 15), $(Int, 3)));
+		PT_ASSERT(lt($(Int, 70), $(Int, 81)));
+		PT_ASSERT(ge($(Int, 71), $(Int, 71)));
+		PT_ASSERT(ge($(Int, 78), $(Int, 71)));
+		PT_ASSERT(le($(Int, 32), $(Int, 32)));
+		PT_ASSERT(le($(Int, 21), $(Int, 32)));
+	}
+
+	PT_TEST(test_hash) {
+		long x = hash($(Int, 1));
+		long y = hash($(Int, 123));
+
+		PT_ASSERT(x is 1);
+		PT_ASSERT(y is 123);
+	}
+
+	PT_TEST(test_collection_list) {
+
+		var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
+
+		PT_ASSERT(x);
+		PT_ASSERT(len(x) is 3);
+		PT_ASSERT(contains(x, $(Int, 1)));
+		PT_ASSERT(contains(x, $(Real, 2.0)));
+		PT_ASSERT(contains(x, $(String, "Hello")));
+
+		discard(x, $(Real, 2.0));
+
+		PT_ASSERT(x);
+		PT_ASSERT(len(x) is 2);
+		PT_ASSERT(contains(x, $(Int, 1)));
+		PT_ASSERT(contains(x, $(String, "Hello")));
+
+		clear(x);
+
+		PT_ASSERT(x);
+		PT_ASSERT(len(x) is 0);
+		PT_ASSERT(is_empty(x));
+
+		delete(x);
+	}
+
+	PT_TEST(test_collection_array) {
+
+		var y = new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
+
+		PT_ASSERT(y);
+		PT_ASSERT(len(y) is 4);
+		PT_ASSERT(contains(y, $(Real, 5.2)));
+		PT_ASSERT(contains(y, $(Real, 7.1)));
+		PT_ASSERT(contains(y, $(Real, 2.2)));
+		PT_ASSERT(contains(y, $(Real, 1.1)));
+
+		sort(y);
+
+		PT_ASSERT(eq(at(y, 0), $(Real, 1.1)));
+		PT_ASSERT(eq(at(y, 1), $(Real, 2.2)));
+		PT_ASSERT(eq(at(y, 2), $(Real, 5.2)));
+		PT_ASSERT(eq(at(y, 3), $(Real, 7.1)));
+
+		var maxval = maximum(y);
+		var minval = minimum(y);
+
+		PT_ASSERT(eq(maxval, $(Real, 7.1)));
+		PT_ASSERT(eq(minval, $(Real, 1.1)));
+
+		delete(y);
+	}
+
+	PT_TEST(test_collection_list_sort) {
+
+		var z = new(List, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
+
+		sort(z);
+
+		PT_ASSERT(eq(at(z, 0), $(Real, 1.1)));
+		PT_ASSERT(eq(at(z, 1), $(Real, 2.2)));
+		PT_ASSERT(eq(at(z, 2), $(Real, 5.2)));
+		PT_ASSERT(eq(at(z, 3), $(Real, 7.1)));
+
+		delete(z);
+
+		var w = new(List, $(Int, 135), $(Int, 11), $(Int, 254), $(Int, 123213), $(Int, 22), $(Int, 1));
+
+		sort(w);
+
+		PT_ASSERT(eq(at(w, 0), $(Int, 1)));
+		PT_ASSERT(eq(at(w, 1), $(Int, 11)));
+		PT_ASSERT(eq(at(w, 2), $(Int, 22)));
+		PT_ASSERT(eq(at(w, 3), $(Int, 135)));
+		PT_ASSERT(eq(at(w, 4), $(Int, 254)));
+		PT_ASSERT(eq(at(w, 5), $(Int, 123213)));
+
+		delete(w);
+	}
+/* 
+	PT_TEST(test_collection_map) {
+
+		var map1 = new(Map);
+		var map2 = new(Map);
+
+		PT_ASSERT(eq(map1, map2));
+
+		put(map1, $(String, "key"), $(String, "val"));
+		PT_ASSERT(neq(map1, map2));
+
+		put(map2, $(String, "key"), $(String, "val"));
+		PT_ASSERT(eq(map1, map2));
+
+		put(map1, $(String, "newkey"), $(Int, 10));
+		put(map2, $(String, "newkey"), $(String, "newval"));
+		PT_ASSERT(neq(map1, map2));
+
+		put(map1, $(String, "newkey"), $(String, "newval"));
+		PT_ASSERT(eq(map1, map2));
+
+		put(map2, $(String, "difkey"), $(Int, 5));
+		PT_ASSERT(neq(map1, map2));
+
+		delete(map1);
+		delete(map2);
+
+	} */
 }
