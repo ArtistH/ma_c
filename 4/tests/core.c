@@ -277,7 +277,7 @@ PT_SUITE(suite_core) {
 
 		delete(w);
 	}
-/* 
+
 	PT_TEST(test_collection_map) {
 
 		var map1 = new(Map);
@@ -304,5 +304,17 @@ PT_SUITE(suite_core) {
 		delete(map1);
 		delete(map2);
 
-	} */
+	}
+
+	PT_TEST(test_iter) {
+
+		var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
+
+		foreach (y in x) {
+			PT_ASSERT(y);
+			PT_ASSERT(type_of(y));
+		}
+
+		delete(x);
+	}
 }
