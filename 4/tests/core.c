@@ -103,7 +103,6 @@ PT_SUITE(suite_core) {
 	}
 
 	PT_TEST(test_assign) {
-
 		/* Integers */
 
 		var x = new(Int, $(Int, 10));
@@ -199,7 +198,6 @@ PT_SUITE(suite_core) {
 	}
 
 	PT_TEST(test_collection_list) {
-
 		var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
 		PT_ASSERT(x);
@@ -225,7 +223,6 @@ PT_SUITE(suite_core) {
 	}
 
 	PT_TEST(test_collection_array) {
-
 		var y = new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
 
 		PT_ASSERT(y);
@@ -252,7 +249,6 @@ PT_SUITE(suite_core) {
 	}
 
 	PT_TEST(test_collection_list_sort) {
-
 		var z = new(List, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
 
 		sort(z);
@@ -279,7 +275,6 @@ PT_SUITE(suite_core) {
 	}
 
 	PT_TEST(test_collection_map) {
-
 		var map1 = new(Map);
 		var map2 = new(Map);
 
@@ -303,11 +298,9 @@ PT_SUITE(suite_core) {
 
 		delete(map1);
 		delete(map2);
-
 	}
 
 	PT_TEST(test_iter) {
-
 		var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
 		foreach (y in x) {
@@ -316,5 +309,206 @@ PT_SUITE(suite_core) {
 		}
 
 		delete(x);
+	}
+
+	PT_TEST(test_push) {
+		var x = new(Array, Int);
+		var y = new(List);
+
+		for (int i = 0; i < 1000; i++) {
+			push(x, $(Int, 1));
+			push(y, $(Int, 2));
+		}
+
+		for (int i = 0; i< 1000; i++) {
+			pop(x);
+			pop(y);
+		}
+
+		push(x, $(Int, 0));
+		push(x, $(Int, 5));
+		push(x, $(Int, 10));
+
+		PT_ASSERT(eq(at(x, 0), $(Int, 0)));
+		PT_ASSERT(eq(at(x, 1), $(Int, 5)));
+		PT_ASSERT(eq(at(x, 2), $(Int, 10)));
+
+		pop_at(x, 1);
+
+		PT_ASSERT(eq(at(x, 0), $(Int, 0)));
+		PT_ASSERT(eq(at(x, 1), $(Int, 10)));
+
+		delete(x);
+		delete(y);
+	}
+
+	PT_TEST(test_at) {
+		var fst = $(Int, 1);
+		var snd = $(Real, 2.0);
+		var trd = $(String, "Hello");
+
+		var x = new(List, fst, snd, trd);
+
+		PT_ASSERT(at(x, 0) is fst);
+		PT_ASSERT(at(x, 1) is snd);
+		PT_ASSERT(at(x, 2) is trd);
+
+		set(x, 1, trd);
+
+		PT_ASSERT(at(x, 1) is trd);
+
+		delete(x);
+	}
+
+	PT_TEST(test_dict) {
+		var prices = new(Table, String, Int);
+		put(prices, $(String, "Apple"), $(Int, 12));
+		put(prices, $(String, "Banana"), $(Int, 6));
+		put(prices, $(String, "Pear"), $(Int, 55));
+
+		var pear_price = get(prices, $(String, "Pear"));
+		var banana_price = get(prices, $(String, "Banana"));
+		var apple_price = get(prices, $(String, "Apple"));
+
+		PT_ASSERT(as_long(pear_price) is 55);
+		PT_ASSERT(as_long(banana_price) is 6);
+		PT_ASSERT(as_long(apple_price) is 12);
+
+		char name[5];
+
+		for (int i = 0; i < 1000; i++) {
+			sprintf(name, "%i", i);
+			put(prices, $(String, name), $(Int, i));
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			sprintf(name, "%i", i);
+			discard(prices, $(String, name));
+		}
+
+		delete(prices);
+	}
+
+	PT_TEST(test_as_ctype) {
+		PT_ASSERT(as_char($(Char, 'a')) is 'a');
+		PT_ASSERT(as_char($(Char, 'b')) is 'b');
+
+		PT_ASSERT_STR_EQ(as_str($(String, "Hello")), "Hello");
+		PT_ASSERT_STR_EQ(as_str($(String, "There")), "There");
+
+		PT_ASSERT(as_long($(Int, 5)) is 5);
+		PT_ASSERT(as_long($(Int, 5.6)) is 5);
+		PT_ASSERT(as_long($(Int, 5.5)) is 5);
+		PT_ASSERT(as_long($(Int, 5.4)) is 5);
+
+		PT_ASSERT(as_double($(Real, 5.1)) is 5.1);
+		PT_ASSERT(as_double($(Real, 5.2)) is 5.2);
+		PT_ASSERT(as_double($(Real, 9.8)) is 9.8);
+		PT_ASSERT(as_double($(Int, 5)) is 5.0);
+		PT_ASSERT(as_double($(Int, 7)) is 7.0);
+	}
+
+	PT_TEST(test_stream) {
+		var f = $(File, NULL);
+		PT_ASSERT(f);
+
+		stream_open(f, "test.bin", "w");
+		PT_ASSERT(f);
+
+		put(f, Int, $(Int, 1));
+		put(f, Int, $(Int, 22));
+
+		stream_close(f);
+		stream_open(f, "test.bin", "r");
+		PT_ASSERT(f);
+
+		var first = get(f, Int);
+		var second = get(f, Int);
+
+		PT_ASSERT(as_long(first) is 1);
+		PT_ASSERT(as_long(second) is 22);
+
+		delete(first);
+		delete(second);
+
+		stream_close(f);
+		PT_ASSERT(f);
+	}
+
+	PT_TEST(test_type_new) {
+		TestType = new(Type, $(String, "TestType"), $(Int, 2),
+					   (var[]){ &TestTypeNew, &TestTypeEq },
+					   (const char* []){ "New", "Eq" });
+
+		PT_ASSERT(TestType);
+		PT_ASSERT_STR_EQ(as_str(TestType), "TestType");
+
+		var test_obj1 = new(TestType, $(Int, 1));
+		var test_obj2 = new(TestType, $(Int, 1));
+		var test_obj3 = new(TestType, $(Int, 4));
+
+		PT_ASSERT(test_obj1);
+		PT_ASSERT(test_obj2);
+		PT_ASSERT(test_obj3);
+
+		PT_ASSERT(eq(test_obj1, test_obj2));
+		PT_ASSERT(neq(test_obj1, test_obj3));
+
+		delete(test_obj1);
+		delete(test_obj2);
+		delete(test_obj3);
+
+		delete(TestType);
+	}
+
+	PT_TEST(test_type_implements) {
+		PT_ASSERT(type_implements(Int, New));
+		PT_ASSERT(type_implements(Real, Num));
+		PT_ASSERT(type_implements(String, Eq));
+
+		PT_ASSERT(type_class(Int, Ord));
+		PT_ASSERT(type_class(List, At));
+		PT_ASSERT(type_class(Type, AsStr));
+	}
+
+	PT_TEST(test_type_parent) {
+		PT_ASSERT(not type_implements(Int, ReturnTrue));
+		PT_ASSERT(not type_implements(Real, ReturnTrue));
+		PT_ASSERT(type_implements(IntParent, ReturnTrue));
+
+		PT_ASSERT(return_true(IntParent));
+
+		Type_Inherit(Int, IntParent);
+
+		PT_ASSERT(type_implements(Int, ReturnTrue));
+		PT_ASSERT(not type_implements(Real, ReturnTrue));
+		PT_ASSERT(type_implements(IntParent, ReturnTrue));
+
+		PT_ASSERT(return_true(Int));
+	}
+
+	PT_TEST(test_show) {
+		var out = new(String, $(String, ""));
+
+		print_to(out, 0, "This is an %s %i %i",
+				 $(String, "example"), $(Int, 10), $(Int, 1));
+
+		PT_ASSERT_STR_EQ(as_str(out), "This is an example 10 1");
+
+		delete(out);
+	}
+
+	PT_TEST(test_look) {
+		var x = $(Int, 0);
+		var y = $(Int, 0);
+		var z = $(Int, 0);
+		var w = $(Int, 0);
+
+		scan_from($(String, "5 10 1 0"), 0, "%i %i %i %i", x, y, z, w);
+
+		PT_ASSERT(eq(x, $(Int, 5)));
+		PT_ASSERT(eq(y, $(Int, 10)));
+		PT_ASSERT(eq(z, $(Int, 1)));
+		PT_ASSERT(eq(w, $(Int, 0)));
 	}
 }
