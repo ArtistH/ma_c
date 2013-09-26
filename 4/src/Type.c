@@ -21,7 +21,7 @@ var Type_Cast(var obj, var t, const char* func, const char* file, int line) {
 		return obj;
 	} else {
 		return throw(TypeError,
-					 "Argument to function '%s' at '%s:%i' ::"
+					 "Argument to function '%s' at '%s:%i' :: "
 					 "Got Type '%s' :: "
 					 "Expected Type '%s'",
 					 $(String, (char*)func),

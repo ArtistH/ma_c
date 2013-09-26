@@ -127,8 +127,9 @@ int Table_Len(var self) {
 
 void Table_Clear(var self) {
 	TableData* tab = cast(self, Table);
-
+  
 	clear(tab->keys);
+
 
 	for (int i = 0; i < tab->size; i++) {
 		clear(tab->key_buckets[i]);
