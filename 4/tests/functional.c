@@ -186,7 +186,7 @@ PT_SUITE(suite_functional) {
 		PT_ASSERT(res is Some);
 	}
 
-	PT_TEST(test_lambda_flip) {
+	/* PT_TEST(test_lambda_flip) {
 		lambda(return_first, args) {
 			return at(args, 0);
 		};
@@ -201,6 +201,220 @@ PT_SUITE(suite_functional) {
 
 		PT_ASSERT(res1 is arg1);
 		PT_ASSERT(res2 is arg2);
+	} */
+
+	PT_TEST(test_lambda_pipe) {
+		var total = $(Int, 0);
+
+		lambda(add_one, args) {
+			add(at(args, 0), $(Int, 1));
+			return args;
+		}
+
+		lambda(add_ten, args) {
+			add(at(args, 0), $(Int, 10));
+			return args;
+		}
+
+		lambda(add_hundred, args) {
+			add(at(args, 0), $(Int, 100));
+			return args;
+		}
+
+		lambda_pipe(add_all, add_one, add_ten, add_hundred);
+
+		var res =  call(add_all, total);
+
+		PT_ASSERT(as_long(total) is 111);
+	}
+
+	PT_TEST(test_lambda_method_pipe) {
+		var str = new(String, $(String, ""));
+
+		lambda(cat_fizz, args) {
+			append(at(args, 0), $(String, "Fizz"));
+			return None;
+		}
+
+		lambda(cat_buzz, args) {
+			append(at(args, 0), $(String, "Buzz"));
+			return None;
+		}
+
+		lambda(cat_boo, args) {
+			append(at(args, 0), $(String, "Boo"));
+			return None;
+		}
+
+		lambda_method_pipe(cat_all, cat_fizz, cat_buzz, cat_boo);
+
+		var res = call(cat_all, str);
+
+		PT_ASSERT_STR_EQ(as_str(str), "FizzBuzzBoo");
+
+		delete(str);
+	}
+
+	PT_TEST(test_lambda_partial_l) {
+		lambda(add_to_first, args) {
+			add(at(args, 0), at(args, 1));
+			add(at(args, 0), at(args, 2));
+			add(at(args, 0), at(args, 3));
+			return None;
+		}
+
+		var total = $(Int, 0);
+
+		lambda_partial(add_to_total, add_to_first, total);
+
+		var res = call(add_to_total, $(Int, 1), $(Int, 10), $(Int, 100));
+
+		PT_ASSERT(as_long(total) is 111);
+	}
+	
+	PT_TEST(test_lambda_partial_r) {
+		lambda(add_to_last, args) {
+			add(at(args, 3), at(args, 0));
+			add(at(args, 3), at(args, 1));
+			add(at(args, 3), at(args, 2));
+			return None;
+		}
+
+		var total = $(Int, 0);
+
+		lambda_partial_r(add_to_total, add_to_last, total);
+
+		var res = call(add_to_total, $(Int, 1), $(Int, 10), $(Int, 100));
+
+		PT_ASSERT(as_long(total) is 111);
+	}
+
+	var return_snd(var fst, var snd) {
+		return snd;
+	}
+
+	PT_TEST(test_lambda_uncurry) {
+		lambda_uncurry(return_snd_uncurried, return_snd, 2);
+
+		var res = call(return_snd_uncurried, None, Some);
+
+		PT_ASSERT(res is Some);
+	}
+
+	void snd_to_fst(var fst, var snd) {
+		assign(fst, snd);
+	}
+
+	PT_TEST(test_lambda_void_uncurry) {
+		lambda_void_uncurry(snd_to_fst_uncurried, snd_to_fst, 2);
+
+		var fst = $(Int, 0);
+		var snd = $(Int, 64);
+
+		var res = call(snd_to_fst_uncurried, fst, snd);
+
+		PT_ASSERT(as_long(fst) is 64);
+	}
+
+	PT_TEST(test_map) {
+		lambda(add_one, args) {
+			add(at(args, 0), $(Int, 1));
+			return None;
+		};
+
+		var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
+
+		map(values, add_one);
+
+		PT_ASSERT(as_long(at(values, 0)) is 6);
+		PT_ASSERT(as_long(at(values, 1)) is 4);
+		PT_ASSERT(as_long(at(values, 2)) is 11);
+
+		delete(values);
+	}
+
+	PT_TEST(test_new_map) {
+		lambda(copy_values, args) {
+			return at(args, 0);
+		};
+
+		var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
+
+		var new_values = new_map(values, copy_values);
+
+		PT_ASSERT(new_values);
+		PT_ASSERT(at(values, 0) is at(new_values, 0));
+
+		delete(values);
+		delete(new_values);
+	}
+
+	PT_TEST(test_new_filter) {
+		lambda(only_some, args) {
+			return bool_var(at(args, 0) is Some);
+		}
+
+		var values = new(List, Some, Some, None);
+		var somes = new_filter(values, only_some);
+
+		PT_ASSERT(len(somes) is 2);
+
+		delete(values);
+		delete(somes);
+	}
+
+	PT_TEST(test_new_sum) {
+		var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
+		var total = new_sum(values);
+
+		PT_ASSERT(as_long(total) is 18);
+
+		delete(total);
+		delete(values);
+	}
+
+	PT_TEST(test_new_product) {
+		var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
+		var total = new_product(values);
+
+		PT_ASSERT(as_long(total) is 150);
+
+		delete(total);
+		delete(values);
+	}
+
+	PT_TEST(test_new_foldl) {
+		lambda(fold_sum, args) {
+			var base = at(args, 0);
+			var item = at(args, 1);
+			add(base, item);
+			return None;
+		}
+
+		var values = new(List, $(Int, 5), $(Int,3), $(Int, 10));
+		var total = new_foldl(values, fold_sum, $(Int, 0));
+
+		PT_ASSERT(as_long(total) is 18);
+
+		delete(total);
+		delete(values);
+	}
+
+	PT_TEST(test_new_foldr) {
+		lambda(fold_sum, args) {
+			var base = at(args, 0);
+			var item = at(args, 1);
+			add(base, item);
+			return None;
+		}
+
+		var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
+		var total = new_foldr(values, fold_sum, $(Int, 0));
+
+		PT_ASSERT(as_long(total) is 18);
+
+		delete(total);
+		delete(values);
 	}
 }
 
