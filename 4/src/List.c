@@ -139,11 +139,12 @@ local void List_Reserve_More(ListData* lo) {
 }
 
 void List_Push_Back(var self, var val) {
+
 	ListData* lo = cast(self, List);
 	lo->num_items++;
 	List_Reserve_More(lo);
 
-	lo->items[lo->num_items - 1] = val;
+	lo->items[lo->num_items-1] = val;
 }
 
 void List_Push_Front(var self, var val) {
@@ -153,16 +154,18 @@ void List_Push_Front(var self, var val) {
 void List_Push_At(var self, var val, int index) {
 	ListData* lo = cast(self, List);
 
-	if (index < 0 or index > lo->num_items - 1) {
-		return;
+	if (index < 0 or index > lo->num_items) {
+		throw(IndexOutOfBoundsError, 
+			  "Index %i out of bounds [%i-%i]", 
+			  $(Int, index), $(Int, 0), $(Int, len(self)));
 	}
 
 	lo->num_items++;
 	List_Reserve_More(lo);
 
-	memmove(&lo->items[index + 1],
-			&lo->items[index],
-			sizeof(var) * ((lo->num_items - 1) - index));
+	memmove(&lo->items[index+1], 
+			&lo->items[index], 
+			sizeof(var) * ((lo->num_items-1) - index));
 
 	lo->items[index] = val;
 }
@@ -181,7 +184,7 @@ var List_Pop_Back(var self) {
 		return throw(IndexOutOfBoundsError, "Cannot pop back. List is empty!");
 	}
 
-	var retval = lo->items[lo->num_items - 1];
+	var retval = lo->items[lo->num_items-1];
 
 	lo->num_items--;
 	List_Reserve_Less(lo);
@@ -196,7 +199,7 @@ var List_Pop_Front(var self) {
 var List_Pop_At(var self, int index) {
 	ListData* lo = cast(self, List);
 
-	if (index < 0 or index > lo->num_items - 1) {
+	if (index < 0 or index > lo->num_items-1) {
 		return throw(IndexOutOfBoundsError,
 					 "index %i out of bounds [%i-%i]",
 					 $(Int, index), $(Int, 0), $(Int, len(self)));
@@ -205,8 +208,8 @@ var List_Pop_At(var self, int index) {
 	var retval = lo->items[index];
 
 	memmove(&lo->items[index],
-			&lo->items[index + 1],
-			sizeof(var) * ((lo->num_items - 1) - index));
+			&lo->items[index+1],
+			sizeof(var) * ((lo->num_items-1) - index));
 
 	lo->num_items--;
 	List_Reserve_Less(lo);
@@ -217,7 +220,7 @@ var List_Pop_At(var self, int index) {
 var List_At(var self, int index) {
 	ListData* lo = cast(self, List);
 
-	if (index < 0 or index > lo->num_items - 1) {
+	if (index < 0 or index > lo->num_items-1) {
 		return throw(IndexOutOfBoundsError,
 					 "Index %i out of bounds [%i-%i]",
 					 $(Int, index), $(Int, 0), $(Int, len(self)));
@@ -229,14 +232,14 @@ var List_At(var self, int index) {
 void List_Set(var self, int index, var val) {
 	ListData* lo = cast(self, List);
 
-	if (index < 0 or index > lo->num_items - 1) {
+	if (index < 0 or index > lo->num_items-1) {
 		return;
 	}
 
 	lo->items[index] = val;
 }
 
-local const var LIST_ITER_END = (var) - 1;
+local const var LIST_ITER_END = (var)-1;
 
 var List_Iter_Start(var self) {
 	if (len(self) == 0) {
@@ -264,7 +267,7 @@ var List_Iter_Next(var self, var curr) {
 		}
 	}
 
-	for (int i = 0; i < len(self) - 1; i++) {
+	for (int i = 0; i < len(self)-1; i++) {
 		var val = at(self, i);
 
 		if (val is curr) {
@@ -285,7 +288,7 @@ local void List_Swap_Items(var self, int i0, int i1) {
 
 void List_Reverse(var self) {
 	for (int i = 0; i < len(self) / 2; i++) {
-		List_Swap_Items(self, i, len(self - 1 - i));
+		List_Swap_Items(self, i, len(self)-1-i);
 	}
 }
 
@@ -318,22 +321,22 @@ local int List_Sort_Partition(var self, int left, int right, int pivot) {
 
 local void List_Sort_Part(var self, int left, int right) {
 	if (left < right) {
-		int pivot = left + (right - left) / 2;
+		int pivot = left + (right-left) / 2;
 		int newpivot = List_Sort_Partition(self, left, right, pivot);
-		List_Sort_Part(self, left, newpivot - 1);
-		List_Sort_Part(self, newpivot + 1, right);
+		List_Sort_Part(self, left, newpivot-1);
+		List_Sort_Part(self, newpivot+1, right);
 	}
 }
 
 void List_Sort(var self) {
-	List_Sort_Part(self, 0, len(self) - 1);
+	List_Sort_Part(self, 0, len(self)-1);
 }
 
 int List_Show(var self, var output, int pos) {
 	pos = print_to(output, pos, "<'List' At 0x%p [", self);
 	for (int i = 0; i < len(self); i++) {
 		pos = print_to(output, pos, "%$", at(self, i));
-		if (i < len(self) - 1) {
+		if (i < len(self)-1) {
 			pos = print_to(output, pos, ", ");
 		}
 	}

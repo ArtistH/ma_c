@@ -48,8 +48,9 @@ var Array_New(var self, var_list vl) {
 }
 
 var Array_Delete(var self) {
-	foreach(item in self) {
-		destruct(item);
+	ArrayData* ad = cast(self, Array);
+	if (ad->items isnt NULL) {
+		free(ad->items);
 	}
 
 	return self;
@@ -186,7 +187,7 @@ var Array_Pop_Back(var self) {
 		return throw(IndexOutOfBoundsError, "Cannot pop back. Array is empty!");
 	}
 
-	destruct(at(self, len(self) - 1));
+	destruct(at(self, len(self)-1));
 
 	ad->num_items--;
 	Array_Reserve_Less(ad);

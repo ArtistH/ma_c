@@ -186,7 +186,7 @@ PT_SUITE(suite_functional) {
 		PT_ASSERT(res is Some);
 	}
 
-	/* PT_TEST(test_lambda_flip) {
+	PT_TEST(test_lambda_flip) {
 		lambda(return_first, args) {
 			return at(args, 0);
 		};
@@ -201,7 +201,7 @@ PT_SUITE(suite_functional) {
 
 		PT_ASSERT(res1 is arg1);
 		PT_ASSERT(res2 is arg2);
-	} */
+	}
 
 	PT_TEST(test_lambda_pipe) {
 		var total = $(Int, 0);
