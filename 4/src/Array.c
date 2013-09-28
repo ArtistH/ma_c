@@ -282,7 +282,8 @@ void Array_Reverse(var self) {
 		Array_Swap_Items(self, temp, i, len(self)-1-i);
 	}
 
-	destruct(temp);
+//	destruct(temp);
+	delete(temp);
 }
 
 local int Array_Sort_Partition(var self, int left, int right, int pivot) {
