@@ -220,13 +220,13 @@ int Table_Show(var self, var output, int pos) {
 	for (int i = 0; i < len(self); i++) {
 		var key = at(td->keys, i);
 		var val = get(self, key);
-		pos = print_to(output, pos, "%s:%s", key, get(self, key));
-		if (i < len(self) - 1) {
+		pos = print_to(output, pos, "%$:%$", key, get(self, key));
+		if (i < len(self)-1) {
 			pos = print_to(output, pos, ", ");
 		}
 	}
 
-	pos = print_to(output, pos, "|>");
+	pos = print_to(output, pos, "}>");
 
 	return pos;
 }
