@@ -49,6 +49,7 @@ var Array_New(var self, var_list vl) {
 
 var Array_Delete(var self) {
 	ArrayData* ad = cast(self, Array);
+	clear(self);
 	if (ad->items isnt NULL) {
 		free(ad->items);
 	}
