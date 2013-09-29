@@ -11,9 +11,9 @@ int main() {
 	pt_add_suite(suite_core);
 	pt_add_suite(suite_functional);
 	pt_add_suite(suite_data);
+	pt_add_suite(suite_exception);
 	pt_add_suite(suite_memory);
-	/* pt_add_suite(suite_exception);
-	pt_add_suite(suite_threading); */
+	pt_add_suite(suite_threading);
 
 	pt_run();
 
