@@ -49,11 +49,12 @@ var Array_New(var self, var_list vl) {
 
 var Array_Delete(var self) {
 	ArrayData* ad = cast(self, Array);
-	clear(self);
-	if (ad->items isnt NULL) {
-		free(ad->items);
-	}
 
+  	foreach(item in self) {
+		destruct(item);
+}	
+	free(ad->items);
+  
 	return self;
 }
 
@@ -282,7 +283,6 @@ void Array_Reverse(var self) {
 		Array_Swap_Items(self, temp, i, len(self)-1-i);
 	}
 
-//	destruct(temp);
 	delete(temp);
 }
 
@@ -314,10 +314,8 @@ local int Array_Sort_Partition(var self, int left, int right, int pivot) {
 		Array_Swap_Items(self, temp, storei, right);
 	}
 
-	/* destruct(temp); */
-	/* destruct(pival); */
-	delete(temp);
-	delete(pival);
+	deallocate(temp);
+	deallocate(pival);
 
 	return storei;
 }

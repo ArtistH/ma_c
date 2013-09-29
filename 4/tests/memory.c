@@ -69,8 +69,5 @@ PT_SUITE(suite_memory) {
 		PT_ASSERT(eq(get(p, z), $(Int, 1)));
 
 		delete(p);
-		delete(x);
-		delete(y);
-		delete(z);
 	}
 }

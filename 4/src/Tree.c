@@ -141,8 +141,6 @@ local var Tree_Next_Inorder(struct TreeNode* node) {
 }
 
 local void Tree_Node_Delete(struct TreeNode* node) {
-//	destruct(node->leaf_key);
-//	destruct(node->leaf_val);
 	delete(node->leaf_key);
 	delete(node->leaf_val);
 	free(node);
