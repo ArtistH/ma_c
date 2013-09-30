@@ -7,8 +7,9 @@ OBJ = $(addprefix src/,$(notdir $(SRC:.c=.o)))
 EXAMPLES = $(wildcard examples/*.c)
 EXAMPLES_EXE = $(addprefix examples/,$(notdir $(EXAMPLES:.c=.bin)))
 
-CFLAGS := -I ./include -std=gnu99 -Wall -Werror -Wno-unused -O3 -g -fPIC -lm
-LFLAGS := -shared -g -ggdb -lm
+CFLAGS := -I ./include -std=gnu99 -Wall -Werror -Wno-unused -O3 -g -fPIC
+LIBS := -lm
+LFLAGS := -shared -g -ggdb
 
 DYNAMIC = libbasic.so
 STATIC = libbasic.a
@@ -20,7 +21,7 @@ all: lib $(EXAMPLES_EXE)
 lib: $(DYNAMIC) $(STATIC)
 
 $(DYNAMIC): $(OBJ)
-	$(CC) $(OBJ) $(LFLAGS) -o $@
+	$(CC) $(OBJ) $(LFLAGS) $(LIBS) -o $@
 
 $(STATIC): $(OBJ)
 	$(AR) rcs $@ $(OBJ)
@@ -31,7 +32,7 @@ $(STATIC): $(OBJ)
 $(EXAMPLES_EXE): $(STATIC)
 
 %.bin: %.c
-	$(CC) $^ $(CFLAGS) -o $@
+	$(CC) $^ $(CFLAGS) $(LIBS) -o $@
 
 clean:
-	rm -f $(OBJ) $(STATIC) $(DYNAMIC) $(EXAMPLES_EXE)
+	rm -f $(STATIC) $(DYNAMIC) $(OBJ) $(EXAMPLES_EXE)
