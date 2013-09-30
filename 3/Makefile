@@ -1,37 +1,37 @@
-# 需要排除的目录
-exclude_dirs := include bin
+CC = gcc
+AR = ar
 
-# 取得当前子目录深度为1的所有目录名称
-dirs := $(shell find . -maxdepth 1 -type d)
-dirs := $(basename $(patsubst ./%,%,$(dirs)))
-dirs := $(filter-out $(exclude_dirs),$(dirs))
+SRC = $(wildcard src/*.c)
+OBJ = $(addprefix src/,$(notdir $(SRC:.c=.o)))
 
-# 避免clean子目录操作同名，加上_clean_前缀
-SUBDIRS := $(dirs)
-clean_dirs := $(addprefix _clean_,$(SUBDIRS) )
+EXAMPLES = $(wildcard examples/*.c)
+EXAMPLES_EXE = $(addprefix examples/,$(notdir $(EXAMPLES:.c=.bin)))
 
-.PHONY: all clean subdirs $(SUBDIRS) lib GTAGS GTAGSCLEAN
-default:all
-all:lib subdirs
+CFLAGS := -I ./include -std=gnu99 -Wall -Werror -Wno-unused -O3 -g -fPIC -lm
+LFLAGS := -shared -g -ggdb -lm
 
-lib:
-	$(MAKE) -C src
+DYNAMIC = libbasic.so
+STATIC = libbasic.a
 
-GTAGS:
-	find . -name "*.[ch]" > gtags.files
-	gtags
+.PHONY: all lib clean
 
-GTAGSCLEAN:
-	rm -rf GPATH GRTAGS GTAGS gtags.files
+all: lib $(EXAMPLES_EXE)
 
-# 执行默认make target
-$(SUBDIRS):
-	$(MAKE) -C $@
+lib: $(DYNAMIC) $(STATIC)
 
-subdirs: $(SUBDIRS)
+$(DYNAMIC): $(OBJ)
+	$(CC) $(OBJ) $(LFLAGS) -o $@
 
-# 执行clean
-$(clean_dirs):
-	$(MAKE) -C $(patsubst _clean_%,%,$@) clean
+$(STATIC): $(OBJ)
+	$(AR) rcs $@ $(OBJ)
 
-clean: $(clean_dirs)
+%.o: %.c
+	$(CC) $< -c $(CFLAGS) -o $@
+
+$(EXAMPLES_EXE): $(STATIC)
+
+%.bin: %.c
+	$(CC) $^ $(CFLAGS) -o $@
+
+clean:
+	rm -f $(OBJ) $(STATIC) $(DYNAMIC) $(EXAMPLES_EXE)
