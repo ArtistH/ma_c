@@ -21,6 +21,7 @@
 /test/[a-zA-Z_]*
 !test/*.c
 !test/*.exp
+!test/*.in
 /VERSION
 /bin/jemalloc.sh
 
