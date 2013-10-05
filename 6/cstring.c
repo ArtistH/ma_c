@@ -204,7 +204,7 @@ cstring_release(cstring s){
 	if (s->type != 0) {
 		return;
 	}
-	if (s->type == 0) {
+	if (s->ref == 0) {
 		return;
 	}
 	if (__sync_sub_and_fetch(&s->ref, 1) == 0) {
@@ -221,4 +221,149 @@ cstring_hash(cstring s) {
 		s->hash_size = hash_blob(s->cstr, strlen(s->cstr));
 	}
 	return s->hash_size;
+}
+
+int
+cstring_equal(cstring a, cstring b) {
+	if (a == b) {
+		return 1;
+	}
+	if ((a->type == CSTRING_INTERNING) &&
+		(b->type == CSTRING_INTERNING)) {
+		return 0;
+	}
+	if ((a->type == CSTRING_ONSTACK) &&
+		(b->type == CSTRING_ONSTACK)) {
+		if (a->hash_size != b->hash_size) {
+			return 0;
+		}
+		return memcmp(a->cstr, b->cstr, a->hash_size) == 0;
+	}
+	uint32_t hasha = cstring_hash(a);
+	uint32_t hashb = cstring_hash(b);
+	if (hasha != hashb) {
+		return 0;
+	}
+	return strcmp(a->cstr, b->cstr) == 0;
+}
+
+static cstring
+cstring_cat2(const char * a, const char * b) {
+	size_t sa = strlen(a);
+	size_t sb = strlen(b);
+	if (sa + sb < CSTRING_INTERNING_SIZE) {
+		char tmp[CSTRING_INTERNING_SIZE];
+		memcpy(tmp, a, sa);
+		memcpy(tmp+sa, b, sb);
+		tmp[sa+sb] = '\0';
+		return cstring_interning(tmp, sa+sb, hash_blob(tmp, sa+sb));
+	}
+	struct cstring_data * p = malloc(sizeof(struct cstring_data) + sa + sb + 1);
+	// todo: memory alloc error
+	assert(p);
+	char * ptr = (char *)(p + 1);
+	p->cstr = ptr;
+	p->type = 0;
+	p->ref = 1;
+	memcpy(ptr, a, sa);
+	memcpy(ptr+sa, b, sb);
+	ptr[sa+sb] = '\0';
+	p->hash_size = 0;
+	return p;
+}
+
+cstring
+cstring_cat(cstring_buffer sb, const char * str) {
+	cstring s = sb->str;
+	if (s->type == CSTRING_ONSTACK) {
+		int i = (int)s->hash_size;
+		while (i < CSTRING_STACK_SIZE-1) {
+			s->cstr[i] = *str;
+			if (*str == '\0') {
+				return s;
+			}
+			++s->hash_size;
+			++str;
+			++i;
+		}
+		s->cstr[i] = '\0';
+	}
+	cstring tmp = s;
+	sb->str = cstring_cat2(tmp->cstr, str);
+	cstring_release(tmp);
+	return sb->str;
+}
+
+static cstring
+cstring_format(const char * format, va_list ap) {
+	static char * cache = NULL;
+	char * result;
+	char * temp = cache;
+	// read cache buffer atomic
+	if (temp) {
+		temp = __sync_val_compare_and_swap(&cache, temp, NULL);
+	}
+	if (temp == NULL) {
+		temp = (char *)malloc(FORMAT_TEMP_SIZE);
+		// todo : check malloc
+		assert(temp);
+	}
+	int n = vsnprintf(temp, FORMAT_TEMP_SIZE, format, ap);
+	if (n >= FORMAT_TEMP_SIZE) {
+		int sz = FORMAT_TEMP_SIZE * 2;
+		for (;;) {
+			result = malloc(sz);
+			// todo : check malloc
+			assert(result);
+			n = vsnprintf(result, sz, format, ap);
+			if (n >= sz) {
+				free(result);
+				sz *= 2;
+			} else {
+				break;
+			}
+		}
+	} else {
+		result = temp;
+	}
+	cstring r = (cstring)malloc(sizeof(struct cstring_data) + n + 1);
+	// todo : check malloc
+	assert(r);
+	r->cstr = (char *)(r+1);
+	r->type = 0;
+	r->ref = 1;
+	r->hash_size = 0;
+	memcpy(r->cstr, result, n+1);
+	if (temp != result) {
+		free(result);
+	}
+	// save temp atomic
+	if (!__sync_bool_compare_and_swap(&cache, NULL, temp)) {
+		free(temp);
+	} else {
+	}
+
+	return r;
+}
+
+cstring
+cstring_printf(cstring_buffer sb, const char * format, ...) {
+	cstring s = sb->str;
+	va_list ap;
+	va_start(ap, format);
+	if (s->type == CSTRING_ONSTACK) {
+		int n = vsnprintf(s->cstr, CSTRING_STACK_SIZE, format, ap);
+		if (n >= CSTRING_STACK_SIZE) {
+			s = cstring_format(format, ap);
+			sb->str = s;
+		} else {
+			s->hash_size = n;
+		}
+	} else {
+		cstring_release(sb->str);
+		s = cstring_format(format, ap);
+		sb->str = s;
+	}
+	va_end(ap);
+	return s;
 }
