@@ -1,8 +1,8 @@
 /* ex-1.c for queue */
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
-#include "queue.h"
+#include "Cbasic/list.h"
+#include "Cbasic/queue.h"
 
 /* print_queue */
 static void print_queue(const Queue *queue) {

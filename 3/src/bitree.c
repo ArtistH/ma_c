@@ -1,7 +1,7 @@
 /* bitree.c */
 #include <stdlib.h>
 #include <string.h>
-#include "bitree.h"
+#include "Cbasic/bitree.h"
 
 /* bitree_init */
 void bitree_init(BiTree *tree, void (*destroy)(void *data)) {

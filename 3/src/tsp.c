@@ -2,9 +2,9 @@
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
-#include "graph.h"
-#include "graphalg.h"
-#include "list.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/graphalg.h"
+#include "Cbasic/list.h"
 
 /* tsp */
 int tsp(List *vertices, const TspVertex *start, List *tour,

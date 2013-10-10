@@ -1,7 +1,7 @@
 /* traverse.c */
 
-#include "list.h"
-#include "traverse.h"
+#include "Cbasic/list.h"
+#include "Cbasic/traverse.h"
 
 /* preorder */
 int preorder(const BiTreeNode *node, List *list) {

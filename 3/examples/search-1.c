@@ -1,9 +1,9 @@
 /* ex-1.c for bisearch search algorithms */
 #include <stdio.h>
 #include <string.h>
-#include "search.h"
-#include "sort.h"
-#include "spell.h"
+#include "Cbasic/search.h"
+#include "Cbasic/sort.h"
+#include "Cbasic/spell.h"
 
 /* Define the size of strings. */
 #define STRSIZ 6

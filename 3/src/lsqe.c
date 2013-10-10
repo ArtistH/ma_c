@@ -1,6 +1,6 @@
 /* lsqe.c */
 #include <math.h>
-#include "nummeths.h"
+#include "Cbasic/nummeths.h"
 
 /* lsqe */
 void lsqe(const double *x, const double *y, int n, double *b1, double *b0) {

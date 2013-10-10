@@ -11,8 +11,9 @@ CFLAGS := -I ./include -std=gnu99 -Wall -Werror -Wno-unused -O3 -g -fPIC
 LIBS := -lm
 LFLAGS := -shared -g -ggdb
 
-DYNAMIC = libbasic.so
-STATIC = libbasic.a
+EXE_NAME = Cbasic
+DYNAMIC = lib$(EXE_NAME).so
+STATIC = lib$(EXE_NAME).a
 
 .PHONY: all lib clean
 
@@ -35,4 +36,6 @@ $(EXAMPLES_EXE): $(STATIC)
 	$(CC) $^ $(CFLAGS) $(LIBS) -o $@
 
 clean:
-	rm -f $(STATIC) $(DYNAMIC) $(OBJ) $(EXAMPLES_EXE)
+	rm -f $(STATIC) $(DYNAMIC)
+	rm -f $(OBJ)
+	rm -f $(EXAMPLES_EXE)

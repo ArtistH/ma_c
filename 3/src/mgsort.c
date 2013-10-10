@@ -1,7 +1,7 @@
 /* mgsort.c */
 #include <stdlib.h>
 #include <string.h>
-#include "sort.h"
+#include "Cbasic/sort.h"
 
 /* merge */
 static int merge(void *data, int esize, int i, int j, int k,

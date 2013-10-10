@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bfs.h"
-#include "graph.h"
-#include "list.h"
-#include "set.h"
+#include "Cbasic/bfs.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/list.h"
+#include "Cbasic/set.h"
 
 /* Define the size of strings. */
 #define STRSIZ 8

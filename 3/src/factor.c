@@ -1,7 +1,7 @@
 /* factor.c */
 #include <math.h>
 #include <stdio.h>
-#include "factor.h"
+#include "Cbasic/factor.h"
 
 /* factor */
 void factor(int number, int n, int j) {

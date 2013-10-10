@@ -2,9 +2,9 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include "search.h"
-#include "sort.h"
-#include "spell.h"
+#include "Cbasic/search.h"
+#include "Cbasic/sort.h"
+#include "Cbasic/spell.h"
 
 /* compare_str */
 static int compare_str(const void *key1, const void *key2) {

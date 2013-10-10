@@ -1,7 +1,7 @@
 /* ex-1.c for data-compression */
 #include <ctype.h>
 #include <stdio.h>
-#include "compress.h"
+#include "Cbasic/compress.h"
 
 /* Define the size of data to compress. */
 #define DATSIZ 500000

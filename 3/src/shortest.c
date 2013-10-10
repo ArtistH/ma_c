@@ -1,10 +1,10 @@
 /* shortest.c */
 #include <float.h>
 #include <stdlib.h>
-#include "graph.h"
-#include "graphalg.h"
-#include "list.h"
-#include "set.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/graphalg.h"
+#include "Cbasic/list.h"
+#include "Cbasic/set.h"
 
 /* relax */
 static void relax(PathVertex *u, PathVertex *v, double weight) {

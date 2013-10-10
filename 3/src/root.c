@@ -1,5 +1,5 @@
 #include <math.h>
-#include "nummeths.h"
+#include "Cbasic/nummeths.h"
 
 /* root */
 int root(double (*f)(double x), double (*g)(double x), double *x,

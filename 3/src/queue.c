@@ -1,7 +1,7 @@
 /* queue.c */
 #include <stdlib.h>
-#include "list.h"
-#include "queue.h"
+#include "Cbasic/list.h"
+#include "Cbasic/queue.h"
 
 /* queue_enqueue */
 int queue_enqueue(Queue *queue, const void *data) {

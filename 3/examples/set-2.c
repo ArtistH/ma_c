@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cover.h"
-#include "list.h"
-#include "set.h"
+#include "Cbasic/cover.h"
+#include "Cbasic/list.h"
+#include "Cbasic/set.h"
 
 /* Define the number of numbers in the skills and player sets. */
 #define SKILLS_COUNT 12

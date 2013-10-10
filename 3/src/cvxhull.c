@@ -1,8 +1,8 @@
 /* cvxhull.c */
 #include <math.h>
 #include <stdlib.h>
-#include "geometry.h"
-#include "list.h"
+#include "Cbasic/geometry.h"
+#include "Cbasic/list.h"
 
 /* cvxhull */
 int cvxhull(const List *P, List *polygon) {

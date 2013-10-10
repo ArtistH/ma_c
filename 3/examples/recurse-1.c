@@ -1,7 +1,7 @@
 /* ex-1.c for recursion and tail-recursion */
 #include <stdio.h>
-#include "fact.h"
-#include "facttail.h"
+#include "Cbasic/fact.h"
+#include "Cbasic/facttail.h"
 
 /* main */
 int main() {

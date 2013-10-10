@@ -1,7 +1,7 @@
 /* interpol.c */
 #include <stdlib.h>
 #include <string.h>
-#include "nummeths.h"
+#include "Cbasic/nummeths.h"
 
 /* interpol
  * return :

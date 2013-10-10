@@ -1,6 +1,6 @@
 /* geodist.c */
-#include "geodist.h"
-#include "geometry.h"
+#include "Cbasic/geodist.h"
+#include "Cbasic/geometry.h"
 
 /* geodist */
 int geodist(double lat1, double lon1, double lat2, double lon2, double *d) {

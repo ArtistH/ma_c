@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "graph.h"
-#include "graphalg.h"
-#include "list.h"
-#include "route.h"
-#include "set.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/graphalg.h"
+#include "Cbasic/list.h"
+#include "Cbasic/route.h"
+#include "Cbasic/set.h"
 
 /* Define the size of strings. */
 #define STRSIZ 2

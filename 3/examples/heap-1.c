@@ -1,7 +1,7 @@
 /* ex-1.c for heap */
 #include <stdio.h>
 #include <stdlib.h>
-#include "heap.h"
+#include "Cbasic/heap.h"
 
 /* print_heap */
 static void print_heap(Heap *heap) {

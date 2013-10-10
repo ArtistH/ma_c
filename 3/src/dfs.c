@@ -1,8 +1,8 @@
 /* dfs.c */
 #include <stdlib.h>
-#include "dfs.h"
-#include "graph.h"
-#include "list.h"
+#include "Cbasic/dfs.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/list.h"
 
 /* dfs_main */
 static int dfs_main(Graph *graph, AdjList *adjlist, List *ordered) {

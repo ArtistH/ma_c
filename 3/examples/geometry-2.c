@@ -1,6 +1,6 @@
 /* ex-2.c for computing great-circle distances. */
 #include <stdio.h>
-#include "geodist.h"
+#include "Cbasic/geodist.h"
 
 /* main */
 int main() {

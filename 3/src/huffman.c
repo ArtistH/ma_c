@@ -3,10 +3,10 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bit.h"
-#include "bitree.h"
-#include "compress.h"
-#include "pqueue.h"
+#include "Cbasic/bit.h"
+#include "Cbasic/bitree.h"
+#include "Cbasic/compress.h"
+#include "Cbasic/pqueue.h"
 
 /* compare_freq */
 static int compare_freq(const void *tree1, const void *tree2) {

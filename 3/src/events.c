@@ -1,9 +1,9 @@
 /* events.c */
 #include <stdlib.h>
 #include <string.h>
-#include "event.h"
-#include "events.h"
-#include "queue.h"
+#include "Cbasic/event.h"
+#include "Cbasic/events.h"
+#include "Cbasic/queue.h"
 
 /* receive_event */
 int receive_event(Queue *events, const Event *event) {

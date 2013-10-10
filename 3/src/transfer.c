@@ -3,8 +3,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "compress.h"
-#include "transfer.h"
+#include "Cbasic/compress.h"
+#include "Cbasic/transfer.h"
 
 /* send_comp */
 int send_comp(int s, const unsigned char *data, int size, int flags) {

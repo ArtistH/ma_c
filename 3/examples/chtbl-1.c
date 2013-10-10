@@ -1,7 +1,7 @@
 /* ex-1.c for chtbl (chained hash table) */
 #include <stdio.h>
-#include "chtbl.h"
-#include "list.h"
+#include "Cbasic/chtbl.h"
+#include "Cbasic/list.h"
 
 /* Define the size of the chained hash table. */
 #define TBLSIZ 11

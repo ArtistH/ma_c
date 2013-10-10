@@ -1,9 +1,9 @@
 /* ex-1.c for geometric algorithms. */
 #include <math.h>
 #include <stdio.h>
-#include "geodist.h"
-#include "geometry.h"
-#include "list.h"
+#include "Cbasic/geodist.h"
+#include "Cbasic/geometry.h"
+#include "Cbasic/list.h"
 
 static void local_lint_printf(Point p1_rct, Point p2_rct,
 							  Point p3_rct, Point p4_rct) {

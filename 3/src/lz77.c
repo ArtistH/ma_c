@@ -2,8 +2,8 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bit.h"
-#include "compress.h"
+#include "Cbasic/bit.h"
+#include "Cbasic/compress.h"
 
 /* compare_win */
 static int compare_win(const unsigned char *window,

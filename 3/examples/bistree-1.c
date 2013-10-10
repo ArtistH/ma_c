@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bistree.h"
+#include "Cbasic/bistree.h"
 
 /* Define the size of strings. */
 #define STRSIZ 6

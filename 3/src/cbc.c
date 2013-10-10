@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "bit.h"
-#include "cbc.h"
-#include "encrypt.h"
+#include "Cbasic/bit.h"
+#include "Cbasic/cbc.h"
+#include "Cbasic/encrypt.h"
 
 /* cbc_encipher */
 void cbc_encipher(const unsigned char *plaintext,

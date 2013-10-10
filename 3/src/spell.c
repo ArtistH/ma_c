@@ -1,7 +1,7 @@
 /* spell.c */
 #include <string.h>
-#include "search.h"
-#include "spell.h"
+#include "Cbasic/search.h"
+#include "Cbasic/spell.h"
 
 /* compare_str */
 static int compare_str(const void *str1, const void *str2) {

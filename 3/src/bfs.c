@@ -1,9 +1,9 @@
 /* bfs.c */
 #include <stdlib.h>
-#include "bfs.h"
-#include "graph.h"
-#include "list.h"
-#include "queue.h"
+#include "Cbasic/bfs.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/list.h"
+#include "Cbasic/queue.h"
 
 /* bfs */
 int bfs(Graph *graph, BfsVertex *start, List *hops) {

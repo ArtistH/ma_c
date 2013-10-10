@@ -1,9 +1,9 @@
 /* mst.c */
 #include <float.h>
 #include <stdlib.h>
-#include "graph.h"
-#include "graphalg.h"
-#include "list.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/graphalg.h"
+#include "Cbasic/list.h"
 
 /* mst */
 int mst(Graph *graph, const MstVertex *start, List *span,

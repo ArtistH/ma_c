@@ -1,5 +1,5 @@
 /* fact.c for recursion but not for effective */
-#include "fact.h"
+#include "Cbasic/fact.h"
 
 /* fact */
 int fact(int n) {

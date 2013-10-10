@@ -1,8 +1,8 @@
 /* ex-1.c for BiTree (binary tree) */
 #include <stdio.h>
 #include <stdlib.h>
-#include "bitree.h"
-#include "traverse.h"
+#include "Cbasic/bitree.h"
+#include "Cbasic/traverse.h"
 
 /* print_preorder */
 static void print_preorder(const BiTreeNode *node) {

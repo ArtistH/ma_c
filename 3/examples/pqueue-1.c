@@ -1,7 +1,7 @@
 /* ex-1.c for (priority queue) */
 #include <stdio.h>
 #include <stdlib.h>
-#include "pqueue.h"
+#include "Cbasic/pqueue.h"
 
 /* print_pqueue */
 static void print_pqueue(PQueue *pqueue) {

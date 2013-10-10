@@ -1,8 +1,8 @@
 /* ex-1.c for stack */
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
-#include "stack.h"
+#include "Cbasic/list.h"
+#include "Cbasic/stack.h"
 
 /* print_stack */
 static void print_stack(const Stack *stack) {

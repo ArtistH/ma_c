@@ -1,8 +1,8 @@
 /* chtbl.c */
 #include <stdlib.h>
 #include <string.h>
-#include "list.h"
-#include "chtbl.h"
+#include "Cbasic/list.h"
+#include "Cbasic/chtbl.h"
 
 /* chtbl_init */
 int chtbl_init(CHTbl *htbl, int buckets, int (*h)(const void *key),

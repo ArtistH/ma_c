@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <unistd.h>
-#include "directls.h"
+#include "Cbasic/directls.h"
 
 /* main */
 int main(int argc, char *argv[])

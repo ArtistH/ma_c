@@ -2,9 +2,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include "chtbl.h"
-#include "lex.h"
-#include "symbol.h"
+#include "Cbasic/chtbl.h"
+#include "Cbasic/lex.h"
+#include "Cbasic/symbol.h"
 
 
 /* lex */

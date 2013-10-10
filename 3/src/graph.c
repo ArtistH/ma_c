@@ -1,9 +1,9 @@
 /* graph.c */
 #include <stdlib.h>
 #include <string.h>
-#include "graph.h"
-#include "list.h"
-#include "set.h"
+#include "Cbasic/graph.h"
+#include "Cbasic/list.h"
+#include "Cbasic/set.h"
 
 /* graph_init */
 void graph_init(Graph *graph,

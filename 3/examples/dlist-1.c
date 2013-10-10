@@ -1,7 +1,7 @@
 /* ex-1.c for dlist - doubly-linked list */
 #include <stdio.h>
 #include <stdlib.h>
-#include "dlist.h"
+#include "Cbasic/dlist.h"
 
 /* print_list */
 void print_list(const DList *list) {

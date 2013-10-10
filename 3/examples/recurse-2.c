@@ -1,6 +1,6 @@
 /* ex-2.c for prime factors using recursion. */
 #include <stdio.h>
-#include "factor.h"
+#include "Cbasic/factor.h"
 
 /* main */
 int main() {

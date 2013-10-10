@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "directls.h"
-#include "sort.h"
+#include "Cbasic/directls.h"
+#include "Cbasic/sort.h"
 
 /* compare_dir */
 static int compare_dir(const void *key1, const void *key2) {

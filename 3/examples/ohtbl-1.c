@@ -1,7 +1,7 @@
 /* ex-1.c for open-addressed hash table. */
 #include <stdio.h>
 #include <string.h>
-#include "ohtbl.h"
+#include "Cbasic/ohtbl.h"
 
 /* Define the size of the hash table. */
 #define TBLSIZ 11

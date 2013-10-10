@@ -1,7 +1,7 @@
 /* ohtbl.c */
 #include <stdlib.h>
 #include <string.h>
-#include "ohtbl.h"
+#include "Cbasic/ohtbl.h"
 
 /* Reserve a sentinel memory address for vacated elements. */
 static char vacated;

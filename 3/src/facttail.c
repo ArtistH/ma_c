@@ -1,5 +1,5 @@
 /* facttail.c */
-#include "facttail.h"
+#include "Cbasic/facttail.h"
 
 /* facttail */
 int facttail(int n, int a) {

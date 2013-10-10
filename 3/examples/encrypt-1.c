@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "encrypt.h"
+#include "Cbasic/encrypt.h"
 
 static void print_des_8(unsigned char desstr[], char *des_name) {
 	fprintf(stdout, "[%s]: %02x %02x %02x %02x %02x %02x %02x %02x\n",

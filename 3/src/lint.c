@@ -1,5 +1,5 @@
 /* lint.c */
-#include "geometry.h"
+#include "Cbasic/geometry.h"
 
 /* lint */
 int lint(Point p1, Point p2, Point p3, Point p4) {

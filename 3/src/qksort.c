@@ -1,7 +1,7 @@
 /* qksort.c */
 #include <stdlib.h>
 #include <string.h>
-#include "sort.h"
+#include "Cbasic/sort.h"
 
 /* compare_int */
 static int compare_int(const void *int1, const void *int2) {

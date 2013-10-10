@@ -1,7 +1,7 @@
 /* ex-2.c using DES in CBC mode */
 #include <stdio.h>
 #include <stdlib.h>
-#include "cbc.h"
+#include "Cbasic/cbc.h"
 
 /* Define the size of text to encipher. */
 #define TXTSIZ 1000

@@ -1,7 +1,7 @@
 /* ex-1.c for numerical-methods */
 #include <math.h>
 #include <stdio.h>
-#include "nummeths.h"
+#include "Cbasic/nummeths.h"
 
 /* Define the maximum size of arrays. */
 #define SIZE 50

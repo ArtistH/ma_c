@@ -1,7 +1,7 @@
 /* ex-1.c for sorting algorithms */
 #include <stdio.h>
 #include <string.h>
-#include "sort.h"
+#include "Cbasic/sort.h"
 
 /* Define the size of strings. */
 #define STRSIZ 6

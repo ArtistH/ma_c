@@ -1,7 +1,7 @@
 /* heap.c */
 #include <stdlib.h>
 #include <string.h>
-#include "heap.h"
+#include "Cbasic/heap.h"
 
 /* Define private macros used by the heap implementation. */
 #define heap_parent(npos) ((int)(((npos) - 1) / 2))

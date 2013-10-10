@@ -1,8 +1,8 @@
 /* cover.c */
 #include <stdlib.h>
-#include "cover.h"
-#include "list.h"
-#include "set.h"
+#include "Cbasic/cover.h"
+#include "Cbasic/list.h"
+#include "Cbasic/set.h"
 
 /* cover */
 int cover(Set *members, Set *subsets, Set *covering) {

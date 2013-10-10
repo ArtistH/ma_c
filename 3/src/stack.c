@@ -1,7 +1,7 @@
 /* stack.c */
 #include <stdlib.h>
-#include "list.h"
-#include "stack.h"
+#include "Cbasic/list.h"
+#include "Cbasic/stack.h"
 
 /* stack_push */
 int stack_push(Stack *stack, const void *data) {

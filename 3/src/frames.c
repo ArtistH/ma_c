@@ -1,7 +1,7 @@
 /* frames.c */
 #include <stdlib.h>
-#include "frames.h"
-#include "list.h"
+#include "Cbasic/frames.h"
+#include "Cbasic/list.h"
 
 /* alloc_frame */
 int alloc_frame(List *frames) {

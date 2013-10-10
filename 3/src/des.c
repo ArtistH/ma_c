@@ -2,8 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bit.h"
-#include "encrypt.h"
+#include "Cbasic/bit.h"
+#include "Cbasic/encrypt.h"
 
 /* Define a mapping for the key transformation. */
 static const int DesTransform[56] = {

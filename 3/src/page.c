@@ -1,6 +1,6 @@
 /* page.c */
-#include "clist.h"
-#include "page.h"
+#include "Cbasic/clist.h"
+#include "Cbasic/page.h"
 
 /* replace_page */
 int replace_page(CListElmt **current) {

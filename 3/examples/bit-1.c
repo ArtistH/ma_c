@@ -1,7 +1,7 @@
 /* ex-1.c for using bit-operations */
 #include <stdio.h>
 #include <string.h>
-#include "bit.h"
+#include "Cbasic/bit.h"
 
 /* print_bits only used for this time. */
 static void print_bits(const unsigned char bits[], const char* bits_name) {
