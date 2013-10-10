@@ -1,0 +1,17 @@
+*.pyc
+*.o
+.*.swp
+.*.swo
+*~
+test
+test.txt
+
+*.bin
+*.so
+*.a
+
+tags
+GTAGS
+GRTAGS
+GPATH
+gtags.files
