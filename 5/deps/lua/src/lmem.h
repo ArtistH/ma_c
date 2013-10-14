@@ -35,7 +35,7 @@
 		((v)=cast(t *, luaM_growaux_(L,v,&(size),sizeof(t),limit,e)))
 
 #define luaM_reallocvector(L,v,oldn,n,t) \
-	((v)=cast(t *), luaM_reallocv(L, v, oldn, n, sizeof(t)))
+	((v)=cast(t *, luaM_reallocv(L, v, oldn, n, sizeof(t))))
 
 
 LUAI_FUNC void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
