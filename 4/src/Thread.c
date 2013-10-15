@@ -163,7 +163,7 @@ local void tls_key_delete(void) {
 
 local DWORD Thread_Init_Run(var args) {
 	var self = pop_front(args);
-	TlsSetValue(key_thread_wrapperm, self);
+	TlsSetValue(key_thread_wrapper, self);
 
 	ThreadData* td = cast(self, Thread);
 	td->running = true;
@@ -175,7 +175,7 @@ local DWORD Thread_Init_Run(var args) {
 
 var Thread_Call(var self, var args) {
 
-	/* Setup Thread local Storage */
+	/* Setup Thread Local Storage */
 
 	if (not tls_key_created) {
 		tls_key_create();
@@ -203,7 +203,7 @@ var Thread_Call(var self, var args) {
 		throw(BusyError, "System is too busy to create thread");
 	}
 #elif defined(_WIN32)
-	td->thread = CreateThread(NULL, 0, Thread_Init_Run, td->args, 0, &td->id);
+	td->thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Thread_Init_Run, td->args, 0, &td->id);
 	if (td->thread == NULL) {
 		throw(ValueError, "Unable to Create WinThread");
 	}
