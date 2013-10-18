@@ -16,7 +16,9 @@
 
 
 typedef LUAI_UINT32 lu_int32;
+
 typedef LUAI_UMEM lu_mem;
+
 typedef LUAI_MEM l_mem;
 
 
@@ -38,6 +40,7 @@ typedef unsigned char lu_byte;
 ** cannot hold the whole pointer value
 */
 #define IntPoint(p)  ((unsigned int)(lu_mem)(p))
+
 
 
 /* type to ensure maximum alignment */
@@ -88,6 +91,7 @@ typedef lu_int32 Instruction;
 
 /* maximum stack for a Lua function */
 #define MAXSTACK	250
+
 
 
 /* minimum size for the string table (must be power of 2) */

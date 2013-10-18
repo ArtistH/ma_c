@@ -92,7 +92,6 @@ typedef struct global_State {
 } global_State;
 
 
-
 /*
  ** `per thread' state
  */

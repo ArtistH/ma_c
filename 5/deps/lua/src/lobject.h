@@ -52,6 +52,7 @@ typedef struct GCheader {
 
 
 
+
 /*
 ** Union of all Lua values
 */
@@ -156,6 +157,7 @@ typedef struct lua_TValue {
 
 
 
+
 #define setobj(L,obj1,obj2) \
   { const TValue *o2=(obj2); TValue *o1=(obj1); \
     o1->value = o2->value; o1->tt=o2->tt; \
@@ -185,6 +187,7 @@ typedef struct lua_TValue {
 
 
 #define iscollectable(o)	(ttype(o) >= LUA_TSTRING)
+
 
 
 typedef TValue *StkId;  /* index to stack elements */
@@ -287,7 +290,6 @@ typedef struct UpVal {
 #define ClosureHeader \
 	CommonHeader; lu_byte isC; lu_byte nupvalues; GCObject *gclist; \
 	struct Table *env
-
 
 typedef struct CClosure {
 	ClosureHeader;

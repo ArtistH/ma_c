@@ -45,6 +45,7 @@
 #endif
 
 
+
 /*
 @@ LUA_USE_POSIX includes all functionallity listed as X/Open System
 @* Interfaces Extension (XSI).
@@ -166,6 +167,7 @@
 
 /* more often than not the libs go together with the core */
 #define LUALIB_API	LUA_API
+
 
 /*
 @@ LUAI_FUNC is a mark for all extern functions that are not to be
@@ -362,6 +364,7 @@
 #define LUA_COMPAT_OPENLIB
 
 
+
 /*
 @@ luai_apicheck is the assert macro used by the Lua-C API.
 ** CHANGE luai_apicheck if you want Lua to perform some checks in the
@@ -483,6 +486,7 @@
 #define LUAL_BUFFERSIZE		BUFSIZ
 
 /* }================================================================== */
+
 
 
 
@@ -679,7 +683,6 @@ union luai_Cast { double l_d; long l_l; };
 
 #endif
 
-
 /*
 @@ LUA_DL_* define which dynamic-library system Lua should use.
 ** CHANGE here if Lua has problems choosing the appropriate
@@ -746,12 +749,14 @@ union luai_Cast { double l_d; long l_l; };
 #endif
 
 
+
 /* =================================================================== */
 
 /*
 ** Local configuration. You can use this space to add your redefinitions
 ** without modifying the main part of the file.
 */
+
 
 
 #endif
