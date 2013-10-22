@@ -47,7 +47,7 @@ local var return_true(var self) {
 global var IntParent;
 
 local var IntParent_ReturnTrue(var self) {
-  return True;
+	return True;
 }
 
 instance(IntParent, ReturnTrue) = { IntParent_ReturnTrue };
@@ -101,6 +101,7 @@ PT_FUNC(test_new) {
 }
 
 PT_FUNC(test_assign) {
+
 	/* Integers */
 
 	var x = new(Int, $(Int, 10));
@@ -176,10 +177,49 @@ PT_FUNC(test_eq) {
 
 	delete(tab1);
 	delete(tab2);
+
+	var dict1 = new(Dictionary, 0);
+	var dict2 = new(Dictionary, 0);
+
+	PT_ASSERT(eq(dict1, dict2));
+	put(dict1, $(String, "apple"), $(Int, 10));
+	PT_ASSERT(neq(dict1, dict2));
+	put(dict2, $(String, "apple"), $(Int, 10));
+	PT_ASSERT(eq(dict1, dict2));
+	put(dict1, $(String, "pear"), $(Int, 20));
+	put(dict2, $(String, "pear"), $(Int, 30));
+	PT_ASSERT(neq(dict1, dict2));
+	put(dict1, $(String, "pear"), $(Int, 30));
+	PT_ASSERT(eq(dict1, dict2));
+	put(dict2, $(String, "banana"), $(Int, 10));
+	PT_ASSERT(neq(dict1, dict2));
+
+	delete(dict1);
+	delete(dict2);
+
+	var tree1 = new(Tree, String, String);
+	var tree2 = new(Tree, String, String);
+
+	PT_ASSERT(eq(tree1, tree2));
+	put(tree1, $(String, "name"), $(String, "Alex"));
+	PT_ASSERT(neq(tree1, tree2));
+	put(tree2, $(String, "name"), $(String, "Alex"));
+	PT_ASSERT(eq(tree1, tree2));
+	put(tree1, $(String, "age"), $(String, "28"));
+	put(tree2, $(String, "age"), $(String, "30"));
+	PT_ASSERT(neq(tree1, tree2));
+	put(tree1, $(String, "age"), $(String, "30"));
+	PT_ASSERT(eq(tree1, tree2));
+	put(tree2, $(String, "nickname"), $(String, "The Wing Man"));
+	PT_ASSERT(neq(tree1, tree2));
+
+	delete(tree1);
+	delete(tree2);
+
 }
 
 PT_FUNC(test_ord) {
-	PT_ASSERT(gt($(Int, 15), $(Int, 3)));
+	PT_ASSERT(gt($(Int, 15), $(Int, 3 )));
 	PT_ASSERT(lt($(Int, 70), $(Int, 81)));
 	PT_ASSERT(ge($(Int, 71), $(Int, 71)));
 	PT_ASSERT(ge($(Int, 78), $(Int, 71)));
@@ -299,6 +339,7 @@ PT_FUNC(test_collection_map) {
 }
 
 PT_FUNC(test_iter) {
+
 	var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
 	foreach (y in x) {
@@ -307,6 +348,7 @@ PT_FUNC(test_iter) {
 	}
 
 	delete(x);
+
 }
 
 PT_FUNC(test_push) {
@@ -341,6 +383,7 @@ PT_FUNC(test_push) {
 }
 
 PT_FUNC(test_at) {
+
 	var fst = $(Int, 1);
 	var snd = $(Real, 2.0);
 	var trd = $(String, "Hello");
@@ -356,9 +399,11 @@ PT_FUNC(test_at) {
 	PT_ASSERT(at(x, 1) is trd);
 
 	delete(x);
+
 }
 
 PT_FUNC(test_dict) {
+
 	var prices = new(Table, String, Int);
 	put(prices, $(String, "Apple"), $(Int, 12));
 	put(prices, $(String, "Banana"), $(Int, 6));
@@ -385,6 +430,7 @@ PT_FUNC(test_dict) {
 	}
 
 	delete(prices);
+
 }
 
 PT_FUNC(test_as_ctype) {
@@ -407,6 +453,7 @@ PT_FUNC(test_as_ctype) {
 }
 
 PT_FUNC(test_stream) {
+
 	var f = $(File, NULL);
 	PT_ASSERT(f);
 
@@ -434,6 +481,7 @@ PT_FUNC(test_stream) {
 }
 
 PT_FUNC(test_type_new) {
+
 	TestType = new(Type, $(String, "TestType"), $(Int, 2),
 				   (var[]){ &TestTypeNew, &TestTypeEq },
 				   (const char* []){ "New", "Eq" });
@@ -457,6 +505,7 @@ PT_FUNC(test_type_new) {
 	delete(test_obj3);
 
 	delete(TestType);
+
 }
 
 PT_FUNC(test_type_implements) {
@@ -540,7 +589,6 @@ PT_FUNC(test_module) {
 #endif
 
 }
-
 
 PT_SUITE(suite_core) {
 

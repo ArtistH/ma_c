@@ -20,8 +20,8 @@ void cello_sleep(int ms) {
 #endif
 }
 
-
 PT_FUNC(test_new) {
+
 	var in_func = $(Reference, False);
 
 	lambda(f, args) {
@@ -37,6 +37,7 @@ PT_FUNC(test_new) {
 	PT_ASSERT(at(in_func, 0));
 
 	delete(t);
+
 }
 
 PT_FUNC(test_multiple) {

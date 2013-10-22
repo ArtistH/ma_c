@@ -121,6 +121,7 @@ PT_FUNC(test_int_num) {
 	divide(tester, $(Int, 3)); PT_ASSERT(as_long(tester) is 20);
 	negate(tester); PT_ASSERT(as_long(tester) is -20);
 	absolute(tester); PT_ASSERT(as_long(tester) is 20);
+	absolute(tester); PT_ASSERT(as_long(tester) is 20);
 }
 
 PT_FUNC(test_int_parse) {

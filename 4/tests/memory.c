@@ -2,13 +2,13 @@
 #include "ptest.h"
 #include "Cello.h"
 
-
 PT_FUNC(test_new) {
 	var x = new(Int, $(Int, 0));
 	delete(x);
 }
 
 PT_FUNC(test_reference) {
+
 	var x = new(Int, $(Int, 1));
 	var y = new(Int, $(Int, 2));
 
@@ -27,6 +27,7 @@ PT_FUNC(test_reference) {
 
 	delete(x);
 	delete(y);
+
 }
 
 PT_FUNC(test_reference_with) {

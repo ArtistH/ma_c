@@ -45,7 +45,7 @@ PT_FUNC(test_catch) {
 
 	try {
 		int r3 = exception_divide(2, 1);
-	} catch (e in DivideByZeroError) {
+	} catch (e in None) {
 		reached2 = true;
 	}
 
