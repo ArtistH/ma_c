@@ -551,7 +551,7 @@ static void push_onecapture (MatchState *ms, int i, const char *s,
 			luaL_error(ms->L, "unfinished capture");
 		}
 		if (l == CAP_POSITION) {
-			lua_pushinteger(ms->L, ms->capture[i].init - ms->src_end + 1);
+			lua_pushinteger(ms->L, ms->capture[i].init - ms->src_init + 1);
 		} else {
 			lua_pushlstring(ms->L, ms->capture[i].init, l);
 		}
@@ -580,8 +580,8 @@ static int str_find_aux (lua_State *L, int find) {
 	} else if ((size_t)(init) > l1) {
 		init = (ptrdiff_t)l1;
 	}
-	if (find && (lua_toboolean(L, 4) ||
-				 strpbrk(p, SPECIALS) == NULL)) {
+	if (find && (lua_toboolean(L, 4) ||  /* explicit request? */
+				 strpbrk(p, SPECIALS) == NULL)) {  /* or no special characters? */
 		/* do a plain search */
 		const char *s2 = lmemfind(s+init, l1-init, p, l2);
 		if (s2) {
@@ -671,10 +671,9 @@ static int gfind_nodef (lua_State *L) {
 
 static void add_s (MatchState *ms, luaL_Buffer *b, const char *s,
 				   const char *e) {
-	size_t l;
-	size_t i;
+	size_t l, i;
 	const char *news = lua_tolstring(ms->L, 3, &l);
-	for (i = 0; i < 1; i++) {
+	for (i = 0; i < l; i++) {
 		if (news[i] != L_ESC) {
 			luaL_addchar(b, news[i]);
 		} else {
@@ -810,7 +809,6 @@ static void addquoted (lua_State *L, luaL_Buffer *b, int arg) {
 	}
 	luaL_addchar(b, '"');
 }
-
 
 static const char *scanformat (lua_State *L, const char *strfrmt, char *form) {
 	const char *p = strfrmt;

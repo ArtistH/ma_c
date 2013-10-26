@@ -8,4 +8,8 @@ default: all
 install:
 	cd src && $(MAKE) $@
 
-.PHONY: install
+GTAGS:
+	find . -type f -name "*.[ch|cpp]" > gtags.files
+	gtags
+
+.PHONY: install GTAGS
