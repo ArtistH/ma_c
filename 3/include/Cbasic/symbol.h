@@ -3,8 +3,9 @@
 #define SYMBOL_H
 
 /* Define next_token for demonstration purposes. */
-static char *next_token(const char *istream) {
-	return 0;
+static char* next_token(const char *istream) {
+	char *temp = (char*)istream;
+	return temp;
 }
 
 /* Define a symbol structure for demonstration purposes. */

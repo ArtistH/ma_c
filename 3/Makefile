@@ -11,7 +11,7 @@ TESTS_EXE = ./test ./test.txt
 EXAMPLES = $(wildcard examples/*.c)
 EXAMPLES_EXE = $(addprefix examples/,$(notdir $(EXAMPLES:.c=.bin)))
 
-CFLAGS := -I ./include -std=gnu99 -Wall -Werror -Wno-unused -O3 -g -fPIC
+CFLAGS := -I ./include -std=gnu99 -Wall -Wextra -Werror -Wno-unused -O3 -g -fPIC
 LIBS := -lm
 LFLAGS := -shared -g -ggdb
 
