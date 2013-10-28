@@ -15,6 +15,10 @@ CFLAGS := -I ./include -std=gnu99 -Wall -Wextra -Werror -Wno-unused -O3 -g -fPIC
 LIBS := -lm
 LFLAGS := -shared -g -ggdb
 
+ifeq ($(asan),1)
+CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+endif
+
 EXE_NAME = Cbasic
 DYNAMIC = lib$(EXE_NAME).so
 STATIC = lib$(EXE_NAME).a

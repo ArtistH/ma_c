@@ -57,7 +57,7 @@ void bit_xor(const unsigned char *bits1, const unsigned char *bits2,
 
 /* bit_rot_left */
 void bit_rot_left(unsigned char *bits, int size, int count) {
-	int fbit;
+	int fbit = 0;
 	int lbit;
 	int i;
 	int j;
