@@ -4,7 +4,7 @@
 
 PT_FUNC(test_stack_function) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 	var (^empty_function)(var) = ^ var (var args) { return None; };
 #else
 	var empty_function(var args) { return None; }
@@ -16,7 +16,7 @@ PT_FUNC(test_stack_function) {
 
 PT_FUNC(test_heap_function) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 	var (^empty_function)(var) = ^ var (var args) { return None; };
 #else
 	var empty_function(var args) { return None; }
@@ -28,8 +28,8 @@ PT_FUNC(test_heap_function) {
 }
 
 PT_FUNC(test_function_assign) {
-
-#if defined(__APPLE__)
+  
+#if defined(__clang__)
 	var (^empty_function)(var) = ^ var (var args) { return None; };
 	var (^empty_function2)(var) = ^ var (var args) { return Some; };
 #else
@@ -52,7 +52,7 @@ PT_FUNC(test_function_assign) {
 
 PT_FUNC(test_function_copy) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 	var (^empty_function)(var) = ^ var (var args) { return None; };
 #else
 	var empty_function(var args) { return None; };
@@ -70,7 +70,7 @@ PT_FUNC(test_function_copy) {
 
 PT_FUNC(test_call) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 	var (^empty_function)(var) = ^ var (var args) { return None; };
 	var (^empty_function2)(var) = ^ var (var args) { return Some; };
 #else
@@ -87,7 +87,7 @@ PT_FUNC(test_call) {
 
 PT_FUNC(test_call_with) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 
 	var (^asserts_args)(var) = ^ var (var args) {
 		PT_ASSERT(at(args, 0));
@@ -114,7 +114,7 @@ PT_FUNC(test_call_with) {
 
 PT_FUNC(test_call_vl) {
 
-#if defined(__APPLE__)
+#if defined(__clang__)
 
 	var (^asserts_args)(var) = ^ var (var args) {
 		PT_ASSERT(at(args, 0));

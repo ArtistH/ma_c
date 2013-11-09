@@ -116,7 +116,7 @@ PT_FUNC(test_exception) {
 		} catch(e) {
 		}
 		return None;
-	}
+	};
 
 	var t = new(Thread, f);
 
