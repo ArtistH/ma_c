@@ -88,7 +88,7 @@ var Array_Eq(var self, var obj) {
 	}
 
 	for (int i = 0; i < len(self); i++) {
-		if_neq(at(self, i), at(obj, i)) {
+		if_neq(at(self,i), at(obj,i)) {
 			return False;
 		}
 	}
