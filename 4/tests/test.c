@@ -1,3 +1,4 @@
+
 #include "ptest.h"
 
 void suite_core(void);
@@ -7,8 +8,9 @@ void suite_exception(void);
 void suite_memory(void);
 void suite_threading(void);
 
-int main()
+int main(int argc, char **argv)
 {
+
 	pt_add_suite(suite_core);
 	pt_add_suite(suite_functional);
 	pt_add_suite(suite_data);
@@ -18,5 +20,4 @@ int main()
 
 	pt_run();
 
-	return 0;
 }

@@ -35,6 +35,7 @@ var Array = type_data {
 
 var Array_New(var self, var_list vl)
 {
+
 	ArrayData *ad = cast(self, Array);
 	ad->item_type = cast(var_list_get(vl), Type);
 	ad->num_items = 0;
@@ -89,6 +90,7 @@ var Array_Copy(var self)
 
 var Array_Eq(var self, var obj)
 {
+
 	if (len(self) != len(obj)) {
 		return False;
 	}
@@ -119,6 +121,7 @@ void Array_Clear(var self)
 	ad->items = realloc(ad->items, 0);
 	ad->num_items = 0;
 	ad->num_slots = 0;
+
 }
 
 var Array_Contains(var self, var obj)
@@ -144,21 +147,25 @@ void Array_Discard(var self, var obj)
 
 local void Array_Reserve_More(ArrayData * ad)
 {
+
 	if (ad->num_items > ad->num_slots) {
-		// int old_size = ad->num_slots;
+		int old_size = ad->num_slots;
 		ad->num_slots = ceil((ad->num_slots + 1) * 1.5);
 		ad->items = realloc(ad->items, size(ad->item_type) * ad->num_slots);
 		if (ad->items == NULL) {
 			throw(OutOfMemoryError, "Cannot grow Array, out of memory!");
 		}
 	}
+
 }
 
 local void Array_Set_Type_At(ArrayData * ad, int i)
 {
+
 	memset(ad->items + (size(ad->item_type) * i), 0, size(ad->item_type));
 	ObjectData *template = ad->items + (size(ad->item_type) * i);
 	template->type = ad->item_type;
+
 }
 
 void Array_Push_Back(var self, var obj)
@@ -169,6 +176,7 @@ void Array_Push_Back(var self, var obj)
 
 	Array_Set_Type_At(self, ad->num_items - 1);
 	set(self, ad->num_items - 1, obj);
+
 }
 
 void Array_Push_Front(var self, var obj)
@@ -192,10 +200,12 @@ void Array_Push_At(var self, var obj, int index)
 
 local void Array_Reserve_Less(ArrayData * ad)
 {
+
 	if (ad->num_slots > pow(ad->num_items + 1, 1.5)) {
 		ad->num_slots = floor((ad->num_slots - 1) * (1.0 / 1.5));
 		ad->items = realloc(ad->items, size(ad->item_type) * ad->num_slots);
 	}
+
 }
 
 var Array_Pop_Back(var self)
@@ -265,12 +275,11 @@ void Array_Set(var self, int i, var obj)
 	assign(ad->items + size(ad->item_type) * i, obj);
 }
 
-local const var ARRAY_ITER_END = (var) - 1;
-
 var Array_Iter_Start(var self)
 {
+
 	if (len(self) == 0) {
-		return ARRAY_ITER_END;
+		return Iter_End;
 	}
 
 	ArrayData *ad = cast(self, Array);
@@ -279,7 +288,7 @@ var Array_Iter_Start(var self)
 
 var Array_Iter_End(var self)
 {
-	return ARRAY_ITER_END;
+	return Iter_End;
 }
 
 var Array_Iter_Next(var self, var curr)
@@ -287,7 +296,7 @@ var Array_Iter_Next(var self, var curr)
 	ArrayData *ad = cast(self, Array);
 
 	if (curr >= ad->items + size(ad->item_type) * (ad->num_items - 1)) {
-		return ARRAY_ITER_END;
+		return Iter_End;
 	} else {
 		return curr + size(ad->item_type);
 	}
@@ -315,6 +324,7 @@ void Array_Reverse(var self)
 
 local int Array_Sort_Partition(var self, int left, int right, int pivot)
 {
+
 	ArrayData *ad = cast(self, Array);
 
 	var pival = allocate(ad->item_type);

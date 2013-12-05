@@ -101,6 +101,7 @@ void Thread_Assign(var self, var obj)
 	td->exc_lineno = to->exc_lineno;
 	memmove(td->exc_backtrace, to->exc_backtrace, sizeof(void *) * 25);
 	td->exc_backtrace_count = to->exc_backtrace_count;
+
 }
 
 var Thread_Copy(var self)
@@ -126,6 +127,7 @@ long Thread_AsLong(var self)
 #elif defined(_WIN32)
 	return (long)td->id;
 #endif
+
 }
 
 var Thread_Eq(var self, var obj)
@@ -160,6 +162,7 @@ local void tls_key_delete(void)
 
 local var Thread_Init_Run(var args)
 {
+
 	var self = pop_front(args);
 	pthread_setspecific(key_thread_wrapper, self);
 
@@ -183,6 +186,7 @@ local void tls_key_delete(void)
 
 local DWORD Thread_Init_Run(var args)
 {
+
 	var self = pop_front(args);
 	TlsSetValue(key_thread_wrapper, self);
 
@@ -235,12 +239,14 @@ var Thread_Call(var self, var args)
 #endif
 
 	return self;
+
 }
 
 local ThreadData main_thread_wrapper;
 
 var Thread_Current(void)
 {
+
 #if defined(__unix__) || defined(__APPLE__)
 	var wrapper = pthread_getspecific(key_thread_wrapper);
 #elif defined(_WIN32)
@@ -256,7 +262,6 @@ var Thread_Current(void)
 	 ** Luckily we can test directly for the main
 	 ** thread on OSX using this non-portable method
 	 */
-
 #if defined(__APPLE__)
 	if (pthread_main_np()) {
 		wrapper = NULL;
@@ -267,13 +272,14 @@ var Thread_Current(void)
 		return wrapper;
 	} else {
 		main_thread_wrapper.is_main = true;
-#if defined(__unix__) ||defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 		main_thread_wrapper.thread = pthread_self();
 #elif defined(_WIN32)
 		main_thread_wrapper.thread = GetCurrentThread();
 #endif
 		return &main_thread_wrapper;
 	}
+
 }
 
 void Thread_Join(var self)
@@ -293,6 +299,7 @@ void Thread_Join(var self)
 #elif defined(_WIN32)
 	WaitForSingleObject(td->thread, INFINITE);
 #endif
+
 }
 
 void Thread_Terminate(var self)
@@ -312,6 +319,7 @@ void Thread_Terminate(var self)
 #elif defined(_WIN32)
 	TerminateThread(td->thread, FALSE);
 #endif
+
 }
 
 void lock(var self)
@@ -331,6 +339,7 @@ data {
 #elif defined(_WIN32)
 	HANDLE mutex;
 #endif
+
 } MutexData;
 
 var Mutex = type_data {
@@ -398,6 +407,7 @@ void Mutex_Lock(var self)
 #elif defined(_WIN32)
 	WaitForSingleObject(md->mutex, INFINITE);
 #endif
+
 }
 
 var Mutex_Lock_Try(var self)
@@ -415,6 +425,7 @@ var Mutex_Lock_Try(var self)
 #elif defined(_WIN32)
 	return bool_var(not(WaitForSingleObject(md->mutex, 0) is WAIT_TIMEOUT));
 #endif
+
 }
 
 void Mutex_Unlock(var self)
@@ -431,4 +442,5 @@ void Mutex_Unlock(var self)
 #elif defined(_WIN32)
 	ReleaseMutex(md->mutex);
 #endif
+
 }

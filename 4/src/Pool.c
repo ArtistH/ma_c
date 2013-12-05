@@ -53,6 +53,7 @@ size_t Pool_Size(void)
 
 var Pool_Retain(var self, var x)
 {
+
 	if (contains(self, x)) {
 		var c = get(self, x);
 		add(c, $(Int, 1));
@@ -61,11 +62,14 @@ var Pool_Retain(var self, var x)
 		put(self, x, $(Int, 1));
 		return x;
 	}
+
 }
 
 void Pool_Release(var self, var x)
 {
+
 	if (contains(self, x)) {
+
 		var c = get(self, x);
 		sub(c, $(Int, 1));
 
@@ -73,7 +77,9 @@ void Pool_Release(var self, var x)
 			discard(self, x);
 			delete(x);
 		}
+
 	}
+
 }
 
 int Pool_Len(var self)

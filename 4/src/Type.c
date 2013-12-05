@@ -25,9 +25,11 @@ var Type_Cast(var obj, var t, const char *func, const char *file, int line)
 					 "Argument to function '%s' at '%s:%i' :: "
 					 "Got Type '%s' :: "
 					 "Expected Type '%s'",
-					 $(String, (char *)func),
-					 $(String, (char *)file), $(Int, line), type_of(obj), t);
+					 $(String, (char *)func), $(String, (char *)file), $(Int,
+																		 line),
+					 type_of(obj), t);
 	}
+
 }
 
 var Type_New(var self, var_list vl)
@@ -89,6 +91,7 @@ const char *Type_Name(var self)
 				 "Was is correctly constructed? :: "
 				 "Does the data start with a 'type' entry? ::"
 				 "Was `type_begin` used?", self);
+
 }
 
 var Type_Parent(var self)
@@ -108,6 +111,7 @@ var Type_Parent(var self)
 				 "Was is correctly constructed? :: "
 				 "Does the data start with a 'type' entry? ::"
 				 "Was `type_begin` used?", self);
+
 }
 
 var Type_Implements(var self, const char *class_name, const char *func,
@@ -121,8 +125,9 @@ var Type_Implements(var self, const char *class_name, const char *func,
 					 "Function '%s' at '%s:%i' :: "
 					 "Object '%p' is not a type! :: "
 					 "It does not start with a NULL pointer",
-					 $(String, (char *)func),
-					 $(String, (char *)file), $(Int, line), self);
+					 $(String, (char *)func), $(String, (char *)file), $(Int,
+																		 line),
+					 self);
 	}
 
 	while (t->class_name) {
@@ -136,6 +141,7 @@ var Type_Implements(var self, const char *class_name, const char *func,
 
 	return bool_var(parent isnt NULL and
 					Type_Implements(parent, class_name, func, file, line));
+
 }
 
 var Type_Implements_Method(var self, int offset, const char *class_name,
@@ -143,19 +149,23 @@ var Type_Implements_Method(var self, int offset, const char *class_name,
 {
 
 	if (not Type_Implements(self, class_name, func, file, line)) {
+
 		return Type_Implements_Method(Type_Parent(self), offset, class_name,
 									  func, file, line);
+
 	} else {
+
 		intptr_t *func_address =
 			Type_Class(self, class_name, func, file, line) + offset;
 		return bool_var(*func_address);
+
 	}
+
 }
 
 var Type_Class(var self, const char *class_name, const char *func,
 			   const char *file, int line)
 {
-
 	TypeData *t = self;
 
 	if (t[0].class_object != NULL) {
@@ -163,8 +173,9 @@ var Type_Class(var self, const char *class_name, const char *func,
 					 "Function '%s' at '%s:%i' :: "
 					 "Object '%p' is not a type! :: "
 					 "It does not start with a NULL pointer",
-					 $(String, (char *)func),
-					 $(String, (char *)file), $(Int, line), self);
+					 $(String, (char *)func), $(String, (char *)file), $(Int,
+																		 line),
+					 self);
 	}
 
 	while (t->class_name) {
@@ -184,11 +195,10 @@ var Type_Class(var self, const char *class_name, const char *func,
 	return throw(ClassError,
 				 "Function '%s' at '%s:%i' :: "
 				 "Type '%s' does not implement class '%s'",
-				 $(String, (char *)func),
-				 $(String, (char *)file),
-				 $(Int, line),
-				 $(String, (char *)Type_Name(self)),
-				 $(String, (char *)class_name));
+				 $(String, (char *)func), $(String, (char *)file), $(Int, line),
+				 $(String, (char *)Type_Name(self)), $(String,
+													   (char *)class_name));
+
 }
 
 var Type_Class_Method(var self, int offset, const char *class_name,
@@ -208,13 +218,11 @@ var Type_Class_Method(var self, int offset, const char *class_name,
 
 	return throw(ClassError,
 				 "Function '%s' at '%s:%i' :: "
-				 "Type '%s' implements class '%s' "
-				 "but not the specific method '%s' required",
-				 $(String, (char *)func),
-				 $(String, (char *)file),
-				 $(Int, line),
-				 self,
-				 $(String, (char *)class_name), $(String, (char *)method_name));
+				 "Type '%s' implements class '%s' but not the specific method '%s' required",
+				 $(String, (char *)func), $(String, (char *)file), $(Int, line),
+				 self, $(String, (char *)class_name), $(String,
+														(char *)method_name));
+
 }
 
 int Type_Show(var self, var output, int pos)
@@ -238,6 +246,7 @@ void Type_Inherit(var self, var parent)
 	throw(ClassError,
 		  "Cannot find Class '__Parent' for object '%p' :: "
 		  "Was is correctly constructed? :: "
-		  "Does the data start with a 'type' entry? :: "
-		  "Was 'type_begin' used?", self);
+		  "Does the data start with a 'type' entry? ::"
+		  "Was `type_begin` used?", self);
+
 }

@@ -107,6 +107,7 @@ var Tree_Eq(var self, var obj)
 	}
 
 	return True;
+
 }
 
 int Tree_Len(var self)
@@ -133,29 +134,33 @@ local bool inorder_opt = true;
 
 local var Tree_Next_Inorder(struct TreeNode * node)
 {
+
 	inorder_opt = not inorder_opt;
 
 	if (inorder_opt) {
+
 		struct TreeNode *rnode = node->left;
 
 		while (1) {
-			if (rnode->right is NULL) {
+			if (rnode->right is NULL)
 				return rnode->leaf_key;
-			} else {
+			else
 				rnode = rnode->right;
-			}
 		}
+
 	} else {
+
 		struct TreeNode *lnode = node->right;
 
 		while (1) {
-			if (lnode->left is NULL) {
+			if (lnode->left is NULL)
 				return lnode->leaf_key;
-			} else {
+			else
 				lnode = lnode->left;
-			}
 		}
+
 	}
+
 }
 
 local void Tree_Node_Delete(struct TreeNode *node)
@@ -167,13 +172,16 @@ local void Tree_Node_Delete(struct TreeNode *node)
 
 void Tree_Discard(var self, var key)
 {
+
 	TreeData *td = cast(self, Tree);
 
 	struct TreeNode **parent = &td->root;
 	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
+
 		if_eq(node->leaf_key, key) {
+
 			if ((node->left is NULL) and(node->right is NULL)) {
 				*parent = NULL;
 				Tree_Node_Delete(node);
@@ -196,6 +204,7 @@ void Tree_Discard(var self, var key)
 			}
 
 			if (not(node->right is NULL) and not(node->left is NULL)) {
+
 				var inorder_key = allocate(td->key_type);
 				var inorder_val = allocate(td->val_type);
 
@@ -213,6 +222,7 @@ void Tree_Discard(var self, var key)
 				discard(td->keys, key);
 				return;
 			}
+
 		}
 
 		if_lt(node->leaf_key, key) {
@@ -223,7 +233,9 @@ void Tree_Discard(var self, var key)
 			parent = &node->right;
 			node = node->right;
 		}
+
 	}
+
 }
 
 var Tree_Get(var self, var key)
@@ -233,16 +245,10 @@ var Tree_Get(var self, var key)
 	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
-		if_eq(node->leaf_key, key) {
-			return node->leaf_val;
-		}
-
-		if_lt(node->leaf_key, key) {
-			node = node->left;
-		}
-		else {
-			node = node->right;
-		}
+		if_eq(node->leaf_key, key) return node->leaf_val;
+		if_lt(node->leaf_key, key) node = node->left;
+		else
+		node = node->right;
 	}
 
 	return throw(KeyError, "Key '%$' not in Tree!", key);
@@ -255,7 +261,7 @@ local struct TreeNode *Tree_Node_New(var self, var key, var val)
 	struct TreeNode *node = malloc(sizeof(struct TreeNode));
 
 	if (node == NULL) {
-		throw(OutOfMemoryError, "Cannot create Tree Node, Out of memory!");
+		throw(OutOfMemoryError, "Cannot create Tree Node. Out of memory!");
 	}
 
 	node->leaf_key = allocate(td->key_type);
@@ -276,6 +282,7 @@ void Tree_Put(var self, var key, var val)
 	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
+
 		if_eq(node->leaf_key, key) {
 			assign(node->leaf_val, val);
 			return;
@@ -289,6 +296,7 @@ void Tree_Put(var self, var key, var val)
 			parent = &node->right;
 			node = node->right;
 		}
+
 	}
 
 	*parent = Tree_Node_New(self, key, val);

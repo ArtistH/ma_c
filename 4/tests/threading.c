@@ -1,4 +1,3 @@
-
 #include "ptest.h"
 #include "Cello.h"
 
@@ -44,6 +43,7 @@ PT_FUNC(test_new)
 
 PT_FUNC(test_multiple)
 {
+
 	var inside = new(List, False, False, False, False, False);
 
 	lambda(f, args) {
@@ -76,10 +76,12 @@ PT_FUNC(test_multiple)
 	delete(args);
 	delete(threads);
 	delete(inside);
+
 }
 
 PT_FUNC(test_mutex)
 {
+
 	var mutex = new(Mutex);
 	var total = $(Int, 0);
 
@@ -110,10 +112,12 @@ PT_FUNC(test_mutex)
 
 	delete(threads);
 	delete(mutex);
+
 }
 
 PT_FUNC(test_exception)
 {
+
 	lambda(f, args) {
 		try {
 			cello_sleep(20);
@@ -132,6 +136,7 @@ PT_FUNC(test_exception)
 	join(t);
 
 	delete(t);
+
 }
 
 PT_SUITE(suite_threading)

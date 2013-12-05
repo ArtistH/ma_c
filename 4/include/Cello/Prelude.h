@@ -204,6 +204,8 @@ class {
 
 long hash(var obj);
 
+long Hash_Table_Size(long size);
+
 /** Collection - contains objects */
 
 class {
@@ -261,6 +263,8 @@ var iter_next(var self, var curr);
 
 #define foreach(x) foreach_scanned(x)
 #define foreach_scanned(x, xs) for(var x = iter_start(xs); x != iter_end(xs); x = iter_next(xs, x))
+
+global var Iter_End;
 
 /** Push - insertion and removal abilities */
 

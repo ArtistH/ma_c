@@ -69,7 +69,9 @@ static const char *colors[] = {
 
 static void pt_color(int color)
 {
+
 	printf("%s", colors[color]);
+
 }
 
 #endif
@@ -84,40 +86,41 @@ static char assert_err[MAX_ERROR];
 static char assert_err_buff[MAX_ERROR];
 static int assert_err_num = 0;
 
-void pt_assert_run(bool result,
-				   const char *expr,
-				   const char *func, const char *file, int line)
+void pt_assert_run(bool result, const char *expr, const char *func,
+				   const char *file, int line)
 {
+
 	num_asserts++;
 	test_passing = test_passing && result;
 
 	if (result) {
 		num_assert_passes++;
 	} else {
-		sprintf(assert_err_buff,
-				"\t%i. Assert [ %s ] (%s:%i):%s\n",
-				assert_err_num + 1, expr, file, line, func);
+		sprintf(assert_err_buff, "        %i. Assert [ %s ] (%s:%i)\n",
+				assert_err_num + 1, expr, file, line);
 		strcat(assert_err, assert_err_buff);
 		assert_err_num++;
 		num_assert_fails++;
 	}
+
 }
 
 static void ptest_signal(int sig)
 {
+
 	test_passing = false;
 
 	switch (sig) {
 	case SIGFPE:
-		sprintf(assert_err_buff, "\t%i. Division by Zero\n",
+		sprintf(assert_err_buff, "        %i. Division by Zero\n",
 				assert_err_num + 1);
 		break;
 	case SIGILL:
-		sprintf(assert_err_buff, "\t%i. Illegal Instruction\n",
+		sprintf(assert_err_buff, "        %i. Illegal Instruction\n",
 				assert_err_num + 1);
 		break;
 	case SIGSEGV:
-		sprintf(assert_err_buff, "\t%i. Segmentation Fault\n",
+		sprintf(assert_err_buff, "        %i. Segmentation Fault\n",
 				assert_err_num + 1);
 		break;
 	}
@@ -129,20 +132,23 @@ static void ptest_signal(int sig)
 	printf("Failed! \n\n%s\n", assert_err);
 	pt_color(WHITE);
 
-	printf("\t Stopping Execution.\n");
+	printf("    | Stopping Execution.\n");
 	fflush(stdout);
 	exit(0);
+
 }
 
 /* Tests */
 
 static void pt_title_case(char *output, const char *input)
 {
+
 	bool space = true;
 
 	strcpy(output, input);
 
 	for (unsigned int i = 0; i < strlen(output); i++) {
+
 		if (output[i] == '_') {
 			space = true;
 			output[i] = ' ';
@@ -154,7 +160,9 @@ static void pt_title_case(char *output, const char *input)
 			output[i] = output[i] - 32;
 			continue;
 		}
+
 	}
+
 }
 
 typedef struct {
@@ -171,6 +179,7 @@ static int num_tests_fails = 0;
 
 void pt_add_test(void (*func) (void), const char *name, const char *suite)
 {
+
 	if (num_tests == MAX_TESTS) {
 		printf("ERROR: Exceeded maximum test count of %i!\n", MAX_TESTS);
 		abort();
@@ -183,8 +192,8 @@ void pt_add_test(void (*func) (void), const char *name, const char *suite)
 	}
 
 	if (strlen(suite) >= MAX_NAME) {
-		printf("ERROR: Test suite '%s' is too long (Maximum is %i "
-			   "characters)\n", suite, MAX_NAME);
+		printf("ERROR: Test suite '%s' too long (Maximum is %i characters)\n",
+			   suite, MAX_NAME);
 		abort();
 	}
 
@@ -195,6 +204,7 @@ void pt_add_test(void (*func) (void), const char *name, const char *suite)
 
 	tests[num_tests] = test;
 	num_tests++;
+
 }
 
 /* Suites */
@@ -216,12 +226,13 @@ static char current_suite[MAX_NAME];
 
 void pt_run()
 {
-	printf("\t\n");
-	printf("\t+-------------------------------------------+\n");
-	printf("\t| ptest          MicroTesting Magic for C   |\n");
-	printf("\t|                                           |\n");
-	printf("\t| Daniel Holden (contact@theorangeduck.com) |\n");
-	printf("\t+-------------------------------------------+\n");
+
+	printf("    \n");
+	printf("    +-------------------------------------------+\n");
+	printf("    | ptest          MicroTesting Magic for C   |\n");
+	printf("    |                                           |\n");
+	printf("    | Daniel Holden (contact@theorangeduck.com) |\n");
+	printf("    +-------------------------------------------+\n");
 
 	signal(SIGFPE, ptest_signal);
 	signal(SIGILL, ptest_signal);
@@ -230,13 +241,14 @@ void pt_run()
 	start = clock();
 	strcpy(current_suite, "");
 
-	int i = 0;
-	for (i = 0; i < num_tests; i++) {
+	for (int i = 0; i < num_tests; i++) {
+
 		test_t test = tests[i];
 
-		/* Check for transition to a new suite. */
+		/* Check for transition to a new suite */
 		if (strcmp(test.suite, current_suite)) {
-			/* Don't increment any counter for first entrance. */
+
+			/* Don't increment any counter for first entrance */
 			if (strcmp(current_suite, "")) {
 				if (suite_passing) {
 					num_suites_passes++;
@@ -247,7 +259,7 @@ void pt_run()
 
 			suite_passing = true;
 			strcpy(current_suite, test.suite);
-			printf("\n\n ===== %s =====\n\n", current_suite);
+			printf("\n\n  ===== %s =====\n\n", current_suite);
 		}
 
 		/* Run Test */
@@ -256,7 +268,7 @@ void pt_run()
 		strcpy(assert_err, "");
 		strcpy(assert_err_buff, "");
 		assert_err_num = 0;
-		printf("\t| %s ... ", test.name);
+		printf("    | %s ... ", test.name);
 
 		test.func();
 
@@ -273,6 +285,7 @@ void pt_run()
 			printf("Failed! \n\n%s\n", assert_err);
 			pt_color(WHITE);
 		}
+
 	}
 
 	if (suite_passing) {
@@ -331,8 +344,9 @@ void pt_run()
 	printf("|\n");
 
 	printf("  +---------++------------+-------------+-------------+\n");
-	printf("\n");
+	printf("  \n");
 
 	double total = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("\t\t\tTotal Running Time: %0.3fs\n\n", total);
+
+	printf("      Total Running Time: %0.3fs\n\n", total);
 }

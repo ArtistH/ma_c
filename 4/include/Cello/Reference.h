@@ -8,7 +8,6 @@
 **  after some lifetime.
 **
 */
-
 #ifndef CelloReference_h
 #define CelloReference_h
 

@@ -18,16 +18,17 @@
 var Undefined = Singleton(Undefined);
 
 /*
- ** The type_of a Type object is just "Type" again.
- ** But because "Type" is extern it isn't a constant expression.
- ** This means it cannot be set at compile time.
- **
- ** So by convention at compile time the type_of a Type object is set to NULL.
- ** So if we access a struct and it tells us NULL is the type, assume "Type".
- */
+** The type_of a Type object is just "Type" again.
+** But because "Type" is extern it isn't a constant expression.
+** This means it cannot be set at compile time.
+**
+** So by convention at compile time the type_of a Type object is set to NULL.
+** So if we access a struct and it tells us NULL is the type, assume "Type".
+*/
 
 var type_of(var self)
 {
+
 	/* Test against Builtins */
 	if (self is Undefined)
 		return throw(ValueError, "Received 'Undefined' as value to 'type_of'");
@@ -43,6 +44,7 @@ var type_of(var self)
 	} else {
 		return entry;
 	}
+
 }
 
 size_t size(var type)
@@ -142,6 +144,7 @@ var gt(var lhs, var rhs)
 var lt(var lhs, var rhs)
 {
 	return type_class_method(type_of(lhs), Ord, lt, lhs, rhs);
+
 }
 
 var ge(var lhs, var rhs)
@@ -182,9 +185,8 @@ void discard(var self, var obj)
 var maximum(var self)
 {
 
-	if (len(self) == 0) {
+	if (len(self) == 0)
 		return None;
-	}
 
 	var best = at(self, 0);
 	foreach(item in self) {
@@ -199,9 +201,8 @@ var maximum(var self)
 var minimum(var self)
 {
 
-	if (len(self) == 0) {
+	if (len(self) == 0)
 		return None;
-	}
 
 	var best = at(self, 0);
 	foreach(item in self) {
@@ -242,6 +243,8 @@ var iter_next(var self, var curr)
 {
 	return type_class_method(type_of(self), Iter, iter_next, self, curr);
 }
+
+var Iter_End = Singleton(Iter_End);
 
 var at(var self, int index)
 {
@@ -301,6 +304,35 @@ long hash(var self)
 	} else {
 		return type_class_method(type_of(self), Hash, hash, self);
 	}
+}
+
+/*
+** Given some number, `Hash_Table_Size` 
+** returns a new number greater than 
+** the old one, suitable for using 
+** as the size for a hash table.
+**
+** To do this it picks from a table
+** of primes or when exhausted multiplies
+** the input by two.
+*/
+
+local const long Hash_Primes[20] = {
+	23, 53, 101, 197,
+	389, 683, 1259, 2417,
+	4733, 9371, 18617, 37097,
+	74093, 148073, 296099, 592019,
+	1100009, 2200013, 4400021, 8800019
+};
+
+long Hash_Table_Size(long size)
+{
+	for (int i = 0; i < 20; i++) {
+		if (Hash_Primes[i] > size) {
+			return Hash_Primes[i];
+		}
+	}
+	return size * 2;
 }
 
 var get(var self, var key)

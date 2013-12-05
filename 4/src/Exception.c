@@ -134,7 +134,8 @@ local void Exception_Error(void)
 	print_to($(File, stderr), 0, "!!\t\n");
 	print_to($(File, stderr), 0, "!!\tUncaught %$ at (%s:%s:%i) \n",
 			 Exception_Object(), $(String, (char *)td->exc_file), $(String,
-																	(char *)td->
+																	(char *)
+																	td->
 																	exc_func),
 			 $(Int, td->exc_lineno));
 	print_to($(File, stderr), 0, "!!\t\n");
@@ -153,10 +154,12 @@ local void Exception_Error(void)
 				 $(String, symbols[i]));
 	}
 	print_to($(File, stderr), 0, "!!\t\n");
+
 	free(symbols);
 #endif
 
 	exit(EXIT_FAILURE);
+
 }
 
 local var main_exc_msg = NULL;
@@ -183,6 +186,7 @@ var Exception_Throw(var obj, const char *fmt, const char *file,
 		td->exc_msg = main_exc_msg;
 		atexit(main_exc_msg_free);
 	}
+
 	print_to_vl(td->exc_msg, 0, fmt, vl);
 
 	if (Exception_Depth() >= 1) {
@@ -192,6 +196,7 @@ var Exception_Throw(var obj, const char *fmt, const char *file,
 	}
 
 	return Undefined;
+
 }
 
 var Exception_Catch(var_list vl)
@@ -221,4 +226,5 @@ var Exception_Catch(var_list vl)
 	}
 
 	return Undefined;
+
 }

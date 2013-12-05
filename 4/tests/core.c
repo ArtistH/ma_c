@@ -81,6 +81,7 @@ PT_FUNC(test_type)
 
 PT_FUNC(test_cast)
 {
+
 	var x = $(Int, 1);
 	var y = $(Real, 2.0);
 
@@ -89,10 +90,12 @@ PT_FUNC(test_cast)
 
 	PT_ASSERT(x);
 	PT_ASSERT(y);
+
 }
 
 PT_FUNC(test_new)
 {
+
 	var x = new(Int, $(Int, 1));
 
 	PT_ASSERT(x);
@@ -111,6 +114,7 @@ PT_FUNC(test_new)
 	PT_ASSERT_STR_EQ(as_str(z), "Hello");
 	z = destruct(z);
 	deallocate(z);
+
 }
 
 PT_FUNC(test_assign)
@@ -157,6 +161,7 @@ PT_FUNC(test_assign)
 
 PT_FUNC(test_copy)
 {
+
 	var x = new(String, $(String, "Hello"));
 	var y = copy(x);
 
@@ -166,6 +171,7 @@ PT_FUNC(test_copy)
 
 	delete(x);
 	delete(y);
+
 }
 
 PT_FUNC(test_eq)
@@ -253,8 +259,9 @@ PT_FUNC(test_hash)
 	PT_ASSERT(y is 123);
 }
 
-PT_FUNC(test_collection_list)
+PT_FUNC(test_collection)
 {
+
 	var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
 	PT_ASSERT(x);
@@ -277,13 +284,9 @@ PT_FUNC(test_collection_list)
 	PT_ASSERT(is_empty(x));
 
 	delete(x);
-}
 
-PT_FUNC(test_collection_array)
-{
-	var y =
-		new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2),
-			$(Real, 1.1));
+	var y = new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2),
+				$(Real, 1.1));
 
 	PT_ASSERT(y);
 	PT_ASSERT(len(y) is 4);
@@ -306,10 +309,7 @@ PT_FUNC(test_collection_array)
 	PT_ASSERT(eq(minval, $(Real, 1.1)));
 
 	delete(y);
-}
 
-PT_FUNC(test_collection_list_sort)
-{
 	var z = new(List, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
 
 	sort(z);
@@ -321,9 +321,8 @@ PT_FUNC(test_collection_list_sort)
 
 	delete(z);
 
-	var w =
-		new(List, $(Int, 135), $(Int, 11), $(Int, 254), $(Int, 123213),
-			$(Int, 22), $(Int, 1));
+	var w = new(List, $(Int, 135), $(Int, 11), $(Int, 254), $(Int, 123213),
+				$(Int, 22), $(Int, 1));
 
 	sort(w);
 
@@ -335,10 +334,7 @@ PT_FUNC(test_collection_list_sort)
 	PT_ASSERT(eq(at(w, 5), $(Int, 123213)));
 
 	delete(w);
-}
 
-PT_FUNC(test_collection_map)
-{
 	var map1 = new(Map);
 	var map2 = new(Map);
 
@@ -362,6 +358,7 @@ PT_FUNC(test_collection_map)
 
 	delete(map1);
 	delete(map2);
+
 }
 
 PT_FUNC(test_iter)
@@ -375,11 +372,11 @@ PT_FUNC(test_iter)
 	}
 
 	delete(x);
-
 }
 
 PT_FUNC(test_push)
 {
+
 	var x = new(Array, Int);
 	var y = new(List);
 
@@ -465,6 +462,7 @@ PT_FUNC(test_dict)
 
 PT_FUNC(test_as_ctype)
 {
+
 	PT_ASSERT(as_char($(Char, 'a')) is 'a');
 	PT_ASSERT(as_char($(Char, 'b')) is 'b');
 
@@ -481,22 +479,27 @@ PT_FUNC(test_as_ctype)
 	PT_ASSERT(as_double($(Real, 9.8)) is 9.8);
 	PT_ASSERT(as_double($(Int, 5)) is 5.0);
 	PT_ASSERT(as_double($(Int, 7)) is 7.0);
+
 }
 
 PT_FUNC(test_stream)
 {
 
 	var f = $(File, NULL);
+
 	PT_ASSERT(f);
 
 	stream_open(f, "test.bin", "w");
+
 	PT_ASSERT(f);
 
 	put(f, Int, $(Int, 1));
 	put(f, Int, $(Int, 22));
 
 	stream_close(f);
+
 	stream_open(f, "test.bin", "r");
+
 	PT_ASSERT(f);
 
 	var first = get(f, Int);
@@ -509,6 +512,7 @@ PT_FUNC(test_stream)
 	delete(second);
 
 	stream_close(f);
+
 	PT_ASSERT(f);
 }
 
@@ -543,6 +547,7 @@ PT_FUNC(test_type_new)
 
 PT_FUNC(test_type_implements)
 {
+
 	PT_ASSERT(type_implements(Int, New));
 	PT_ASSERT(type_implements(Real, Num));
 	PT_ASSERT(type_implements(String, Eq));
@@ -550,10 +555,12 @@ PT_FUNC(test_type_implements)
 	PT_ASSERT(type_class(Int, Ord));
 	PT_ASSERT(type_class(List, At));
 	PT_ASSERT(type_class(Type, AsStr));
+
 }
 
 PT_FUNC(test_type_parent)
 {
+
 	PT_ASSERT(not type_implements(Int, ReturnTrue));
 	PT_ASSERT(not type_implements(Real, ReturnTrue));
 	PT_ASSERT(type_implements(IntParent, ReturnTrue));
@@ -567,10 +574,12 @@ PT_FUNC(test_type_parent)
 	PT_ASSERT(type_implements(IntParent, ReturnTrue));
 
 	PT_ASSERT(return_true(Int));
+
 }
 
 PT_FUNC(test_show)
 {
+
 	var out = new(String, $(String, ""));
 
 	print_to(out, 0, "This is an %s %i %i",
@@ -579,10 +588,12 @@ PT_FUNC(test_show)
 	PT_ASSERT_STR_EQ(as_str(out), "This is an example 10 1");
 
 	delete(out);
+
 }
 
 PT_FUNC(test_look)
 {
+
 	var x = $(Int, 0);
 	var y = $(Int, 0);
 	var z = $(Int, 0);
@@ -594,6 +605,7 @@ PT_FUNC(test_look)
 	PT_ASSERT(eq(y, $(Int, 10)));
 	PT_ASSERT(eq(z, $(Int, 1)));
 	PT_ASSERT(eq(w, $(Int, 0)));
+
 }
 
 PT_FUNC(test_module)
@@ -642,10 +654,7 @@ PT_SUITE(suite_core)
 	PT_REG(test_eq);
 	PT_REG(test_ord);
 	PT_REG(test_hash);
-	PT_REG(test_collection_list);
-	PT_REG(test_collection_list_sort);
-	PT_REG(test_collection_map);
-	PT_REG(test_collection_array);
+	PT_REG(test_collection);
 	PT_REG(test_iter);
 	PT_REG(test_push);
 	PT_REG(test_at);

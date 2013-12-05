@@ -44,7 +44,9 @@ var File_Open(var self, const char *filename, const char *access)
 	if (fd->f != NULL) {
 		stream_close(self);
 	}
+
 	fd->f = fopen(filename, access);
+
 	if (fd->f == NULL) {
 		throw(IOError, "Could not open file: %s", $(String, (char *)filename));
 	}
@@ -55,8 +57,8 @@ var File_Open(var self, const char *filename, const char *access)
 void File_Close(var self)
 {
 	FileData *fd = cast(self, File);
-
 	int err = fclose(fd->f);
+
 	if (err != 0) {
 		throw(IOError, "Failed to close file: %i", $(Int, err));
 	}
@@ -67,18 +69,19 @@ void File_Close(var self)
 void File_Seek(var self, int pos, int origin)
 {
 	FileData *fd = cast(self, File);
-
 	int err = fseek(fd->f, pos, origin);
+
 	if (err != 0) {
 		throw(IOError, "Failed to seek in file: %i", $(Int, err));
 	}
+
 }
 
 int File_Tell(var self)
 {
 	FileData *fd = cast(self, File);
-
 	int i = ftell(fd->f);
+
 	if (i == -1) {
 		throw(IOError, "Failed to tell file: %i", $(Int, i));
 	}
@@ -89,11 +92,12 @@ int File_Tell(var self)
 void File_Flush(var self)
 {
 	FileData *fd = cast(self, File);
-
 	int err = fflush(fd->f);
+
 	if (err != 0) {
 		throw(IOError, "Failed to flush file: %i", $(Int, err));
 	}
+
 }
 
 bool File_EOF(var self)
@@ -105,8 +109,8 @@ bool File_EOF(var self)
 int File_Read(var self, void *output, int size)
 {
 	FileData *fd = cast(self, File);
-
 	int num = fread(output, size, 1, fd->f);
+
 	if (num == -1) {
 		throw(IOError, "Failed to read from file: %i", $(Int, num));
 		return num;
@@ -118,8 +122,8 @@ int File_Read(var self, void *output, int size)
 int File_Write(var self, void *input, int size)
 {
 	FileData *fd = cast(self, File);
-
 	int num = fwrite(input, size, 1, fd->f);
+
 	if (num != 1 && size != 0) {
 		throw(IOError, "Failed to write to file: %i", $(Int, num));
 	}

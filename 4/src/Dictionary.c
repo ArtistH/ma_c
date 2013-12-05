@@ -32,11 +32,19 @@ var Dictionary = type_data {
 var Dictionary_New(var self, var_list vl)
 {
 	DictionaryData *dict = cast(self, Dictionary);
-	dict->size = 1024;
+
+	dict->size = Hash_Table_Size(0);
 	dict->keys = new(List);
 
-	dict->key_buckets = calloc(dict->size, sizeof(var));
-	dict->val_buckets = calloc(dict->size, sizeof(var));
+	dict->key_buckets = malloc(dict->size * sizeof(var));
+	dict->val_buckets = malloc(dict->size * sizeof(var));
+
+	if (dict->key_buckets == NULL) {
+		throw(OutOfMemoryError, "Cannot create Dictionary. Out of memory!");
+	}
+	if (dict->val_buckets == NULL) {
+		throw(OutOfMemoryError, "Cannot create Dictionary. Out of memory!");
+	}
 
 	for (int i = 0; i < dict->size; i++) {
 		dict->key_buckets[i] = new(List);
@@ -52,7 +60,7 @@ var Dictionary_Delete(var self)
 
 	delete(dict->keys);
 
-	for (int i = 0; i < dict->size; ++i) {
+	for (int i = 0; i < dict->size; i++) {
 		delete(dict->key_buckets[i]);
 		delete(dict->val_buckets[i]);
 	}
@@ -70,6 +78,7 @@ size_t Dictionary_Size(void)
 
 void Dictionary_Assign(var self, var obj)
 {
+
 	clear(self);
 
 	foreach(key in obj) {
@@ -80,6 +89,7 @@ void Dictionary_Assign(var self, var obj)
 
 var Dictionary_Copy(var self)
 {
+
 	var cop = new(Dictionary);
 
 	foreach(key in self) {
@@ -142,6 +152,52 @@ var Dictionary_Contains(var self, var key)
 	return contains(dict->keys, key);
 }
 
+static void Dictionary_Rehash(DictionaryData * dict)
+{
+
+	int new_size = Hash_Table_Size(len(dict) / 2);
+	int old_size = dict->size;
+	if (old_size == new_size) {
+		return;
+	}
+
+	var *old_keys = dict->key_buckets;
+	var *old_vals = dict->val_buckets;
+
+	dict->size = new_size;
+	dict->key_buckets = malloc(dict->size * sizeof(var));
+	dict->val_buckets = malloc(dict->size * sizeof(var));
+
+	if (dict->key_buckets == NULL) {
+		throw(OutOfMemoryError, "Cannot create Dictionary. Out of memory!");
+	}
+	if (dict->val_buckets == NULL) {
+		throw(OutOfMemoryError, "Cannot create Dictionary. Out of memory!");
+	}
+
+	for (int i = 0; i < dict->size; i++) {
+		dict->key_buckets[i] = new(List);
+		dict->val_buckets[i] = new(List);
+	}
+
+	for (int i = 0; i < old_size; i++) {
+		var keys = old_keys[i];
+		var vals = old_vals[i];
+
+		for (int j = 0; j < len(keys); j++) {
+			long ni = abs(hash(at(keys, j)) % dict->size);
+			push(dict->key_buckets[ni], at(keys, j));
+			push(dict->val_buckets[ni], at(vals, j));;
+		}
+
+		delete(keys);
+		delete(vals);
+	}
+
+	free(old_keys);
+	free(old_vals);
+}
+
 void Dictionary_Discard(var self, var key)
 {
 	DictionaryData *dict = cast(self, Dictionary);
@@ -151,24 +207,22 @@ void Dictionary_Discard(var self, var key)
 	var keys = dict->key_buckets[i];
 	var vals = dict->val_buckets[i];
 
-	int pos = -1;
-
-	for (int i = 0; i < len(keys); i++) {
-		var k = at(keys, i);
-		if_eq(k, key) {
-			pos = i;
+	for (int j = 0; j < len(keys); j++) {
+		if_eq(at(keys, j), key) {
+			discard(dict->keys, key);
+			pop_at(keys, j);
+			pop_at(vals, j);
+			Dictionary_Rehash(dict);
+			return;
 		}
 	}
 
-	if (pos != -1) {
-		discard(dict->keys, key);
-		pop_at(keys, pos);
-		pop_at(vals, pos);
-	}
+	throw(KeyError, "Key %$ not in Dictionary!", key);
 }
 
 var Dictionary_Get(var self, var key)
 {
+
 	DictionaryData *dict = cast(self, Dictionary);
 
 	long i = abs(hash(key) % dict->size);
@@ -184,30 +238,26 @@ var Dictionary_Get(var self, var key)
 		}
 	}
 
-	return throw(KeyError, "Key '%$' not in Dictionary!", key);
+	return throw(KeyError, "Key %$ not in Dictionary!", key);
 }
 
 void Dictionary_Put(var self, var key, var val)
 {
+
 	DictionaryData *dict = cast(self, Dictionary);
+	Dictionary_Rehash(dict);
 
 	long i = abs(hash(key) % dict->size);
 
 	var keys = dict->key_buckets[i];
 	var vals = dict->val_buckets[i];
 
-	int pos = -1;
-
-	for (int i = 0; i < len(keys); i++) {
-		var k = at(keys, i);
-		if_eq(k, key) {
-			pos = i;
+	for (int j = 0; j < len(keys); j++) {
+		if_eq(at(keys, j), key) {
+			discard(dict->keys, key);
+			pop_at(keys, j);
+			pop_at(vals, j);
 		}
-	}
-
-	if (pos != -1) {
-		pop_at(keys, pos);
-		pop_at(vals, pos);
 	}
 
 	push(keys, key);

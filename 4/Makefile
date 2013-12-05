@@ -1,7 +1,7 @@
 CC = gcc
 AR = ar
 
-VERSION = 1.1.5
+VERSION = 1.1.6
 PACKAGE = libCello-$(VERSION)
 
 PREFIX=/usr/local
@@ -16,7 +16,6 @@ OBJ = $(addprefix obj/,$(notdir $(SRC:.c=.o)))
 
 TESTS = $(wildcard tests/*.c)
 TESTS_OBJ = $(addprefix obj/,$(notdir $(TESTS:.c=.o)))
-TESTS_EXE = ./test ./test.bin ./test.txt
 
 DEMOS = $(wildcard demos/*.c)
 DEMOS_OBJ = $(addprefix obj/,$(notdir $(DEMOS:.c=.o)))
@@ -74,7 +73,7 @@ obj:
 check: $(TESTS_OBJ) $(STATIC)
 	$(CC) $(TESTS_OBJ) $(STATIC) $(LIBS) -o test
 	./test
-  
+
 obj/%.o: tests/%.c | obj
 	$(CC) $< -c $(CFLAGS) -o $@
 
@@ -97,7 +96,8 @@ $(PACKAGE):
 # Clean
 
 clean:
-	rm -f $(OBJ) $(TESTS_OBJ) $(DEMOS_OBJ) $(STATIC) $(DYNAMIC) $(DEMOS_EXE) $(TESTS_EXE)
+	rm -f $(OBJ) $(TESTS_OBJ) $(DEMOS_OBJ) $(STATIC) $(DYNAMIC)
+	rm -f test
 
 # Install
 

@@ -79,9 +79,8 @@ var String_Eq(var self, var other)
 var String_Gt(var self, var obj)
 {
 	StringData *s = cast(self, String);
-	if (not type_implements(type_of(obj), AsStr)) {
+	if (not type_implements(type_of(obj), AsStr))
 		return false;
-	}
 
 	const char *fst = s->value;
 	const char *snd = as_str(obj);
@@ -91,14 +90,12 @@ var String_Gt(var self, var obj)
 	int minlen = fstlen > sndlen ? sndlen : fstlen;
 
 	for (int i = 0; i < minlen; i++) {
-		if (fst[i] > snd[i]) {
+		if (fst[i] > snd[i])
 			return True;
-		}
 	}
 
-	if (fstlen > sndlen) {
+	if (fstlen > sndlen)
 		return True;
-	}
 
 	return False;
 }
@@ -106,10 +103,8 @@ var String_Gt(var self, var obj)
 var String_Lt(var self, var obj)
 {
 	StringData *s = cast(self, String);
-
-	if (not type_implements(type_of(obj), AsStr)) {
+	if (not type_implements(type_of(obj), AsStr))
 		return false;
-	}
 
 	const char *fst = s->value;
 	const char *snd = as_str(obj);
@@ -119,14 +114,12 @@ var String_Lt(var self, var obj)
 	int minlen = fstlen > sndlen ? sndlen : fstlen;
 
 	for (int i = 0; i < minlen; i++) {
-		if (fst[i] < snd[i]) {
+		if (fst[i] < snd[i])
 			return True;
-		}
 	}
 
-	if (fstlen < sndlen) {
+	if (fstlen < sndlen)
 		return True;
-	}
 
 	return False;
 }
@@ -188,9 +181,10 @@ void String_Discard(var self, var obj)
 		char ochar = as_char(obj);
 		const char *pos = strchr(s->value, ochar);
 		while (pos != NULL) {
-			pos += 1;
+			pos = pos + 1;
 		}
 	}
+
 }
 
 long String_Hash(var self)
@@ -232,11 +226,10 @@ void String_Append(var self, var obj)
 void String_Reverse(var self)
 {
 	StringData *s = cast(self, String);
-	unsigned int s_len = strlen(s->value);
-	for (unsigned int i = 0; i < s_len / 2; i++) {
+	for (unsigned int i = 0; i < strlen(s->value) / 2; i++) {
 		char temp = s->value[i];
-		s->value[i] = s->value[s_len - 1 - i];
-		s->value[s_len - 1 - i] = temp;
+		s->value[i] = s->value[strlen(s->value) - 1 - i];
+		s->value[strlen(s->value) - 1 - i] = temp;
 	}
 }
 
@@ -256,6 +249,7 @@ int String_Format_To(var self, int pos, const char *fmt, va_list va)
 	if (s->value == NULL) {
 		throw(OutOfMemoryError, "Cannot allocate string, out of memory!");
 	}
+
 	return vsprintf(s->value + pos, fmt, va);
 
 #elif defined(__APPLE__)
@@ -270,6 +264,7 @@ int String_Format_To(var self, int pos, const char *fmt, va_list va)
 	if (s->value == NULL) {
 		throw(OutOfMemoryError, "Cannot allocate string, out of memory!");
 	}
+
 	s->value[pos] = '\0';
 	strcat(s->value, tmp);
 	free(tmp);
@@ -287,9 +282,11 @@ int String_Format_To(var self, int pos, const char *fmt, va_list va)
 	if (s->value == NULL) {
 		throw(OutOfMemoryError, "Cannot allocate string, out of memory!");
 	}
+
 	return vsprintf(s->value + pos, fmt, va);
 
 #endif
+
 }
 
 int String_Format_From(var self, int pos, const char *fmt, va_list va)

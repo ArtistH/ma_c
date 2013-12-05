@@ -67,6 +67,7 @@ PT_FUNC(test_function_assign)
 
 	delete(f1);
 	delete(f2);
+
 }
 
 PT_FUNC(test_function_copy)
@@ -79,7 +80,7 @@ PT_FUNC(test_function_copy)
 #else
 	var empty_function(var args) {
 		return None;
-	};
+	}
 #endif
 
 	var f1 = new(Function, $(Function, empty_function));
@@ -116,6 +117,7 @@ PT_FUNC(test_call)
 
 	PT_ASSERT(result1 is None);
 	PT_ASSERT(result2 is Some);
+
 }
 
 PT_FUNC(test_call_with)
@@ -140,10 +142,15 @@ PT_FUNC(test_call_with)
 #endif
 
 	var args = new(List, $(Int, 1), $(Int, 5));
+
 	var assert_func = $(Function, asserts_args);
+
 	var result = call_with(assert_func, args);
+
 	PT_ASSERT(result is None);
+
 	delete(args);
+
 }
 
 PT_FUNC(test_call_vl)
@@ -168,13 +175,18 @@ PT_FUNC(test_call_vl)
 #endif
 
 	var_list args = var_list_new($(Int, 1), $(Int, 5));
+
 	var assert_func = $(Function, asserts_args);
+
 	var result = call_vl(assert_func, args);
+
 	PT_ASSERT(result is None);
+
 }
 
 PT_FUNC(test_lambda)
 {
+
 	var out = new(String, $(String, ""));
 
 	lambda(hello_name, args) {
@@ -185,12 +197,15 @@ PT_FUNC(test_lambda)
 	};
 
 	call(hello_name, $(String, "Hello Bob!"), out);
+
 	PT_ASSERT(eq(out, $(String, "Hello Bob!")));
+
 	delete(out);
 }
 
 PT_FUNC(test_lambda_id)
 {
+
 	lambda(return_new_int1, args) {
 		return new(Int, $(Int, 1));
 	};
@@ -206,17 +221,23 @@ PT_FUNC(test_lambda_id)
 
 	delete(res1);
 	delete(res2);
+
 }
 
 PT_FUNC(test_lambda_const)
 {
+
 	lambda_const(return_some, Some);
+
 	var res = call(return_some, None);
+
 	PT_ASSERT(res is Some);
+
 }
 
 PT_FUNC(test_lambda_compose)
 {
+
 	lambda(return_some, args) {
 		return new(List, Some);
 	};
@@ -228,12 +249,16 @@ PT_FUNC(test_lambda_compose)
 	};
 
 	lambda_compose(return_compose, return_arg0, return_some);
+
 	var res = call(return_compose, None);
+
 	PT_ASSERT(res is Some);
+
 }
 
 PT_FUNC(test_lambda_flip)
 {
+
 	lambda(return_first, args) {
 		return at(args, 0);
 	};
@@ -248,10 +273,12 @@ PT_FUNC(test_lambda_flip)
 
 	PT_ASSERT(res1 is arg1);
 	PT_ASSERT(res2 is arg2);
+
 }
 
 PT_FUNC(test_lambda_pipe)
 {
+
 	var total = $(Int, 0);
 
 	lambda(add_one, args) {
@@ -274,10 +301,12 @@ PT_FUNC(test_lambda_pipe)
 	var res = call(add_all, total);
 
 	PT_ASSERT(as_long(total) is 111);
+
 }
 
 PT_FUNC(test_lambda_method_pipe)
 {
+
 	var str = new(String, $(String, ""));
 
 	lambda(cat_fizz, args) {
@@ -302,10 +331,12 @@ PT_FUNC(test_lambda_method_pipe)
 	PT_ASSERT_STR_EQ(as_str(str), "FizzBuzzBoo");
 
 	delete(str);
+
 }
 
 PT_FUNC(test_lambda_partial_l)
 {
+
 	lambda(add_to_first, args) {
 		add(at(args, 0), at(args, 1));
 		add(at(args, 0), at(args, 2));
@@ -324,6 +355,7 @@ PT_FUNC(test_lambda_partial_l)
 
 PT_FUNC(test_lambda_partial_r)
 {
+
 	lambda(add_to_last, args) {
 		add(at(args, 3), at(args, 0));
 		add(at(args, 3), at(args, 1));
@@ -338,6 +370,7 @@ PT_FUNC(test_lambda_partial_r)
 	var res = call(add_to_total, $(Int, 1), $(Int, 10), $(Int, 100));
 
 	PT_ASSERT(as_long(total) is 111);
+
 }
 
 local var return_snd(var fst, var snd)
@@ -347,14 +380,16 @@ local var return_snd(var fst, var snd)
 
 PT_FUNC(test_lambda_uncurry)
 {
+
 	lambda_uncurry(return_snd_uncurried, return_snd, 2);
 
 	var res = call(return_snd_uncurried, None, Some);
 
 	PT_ASSERT(res is Some);
+
 }
 
-void snd_to_fst(var fst, var snd)
+local void snd_to_fst(var fst, var snd)
 {
 	assign(fst, snd);
 }
@@ -375,6 +410,7 @@ PT_FUNC(test_lambda_void_uncurry)
 
 PT_FUNC(test_map)
 {
+
 	lambda(add_one, args) {
 		add(at(args, 0), $(Int, 1));
 		return None;
@@ -389,6 +425,7 @@ PT_FUNC(test_map)
 	PT_ASSERT(as_long(at(values, 2)) is 11);
 
 	delete(values);
+
 }
 
 PT_FUNC(test_new_map)
@@ -412,6 +449,7 @@ PT_FUNC(test_new_map)
 
 PT_FUNC(test_new_filter)
 {
+
 	lambda(only_some, args) {
 		return bool_var(at(args, 0) is Some);
 	};
@@ -423,6 +461,7 @@ PT_FUNC(test_new_filter)
 
 	delete(values);
 	delete(somes);
+
 }
 
 PT_FUNC(test_new_sum)
@@ -440,6 +479,7 @@ PT_FUNC(test_new_sum)
 
 PT_FUNC(test_new_product)
 {
+
 	var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
 	var total = new_product(values);
 
@@ -447,6 +487,7 @@ PT_FUNC(test_new_product)
 
 	delete(total);
 	delete(values);
+
 }
 
 PT_FUNC(test_new_foldl)

@@ -4,7 +4,7 @@
 **  Container that stores keys and values
 **
 **  + Allocates space for key and value objects
-**  + Key objects require "Ord" and "Eq"
+**  + Key objects require "Ord" and "Eq" 
 **  + Uses "Assign" to set data contents
 */
 

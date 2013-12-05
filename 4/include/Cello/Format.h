@@ -5,7 +5,7 @@
 **  which works with rich objects.
 **
 **  The semantics of the "Format" class are similar to
-**  "printf" and "scanf". The 'pos' variable is meant to
+**  "printf" and "scanf". The 'pos' variable is meant to 
 **  represent the position at which the formatting takes
 **  place but can be ignored by objects which maintain
 **  their own state such as "File".
@@ -27,7 +27,6 @@
 **  version of the 'pos' variable, with added to it the
 **  number of character either written or scanned.
 */
-
 #ifndef CelloFormat_h
 #define CelloFormat_h
 

@@ -72,7 +72,6 @@ var Map_Copy(var self)
 		var val = get(self, key);
 		put(newmap, key, val);
 	}
-
 	return newmap;
 }
 
@@ -135,26 +134,27 @@ local var Map_Next_Inorder(struct MapNode * node)
 	if (inorder_opt) {
 
 		struct MapNode *rnode = node->left;
+
 		while (1) {
-			if (rnode->right is NULL) {
+			if (rnode->right is NULL)
 				return rnode->leaf_key;
-			} else {
+			else
 				rnode = rnode->right;
-			}
 		}
 
 	} else {
 
 		struct MapNode *lnode = node->right;
+
 		while (1) {
-			if (lnode->left is NULL) {
+			if (lnode->left is NULL)
 				return lnode->leaf_key;
-			} else {
+			else
 				lnode = lnode->left;
-			}
 		}
 
 	}
+
 }
 
 void Map_Discard(var self, var key)
@@ -165,6 +165,7 @@ void Map_Discard(var self, var key)
 	struct MapNode *node = md->root;
 
 	while (node != NULL) {
+
 		if_eq(node->leaf_key, key) {
 
 			if ((node->left is NULL) and(node->right is NULL)) {
@@ -200,6 +201,7 @@ void Map_Discard(var self, var key)
 				discard(md->keys, key);
 				return;
 			}
+
 		}
 
 		if_lt(node->leaf_key, key) {
@@ -210,7 +212,9 @@ void Map_Discard(var self, var key)
 			parent = &node->right;
 			node = node->right;
 		}
+
 	}
+
 }
 
 var Map_Get(var self, var key)
@@ -220,17 +224,12 @@ var Map_Get(var self, var key)
 	struct MapNode *node = md->root;
 
 	while (node != NULL) {
-		if_eq(node->leaf_key, key) {
-			return node->leaf_val;
-		}
-		if_lt(node->leaf_key, key) {
-			node = node->left;
-		}
-		else {
-			node = node->right;
-		}
-
+		if_eq(node->leaf_key, key) return node->leaf_val;
+		if_lt(node->leaf_key, key) node = node->left;
+		else
+		node = node->right;
 	}
+
 	return throw(KeyError, "Key '%$' not in Map!", key);
 }
 
@@ -239,7 +238,7 @@ local struct MapNode *Map_Node_New(var key, var val)
 	struct MapNode *node = malloc(sizeof(struct MapNode));
 
 	if (node == NULL) {
-		throw(OutOfMemoryError, "Cannot create new Map Node, Out of memory!");
+		throw(OutOfMemoryError, "Cannot create new Map Node. Out of memory!");
 	}
 
 	node->leaf_key = key;
@@ -257,6 +256,7 @@ void Map_Put(var self, var key, var val)
 	struct MapNode *node = md->root;
 
 	while (node != NULL) {
+
 		if_eq(node->leaf_key, key) {
 			node->leaf_val = val;
 			return;
@@ -270,11 +270,13 @@ void Map_Put(var self, var key, var val)
 			parent = &node->right;
 			node = node->right;
 		}
+
 	}
 
 	*parent = Map_Node_New(key, val);
 	push(md->keys, key);
 	return;
+
 }
 
 var Map_Iter_Start(var self)

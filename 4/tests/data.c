@@ -1,5 +1,5 @@
-
 #include "ptest.h"
+
 #include "Cello.h"
 
 #include <math.h>
@@ -24,12 +24,13 @@ PT_FUNC(test_bool_asctypes)
 	PT_ASSERT(as_long(False) is 0);
 	PT_ASSERT(as_double(True) is 1.0);
 	PT_ASSERT(as_double(False) is 0.0);
-	PT_ASSERT_STR_EQ(as_str(True), "True");
 	PT_ASSERT_STR_EQ(as_str(False), "False");
+	PT_ASSERT_STR_EQ(as_str(True), "True");
 }
 
 PT_FUNC(test_char_create)
 {
+
 	var char0 = $(Char, 'a');
 	var char1 = new(Char, $(Char, 'b'));
 	var char2 = copy(char0);
@@ -48,6 +49,7 @@ PT_FUNC(test_char_create)
 
 	delete(char1);
 	delete(char2);
+
 }
 
 PT_FUNC(test_char_ord)
@@ -75,6 +77,7 @@ PT_FUNC(test_char_hash)
 
 PT_FUNC(test_int_create)
 {
+
 	var int0 = $(Int, 1);
 	var int1 = new(Int, $(Int, 24313));
 	var int2 = copy(int0);
@@ -94,10 +97,12 @@ PT_FUNC(test_int_create)
 
 	delete(int1);
 	delete(int2);
+
 }
 
 PT_FUNC(test_int_ord)
 {
+
 	PT_ASSERT(gt($(Int, 5), $(Int, 0)));
 	PT_ASSERT(gt($(Int, 5133), $(Int, 232)));
 	PT_ASSERT(lt($(Int, 2332), $(Int, 9992)));
@@ -110,19 +115,24 @@ PT_FUNC(test_int_ord)
 	PT_ASSERT(le($(Int, 11), $(Int, 888)));
 	PT_ASSERT(neq($(Int, 324), $(Int, 685)));
 	PT_ASSERT(neq($(Int, 34), $(Int, 54)));
+
 }
 
 PT_FUNC(test_int_hash)
 {
+
 	PT_ASSERT(hash($(Int, 34)) is 34);
 	PT_ASSERT(hash($(Int, 11)) is 11);
 	PT_ASSERT(hash($(Int, 06)) is 06);
 	PT_ASSERT(hash($(Int, 8213)) is 8213);
+
 }
 
 PT_FUNC(test_int_num)
 {
+
 	var tester = $(Int, 0);
+
 	PT_ASSERT(as_long(tester) is 0);
 
 	add(tester, $(Int, 10));
@@ -139,10 +149,12 @@ PT_FUNC(test_int_num)
 	PT_ASSERT(as_long(tester) is 20);
 	absolute(tester);
 	PT_ASSERT(as_long(tester) is 20);
+
 }
 
 PT_FUNC(test_int_parse)
 {
+
 	var f = stream_open($(File, NULL), "test.bin", "w");
 
 	put(f, Int, $(Int, 10));
@@ -162,10 +174,12 @@ PT_FUNC(test_int_parse)
 
 	delete(fst);
 	delete(snd);
+
 }
 
 PT_FUNC(test_real_create)
 {
+
 	var real0 = $(Real, 1.0);
 	var real1 = new(Real, $(Real, 24.313));
 	var real2 = copy(real0);
@@ -185,10 +199,12 @@ PT_FUNC(test_real_create)
 
 	delete(real1);
 	delete(real2);
+
 }
 
 PT_FUNC(test_real_ord)
 {
+
 	PT_ASSERT(gt($(Real, 5.0), $(Real, 0.0)));
 	PT_ASSERT(gt($(Real, 51.33), $(Real, 2.32)));
 	PT_ASSERT(lt($(Real, 23.32), $(Real, 99.92)));
@@ -201,6 +217,7 @@ PT_FUNC(test_real_ord)
 	PT_ASSERT(le($(Real, 1.1), $(Real, 88.8)));
 	PT_ASSERT(neq($(Real, 3.24), $(Real, 6.85)));
 	PT_ASSERT(neq($(Real, 3.4), $(Real, 5.4)));
+
 }
 
 union type_interp {
@@ -210,6 +227,7 @@ union type_interp {
 
 PT_FUNC(test_real_hash)
 {
+
 	union type_interp r0 = { 34.0 };
 	union type_interp r1 = { 11.0 };
 	union type_interp r2 = { 0.6 };
@@ -219,10 +237,12 @@ PT_FUNC(test_real_hash)
 	PT_ASSERT(hash($(Real, 11.0)) is r1.as_long);
 	PT_ASSERT(hash($(Real, 0.6)) is r2.as_long);
 	PT_ASSERT(hash($(Real, 82.13)) is r3.as_long);
+
 }
 
 PT_FUNC(test_real_num)
 {
+
 	double base = 0.0;
 	var mirror = $(Real, 0.0);
 
@@ -245,10 +265,12 @@ PT_FUNC(test_real_num)
 	base = fabs(base);
 	absolute(mirror);
 	PT_ASSERT(as_double(mirror) is base);
+
 }
 
 PT_FUNC(test_real_parse)
 {
+
 	var f = stream_open($(File, NULL), "test.bin", "w");
 
 	put(f, Real, $(Real, 1.0));
@@ -268,10 +290,12 @@ PT_FUNC(test_real_parse)
 
 	delete(fst);
 	delete(snd);
+
 }
 
 PT_FUNC(test_string_create)
 {
+
 	var s0 = $(String, "Hello");
 	var s1 = new(String, $(String, "There"));
 	var s2 = copy(s0);
@@ -291,10 +315,12 @@ PT_FUNC(test_string_create)
 
 	delete(s1);
 	delete(s2);
+
 }
 
 PT_FUNC(test_string_ord)
 {
+
 	PT_ASSERT(gt($(String, "Apple"), $(String, "Ball")));
 	PT_ASSERT(gt($(String, "cat"), $(String, "dog")));
 	PT_ASSERT(lt($(String, "great"), $(String, "hello")));
@@ -307,10 +333,12 @@ PT_FUNC(test_string_ord)
 	PT_ASSERT(le($(String, "keep"), $(String, "keep")));
 	PT_ASSERT(neq($(String, "Hello"), $(String, "hello")));
 	PT_ASSERT(neq($(String, "group"), $(String, "GROUP")));
+
 }
 
 PT_FUNC(test_string_collection)
 {
+
 	var s0 = new(String, $(String, "Balloons"));
 
 	PT_ASSERT(len(s0) is 8);
@@ -329,17 +357,21 @@ PT_FUNC(test_string_collection)
 	PT_ASSERT_STR_EQ(as_str(s0), "");
 
 	delete(s0);
+
 }
 
 PT_FUNC(test_string_hash)
 {
+
 	PT_ASSERT(hash($(String, "Hello")) is 511);
 	PT_ASSERT(hash($(String, "There")) is 515);
 	PT_ASSERT(hash($(String, "People")) is 629);
+
 }
 
 PT_FUNC(test_string_reverse)
 {
+
 	var s0 = new(String, $(String, "Hello"));
 	var s1 = new(String, $(String, "olleH"));
 
@@ -351,10 +383,12 @@ PT_FUNC(test_string_reverse)
 
 	delete(s0);
 	delete(s1);
+
 }
 
 PT_FUNC(test_array_create)
 {
+
 	var a0 = new(Array, Int, $(Int, 1), $(Int, 5), $(Int, 10));
 	var a1 = new(Array, Real, $(Real, 1.1), $(Real, 2.2));
 	var a2 = copy(a0);
@@ -379,10 +413,12 @@ PT_FUNC(test_array_create)
 	delete(a0);
 	delete(a1);
 	delete(a2);
+
 }
 
 PT_FUNC(test_array_eq)
 {
+
 	var a0 = new(Array, Int, $(Int, 1), $(Int, 5), $(Int, 10));
 	var a1 = new(Array, Int, $(Int, 1), $(Int, 5), $(Int, 10));
 	var a2 = new(Array, Int, $(Int, 2), $(Int, 5), $(Int, 10));
@@ -396,10 +432,12 @@ PT_FUNC(test_array_eq)
 	delete(a0);
 	delete(a1);
 	delete(a2);
+
 }
 
 PT_FUNC(test_array_collection)
 {
+
 	var a0 = new(Array, Int, $(Int, 1), $(Int, 5), $(Int, 10));
 
 	PT_ASSERT(len(a0) is 3);
@@ -418,10 +456,12 @@ PT_FUNC(test_array_collection)
 	PT_ASSERT(not contains(a0, $(Int, 1)));
 
 	delete(a0);
+
 }
 
 PT_FUNC(test_array_push)
 {
+
 	var a0 = new(Array, Int);
 
 	PT_ASSERT(len(a0) is 0);
@@ -475,13 +515,14 @@ PT_FUNC(test_array_push)
 	PT_ASSERT(len(a0) is 0);
 
 	delete(a0);
+
 }
 
 PT_FUNC(test_array_at)
 {
-	var a0 =
-		new(Array, String, $(String, "Hello"), $(String, "There"),
-			$(String, "People"));
+
+	var a0 = new(Array, String, $(String, "Hello"), $(String, "There"),
+				 $(String, "People"));
 
 	PT_ASSERT(eq(at(a0, 0), $(String, "Hello")));
 	PT_ASSERT(eq(at(a0, 1), $(String, "There")));
@@ -501,13 +542,14 @@ PT_FUNC(test_array_at)
 	PT_ASSERT(eq(at(a0, 2), $(String, "Bar")));
 
 	delete(a0);
+
 }
 
 PT_FUNC(test_array_iter)
 {
-	var a0 =
-		new(Array, String, $(String, "Hello"), $(String, "There"),
-			$(String, "People"));
+
+	var a0 = new(Array, String, $(String, "Hello"), $(String, "There"),
+				 $(String, "People"));
 
 	int counter = 0;
 
@@ -540,16 +582,16 @@ PT_FUNC(test_array_iter)
 
 	PT_ASSERT(counter is 9);
 	delete(a0);
+
 }
 
 PT_FUNC(test_array_reverse)
 {
-	var a0 =
-		new(Array, String, $(String, "Hello"), $(String, "There"),
-			$(String, "People"));
-	var a1 =
-		new(Array, String, $(String, "People"), $(String, "There"),
-			$(String, "Hello"));
+
+	var a0 = new(Array, String, $(String, "Hello"), $(String, "There"),
+				 $(String, "People"));
+	var a1 = new(Array, String, $(String, "People"), $(String, "There"),
+				 $(String, "Hello"));
 
 	PT_ASSERT(not eq(a0, a1));
 
@@ -559,10 +601,12 @@ PT_FUNC(test_array_reverse)
 
 	delete(a0);
 	delete(a1);
+
 }
 
 PT_FUNC(test_table_create)
 {
+
 	var t0 = new(Table, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -594,10 +638,12 @@ PT_FUNC(test_table_create)
 	delete(t0);
 	delete(t1);
 	delete(t2);
+
 }
 
 PT_FUNC(test_table_collection)
 {
+
 	var t0 = new(Table, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -618,10 +664,12 @@ PT_FUNC(test_table_collection)
 	PT_ASSERT(not contains(t0, $(String, "There")));
 
 	delete(t0);
+
 }
 
 PT_FUNC(test_table_dict)
 {
+
 	var t0 = new(Table, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -638,10 +686,37 @@ PT_FUNC(test_table_dict)
 	PT_ASSERT(eq(i2, $(Int, 6)));
 
 	delete(t0);
+
+}
+
+PT_FUNC(test_table_rehash)
+{
+
+	var d0 = new(Table, Int, Int);
+	var value = $(Int, 23);
+	var test_key = Undefined;
+
+	int max = 1000;
+	int r = rand() % max;
+
+	for (int i = 0; i < max; i++) {
+		var key = $(Int, i);
+		if (i == r) {
+			test_key = key;
+		}
+		put(d0, key, value);
+	}
+
+	PT_ASSERT(test_key isnt Undefined);
+	PT_ASSERT(eq(get(d0, test_key), value));
+	PT_ASSERT(len(d0) is max);
+
+	delete(d0);
 }
 
 PT_FUNC(test_table_iter)
 {
+
 	var t0 = new(Table, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -674,11 +749,14 @@ PT_FUNC(test_table_iter)
 	}
 
 	PT_ASSERT(counter is 2);
+
 	delete(t0);
+
 }
 
 PT_FUNC(test_tree_create)
 {
+
 	var t0 = new(Tree, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -710,10 +788,12 @@ PT_FUNC(test_tree_create)
 	delete(t0);
 	delete(t1);
 	delete(t2);
+
 }
 
 PT_FUNC(test_tree_collection)
 {
+
 	var t0 = new(Tree, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -734,10 +814,12 @@ PT_FUNC(test_tree_collection)
 	PT_ASSERT(not contains(t0, $(String, "There")));
 
 	delete(t0);
+
 }
 
 PT_FUNC(test_tree_dict)
 {
+
 	var t0 = new(Tree, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -754,10 +836,12 @@ PT_FUNC(test_tree_dict)
 	PT_ASSERT(eq(i2, $(Int, 8)));
 
 	delete(t0);
+
 }
 
 PT_FUNC(test_tree_iter)
 {
+
 	var t0 = new(Tree, String, Int);
 	put(t0, $(String, "Hello"), $(Int, 2));
 	put(t0, $(String, "There"), $(Int, 5));
@@ -791,6 +875,7 @@ PT_FUNC(test_tree_iter)
 
 	PT_ASSERT(counter is 2);
 	delete(t0);
+
 }
 
 #define TEST_VALUES() \
@@ -826,6 +911,7 @@ var dv9 = $(Real, 9.3321);
 
 PT_FUNC(test_list_create)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -855,10 +941,12 @@ PT_FUNC(test_list_create)
 	delete(l0);
 	delete(l1);
 	delete(l2);
+
 }
 
 PT_FUNC(test_list_eq)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -879,10 +967,12 @@ PT_FUNC(test_list_eq)
 	delete(l1);
 	delete(l2);
 	delete(l3);
+
 }
 
 PT_FUNC(test_list_collection)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -916,10 +1006,12 @@ PT_FUNC(test_list_collection)
 	PT_ASSERT(not contains(l0, li5));
 
 	delete(l0);
+
 }
 
 PT_FUNC(test_list_push)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List);
@@ -975,10 +1067,12 @@ PT_FUNC(test_list_push)
 	PT_ASSERT(len(l0) is 0);
 
 	delete(l0);
+
 }
 
 PT_FUNC(test_list_at)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -1005,10 +1099,12 @@ PT_FUNC(test_list_at)
 	PT_ASSERT(at(l0, 3) is li0);
 
 	delete(l0);
+
 }
 
 PT_FUNC(test_list_iter)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -1036,10 +1132,12 @@ PT_FUNC(test_list_iter)
 	}
 
 	delete(l0);
+
 }
 
 PT_FUNC(test_list_reverse)
 {
+
 	TEST_VALUES();
 
 	var l0 = new(List, li0, li1, li2, li3);
@@ -1053,10 +1151,12 @@ PT_FUNC(test_list_reverse)
 
 	delete(l0);
 	delete(l1);
+
 }
 
 PT_FUNC(test_dictionary_create)
 {
+
 	TEST_VALUES();
 
 	var d0 = new(Dictionary);
@@ -1100,10 +1200,12 @@ PT_FUNC(test_dictionary_create)
 	delete(d0);
 	delete(d1);
 	delete(d2);
+
 }
 
 PT_FUNC(test_dictionary_collection)
 {
+
 	TEST_VALUES();
 
 	var d0 = new(Dictionary);
@@ -1131,10 +1233,12 @@ PT_FUNC(test_dictionary_collection)
 	PT_ASSERT(not contains(d0, dk2));
 
 	delete(d0);
+
 }
 
 PT_FUNC(test_dictionary_iter)
 {
+
 	TEST_VALUES();
 
 	var d0 = new(Dictionary);
@@ -1176,11 +1280,14 @@ PT_FUNC(test_dictionary_iter)
 	}
 
 	PT_ASSERT(counter is 3);
+
 	delete(d0);
+
 }
 
 PT_FUNC(test_dictionary_dict)
 {
+
 	TEST_VALUES();
 
 	var d0 = new(Dictionary);
@@ -1193,10 +1300,42 @@ PT_FUNC(test_dictionary_dict)
 	PT_ASSERT(get(d0, dk2) is dv9);
 
 	delete(d0);
+
+}
+
+PT_FUNC(test_dictionary_rehash)
+{
+
+	var d0 = new(Dictionary);
+	var value = $(String, "There");
+	var test_key = Undefined;
+
+	int max = 1000;
+	int r = rand() % max;
+
+	for (int i = 0; i < max; i++) {
+
+		var key = new(Int, $(Int, i));
+		if (i == r) {
+			test_key = key;
+		}
+		put(d0, key, value);
+	}
+
+	PT_ASSERT(test_key isnt Undefined);
+	PT_ASSERT(get(d0, test_key) is value);
+	PT_ASSERT(len(d0) is max);
+
+	foreach(key in d0) {
+		delete(key);
+	}
+
+	delete(d0);
 }
 
 PT_FUNC(test_map_create)
 {
+
 	TEST_VALUES();
 
 	var m0 = new(Map);
@@ -1240,10 +1379,12 @@ PT_FUNC(test_map_create)
 	delete(m0);
 	delete(m1);
 	delete(m2);
+
 }
 
 PT_FUNC(test_map_collection)
 {
+
 	TEST_VALUES();
 
 	var m0 = new(Map);
@@ -1271,10 +1412,12 @@ PT_FUNC(test_map_collection)
 	PT_ASSERT(not contains(m0, mk2));
 
 	delete(m0);
+
 }
 
 PT_FUNC(test_map_iter)
 {
+
 	TEST_VALUES();
 
 	var m0 = new(Map);
@@ -1317,10 +1460,12 @@ PT_FUNC(test_map_iter)
 
 	PT_ASSERT(counter is 3);
 	delete(m0);
+
 }
 
 PT_FUNC(test_map_dict)
 {
+
 	TEST_VALUES();
 
 	var m0 = new(Map);
@@ -1333,10 +1478,12 @@ PT_FUNC(test_map_dict)
 	PT_ASSERT(get(m0, mk2) is dv9);
 
 	delete(m0);
+
 }
 
 PT_FUNC(test_file_create)
 {
+
 	TEST_VALUES();
 
 	var f0 = new(File, $(String, "test.bin"), $(String, "w"));
@@ -1348,6 +1495,7 @@ PT_FUNC(test_file_create)
 	PT_ASSERT(f0 isnt f1);
 
 	delete(f0);
+
 }
 
 local char testoutput1[] = "This is a test\n";
@@ -1356,6 +1504,7 @@ local char testinput[512];
 
 PT_FUNC(test_file_read)
 {
+
 	var f0 = $(File, NULL);
 
 	stream_open(f0, "test.txt", "w");
@@ -1367,10 +1516,12 @@ PT_FUNC(test_file_read)
 	stream_close(f0);
 
 	PT_ASSERT_STR_EQ(testinput, testoutput1);
+
 }
 
 PT_FUNC(test_file_dict)
 {
+
 	var f = $(File, NULL);
 
 	stream_open(f, "test.bin", "w");
@@ -1392,6 +1543,7 @@ PT_FUNC(test_file_dict)
 	delete(second);
 
 	stream_close(f);
+
 }
 
 PT_SUITE(suite_data)
@@ -1428,6 +1580,7 @@ PT_SUITE(suite_data)
 	PT_REG(test_table_create);
 	PT_REG(test_table_collection);
 	PT_REG(test_table_dict);
+	PT_REG(test_table_rehash);
 	PT_REG(test_table_iter);
 	PT_REG(test_tree_create);
 	PT_REG(test_tree_collection);
@@ -1444,6 +1597,7 @@ PT_SUITE(suite_data)
 	PT_REG(test_dictionary_collection);
 	PT_REG(test_dictionary_iter);
 	PT_REG(test_dictionary_dict);
+	PT_REG(test_dictionary_rehash);
 	PT_REG(test_map_create);
 	PT_REG(test_map_collection);
 	PT_REG(test_map_iter);

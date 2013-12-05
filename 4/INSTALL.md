@@ -33,7 +33,7 @@ Running the tests
 One can run the tests using
 
     $ make check
-
+    
 
 Making the demos
 ----------------
@@ -41,5 +41,5 @@ Making the demos
 One can make all the demos using
 
     $ make demos
-
-
+    
+    

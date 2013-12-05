@@ -78,6 +78,7 @@ void List_Assign(var self, var obj)
 
 var List_Copy(var self)
 {
+
 	var newlist = new(List);
 
 	foreach(val in self) {
@@ -85,10 +86,12 @@ var List_Copy(var self)
 	}
 
 	return newlist;
+
 }
 
 var List_Eq(var self, var other)
 {
+
 	if (len(self) != len(other)) {
 		return False;
 	}
@@ -110,18 +113,18 @@ int List_Len(var self)
 
 void List_Clear(var self)
 {
+
 	while (not is_empty(self)) {
 		var discard = pop(self);
 	}
+
 }
 
 var List_Contains(var self, var obj)
 {
 	ListData *lo = cast(self, List);
 	foreach(item in self) {
-		if_eq(item, obj) {
-			return True;
-		}
+		if_eq(item, obj) return True;
 	}
 
 	return False;
@@ -140,13 +143,15 @@ void List_Discard(var self, var obj)
 
 local void List_Reserve_More(ListData * lo)
 {
+
 	if (lo->num_items > lo->num_slots) {
 		lo->num_slots = ceil((lo->num_slots + 1) * 1.5);
 		lo->items = realloc(lo->items, sizeof(var) * lo->num_slots);
 		if (lo->items == NULL) {
-			throw(OutOfMemoryError, "Cannot grow List, Out of memory");
+			throw(OutOfMemoryError, "Cannot grow List. Out of memory!");
 		}
 	}
+
 }
 
 void List_Push_Back(var self, var val)
@@ -185,10 +190,12 @@ void List_Push_At(var self, var val, int index)
 
 local void List_Reserve_Less(ListData * lo)
 {
+
 	if (lo->num_slots > pow(lo->num_items + 1, 1.5)) {
 		lo->num_slots = floor((lo->num_slots - 1) * (1.0 / 1.5));
 		lo->items = realloc(lo->items, sizeof(var) * lo->num_slots);
 	}
+
 }
 
 var List_Pop_Back(var self)
@@ -218,7 +225,7 @@ var List_Pop_At(var self, int index)
 
 	if (index < 0 or index > lo->num_items - 1) {
 		return throw(IndexOutOfBoundsError,
-					 "index %i out of bounds [%i-%i]",
+					 "Index %i out of bounds [%i-%i]",
 					 $(Int, index), $(Int, 0), $(Int, len(self)));
 	}
 
@@ -231,6 +238,7 @@ var List_Pop_At(var self, int index)
 	List_Reserve_Less(lo);
 
 	return retval;
+
 }
 
 var List_At(var self, int index)
@@ -257,12 +265,11 @@ void List_Set(var self, int index, var val)
 	lo->items[index] = val;
 }
 
-local const var LIST_ITER_END = (var) - 1;
-
 var List_Iter_Start(var self)
 {
+
 	if (len(self) == 0) {
-		return LIST_ITER_END;
+		return Iter_End;
 	}
 
 	ListData *lo = cast(self, List);
@@ -272,7 +279,7 @@ var List_Iter_Start(var self)
 
 var List_Iter_End(var self)
 {
-	return LIST_ITER_END;
+	return Iter_End;
 }
 
 var List_Iter_Next(var self, var curr)
@@ -282,7 +289,7 @@ var List_Iter_Next(var self, var curr)
 	if (lo->items[lo->cursor] is curr) {
 		lo->cursor++;
 		if (lo->cursor == lo->num_items) {
-			return LIST_ITER_END;
+			return Iter_End;
 		} else {
 			return lo->items[lo->cursor];
 		}
@@ -297,7 +304,8 @@ var List_Iter_Next(var self, var curr)
 		}
 	}
 
-	return LIST_ITER_END;
+	return Iter_End;
+
 }
 
 local void List_Swap_Items(var self, int i0, int i1)

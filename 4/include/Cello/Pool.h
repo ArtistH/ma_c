@@ -6,7 +6,6 @@
 **  "retain" and "release"
 **
 */
-
 #ifndef CelloPool_h
 #define CelloPool_h
 

@@ -53,6 +53,7 @@ int show_to(var self, var out, int pos)
 		Show *ishow = type_class(type_of(self), Show);
 		return ishow->show(self, out, pos);
 	}
+
 }
 
 int print_vl(const char *fmt, var_list vl)

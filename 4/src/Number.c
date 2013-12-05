@@ -84,7 +84,6 @@ var Int_Copy(var self)
 var Int_Eq(var self, var other)
 {
 	IntData *io = cast(self, Int);
-
 	if (type_implements(type_of(other), AsLong)) {
 		return bool_var(io->value == as_long(other));
 	} else {
@@ -181,7 +180,7 @@ int Int_Look(var self, var input, int pos)
 {
 	IntData *io = cast(self, Int);
 	int off = 0;
-	format_from(input, pos, "%li%n", &io->value, &off);
+	int err = format_from(input, pos, "%li%n", &io->value, &off);
 	pos += off;
 	return pos;
 }

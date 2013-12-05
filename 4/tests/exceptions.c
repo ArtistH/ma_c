@@ -1,4 +1,3 @@
-
 #include "ptest.h"
 #include "Cello.h"
 
@@ -17,6 +16,7 @@ local int exception_divide(int x, int y)
 
 PT_FUNC(test_throw)
 {
+
 	int r0 = exception_divide(2, 1);
 	int r1 = exception_divide(4, 2);
 	int r2 = exception_divide(9, 3);
@@ -26,10 +26,12 @@ PT_FUNC(test_throw)
 	PT_ASSERT(r2 == 3);
 
 	PT_ASSERT(Exception_Depth()is 0);
+
 }
 
 PT_FUNC(test_catch)
 {
+
 	volatile bool reached0 = false;
 	volatile bool reached1 = false;
 	volatile bool reached2 = false;
@@ -57,10 +59,12 @@ PT_FUNC(test_catch)
 	PT_ASSERT(not reached2);
 
 	PT_ASSERT(Exception_Depth()is 0);
+
 }
 
 PT_FUNC(test_catch_all)
 {
+
 	volatile bool reached0 = false;
 	volatile bool reached1 = false;
 
@@ -79,14 +83,17 @@ PT_FUNC(test_catch_all)
 	PT_ASSERT(reached0);
 	PT_ASSERT(reached1);
 	PT_ASSERT(Exception_Depth()is 0);
+
 }
 
 PT_FUNC(test_catch_outer)
 {
+
 	volatile bool reached0 = false;
 	volatile bool reached1 = false;
 
 	try {
+
 		PT_ASSERT(Exception_Depth()is 1);
 
 		try {
@@ -97,6 +104,7 @@ PT_FUNC(test_catch_outer)
 		}
 
 		PT_ASSERT(Exception_Depth()is 1);
+
 	} catch(e) {
 		reached1 = true;
 	}
@@ -105,6 +113,7 @@ PT_FUNC(test_catch_outer)
 	PT_ASSERT(reached1);
 
 	PT_ASSERT(Exception_Depth()is 0);
+
 }
 
 PT_SUITE(suite_exception)

@@ -42,6 +42,7 @@ enum {
 };
 
 data {
+
 	var type;
 
 	/* Function Details */
@@ -69,8 +70,9 @@ data {
 	const char *exc_file;
 	unsigned int exc_lineno;
 
-	void *exc_backtrace[25];	// why 25 ?
+	void *exc_backtrace[25];
 	int exc_backtrace_count;
+
 } ThreadData;
 
 var Thread_New(var self, var_list vl);

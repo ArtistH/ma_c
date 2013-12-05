@@ -44,8 +44,8 @@ data {
 } FunctionData;
 
 #define lambda(name, args) \
-		FunctionData* name = $(Function, NULL); \
-		name->func = ^ var (var args)
+    FunctionData* name = $(Function, NULL); \
+    name->func = ^ var (var args)
 
 #else
 
@@ -55,9 +55,9 @@ data {
 } FunctionData;
 
 #define lambda(name, args) \
-		auto var __LambdaCello_##name(var); \
-		var name = $(Function, __LambdaCello_##name); \
-		var __LambdaCello_##name(var args)
+    auto var __LambdaCello_##name(var); \
+    var name = $(Function, __LambdaCello_##name); \
+    var __LambdaCello_##name(var args)
 
 #endif
 
