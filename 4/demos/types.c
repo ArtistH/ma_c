@@ -14,23 +14,27 @@ data {
 	int hello_val;
 } HelloData;
 
-local var Hello_New(var self, var_list vl) {
-	HelloData* hd = cast(self, Hello);
+local var Hello_New(var self, var_list vl)
+{
+	HelloData *hd = cast(self, Hello);
 	hd->hello_val = as_long(var_list_get(vl));
 	return self;
 }
 
-local var Hello_Delete(var self) {
+local var Hello_Delete(var self)
+{
 	return self;
 }
 
-local size_t Hello_Size(void) {
+local size_t Hello_Size(void)
+{
 	return sizeof(HelloData);
 }
 
-local var Hello_Eq(var self, var obj) {
-	HelloData* lhs = cast(self, Hello);
-	HelloData* rhs = cast(obj, Hello);
+local var Hello_Eq(var self, var obj)
+{
+	HelloData *lhs = cast(self, Hello);
+	HelloData *rhs = cast(obj, Hello);
 	if (lhs->hello_val == rhs->hello_val) {
 		return True;
 	} else {
@@ -38,14 +42,15 @@ local var Hello_Eq(var self, var obj) {
 	}
 }
 
-int main() {
+int main()
+{
 
 	New hello_new_instance = { Hello_New, Hello_Delete, Hello_Size };
 	Eq hello_eq_instance = { Hello_Eq };
 
-	Hello = new(Type, $(String, "Hello"), $(Int, 2),
-				(var[]){ &hello_new_instance, &hello_eq_instance },
-				(const char*[]){ "New", "Eq" } );
+	Hello = new(Type, $(String, "Hello"), $(Int, 2), (var[]) {
+				&hello_new_instance, &hello_eq_instance}, (const char *[]) {
+				"New", "Eq"});
 
 	print("%s is a %s!\n", Hello, type_of(Hello));
 

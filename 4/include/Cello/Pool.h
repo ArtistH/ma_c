@@ -14,8 +14,8 @@
 #include "Reference.h"
 
 class {
-	var (*retain)(var p, var x);
-	void (*release)(var p, var x);
+	var(*retain) (var p, var x);
+	void (*release) (var p, var x);
 } Retain;
 
 var retain(var p, var x);
@@ -40,9 +40,16 @@ void Pool_Discard(var self, var x);
 var Pool_Get(var self, var k);
 void Pool_Put(var self, var k, var v);
 
-instance(Pool, New) = { Pool_New, Pool_Delete, Pool_Size };
-instance(Pool, Retain) = { Pool_Retain, Pool_Release };
-instance(Pool, Collection) = { Pool_Len, Pool_Clear, Pool_Contains, Pool_Discard };
-instance(Pool, Dict) = { Pool_Get, Pool_Put };
+instance(Pool, New) = {
+Pool_New, Pool_Delete, Pool_Size};
+
+instance(Pool, Retain) = {
+Pool_Retain, Pool_Release};
+
+instance(Pool, Collection) = {
+Pool_Len, Pool_Clear, Pool_Contains, Pool_Discard};
+
+instance(Pool, Dict) = {
+Pool_Get, Pool_Put};
 
 #endif

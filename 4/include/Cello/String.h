@@ -15,7 +15,7 @@ global var String;
 
 data {
 	var type;
-	char* value;
+	char *value;
 } StringData;
 
 var String_New(var self, var_list vl);
@@ -35,28 +35,51 @@ void String_Discard(var self, var sub);
 
 long String_Hash(var self);
 
-const char* String_AsStr(var self);
+const char *String_AsStr(var self);
 
 void String_Append(var self, var obj);
 void String_Reverse(var self);
 
-int String_Format_To(var self, int pos, const char* fmt, va_list va);
-int String_Format_From(var self, int pos, const char* fmt, va_list va);
+int String_Format_To(var self, int pos, const char *fmt, va_list va);
+int String_Format_From(var self, int pos, const char *fmt, va_list va);
 
 int String_Show(var self, var out, int pos);
 int String_Look(var self, var input, int pos);
 
-instance(String, New) = { String_New, String_Delete, String_Size };
-instance(String, Assign) = { String_Assign };
-instance(String, Copy) = { String_Copy };
-instance(String, Eq) = { String_Eq };
-instance(String, Ord) = { String_Gt, String_Lt };
-instance(String, Collection) = { String_Len, String_Clear, String_Contains, String_Discard };
-instance(String, Hash) = { String_Hash };
-instance(String, Reverse) = { String_Reverse };
-instance(String, AsStr) = { String_AsStr };
-instance(String, Append) = { String_Append };
-instance(String, Format) = { String_Format_To, String_Format_From };
-instance(String, Show) = { String_Show, String_Look };
+instance(String, New) = {
+String_New, String_Delete, String_Size};
+
+instance(String, Assign) = {
+String_Assign};
+
+instance(String, Copy) = {
+String_Copy};
+
+instance(String, Eq) = {
+String_Eq};
+
+instance(String, Ord) = {
+String_Gt, String_Lt};
+
+instance(String, Collection) = {
+String_Len, String_Clear, String_Contains, String_Discard};
+
+instance(String, Hash) = {
+String_Hash};
+
+instance(String, Reverse) = {
+String_Reverse};
+
+instance(String, AsStr) = {
+String_AsStr};
+
+instance(String, Append) = {
+String_Append};
+
+instance(String, Format) = {
+String_Format_To, String_Format_From};
+
+instance(String, Show) = {
+String_Show, String_Look};
 
 #endif

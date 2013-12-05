@@ -18,8 +18,8 @@
 
 global var Bool;
 
-local var True = (var)1;
-local var False = (var)0;
+local var True = (var) 1;
+local var False = (var) 0;
 
 var bool_var(bool x);
 
@@ -29,19 +29,34 @@ var Bool_Lt(var self, var obj);
 
 long Bool_Hash(var self);
 char Bool_AsChar(var self);
-const char* Bool_AsStr(var self);
+const char *Bool_AsStr(var self);
 long Bool_AsLong(var self);
 double Bool_AsDouble(var self);
 
 int Bool_Show(var self, var output, int pos);
 
-instance(Bool, Eq) = { Bool_Eq };
-instance(Bool, Ord) = { Bool_Gt, Bool_Lt };
-instance(Bool, Hash) = { Bool_Hash };
-instance(Bool, AsChar) = { Bool_AsChar };
-instance(Bool, AsLong) = { Bool_AsLong };
-instance(Bool, AsDouble) = { Bool_AsDouble };
-instance(Bool, AsStr) = { Bool_AsStr };
-instance(Bool, Show) = { Bool_Show, NULL };
+instance(Bool, Eq) = {
+Bool_Eq};
+
+instance(Bool, Ord) = {
+Bool_Gt, Bool_Lt};
+
+instance(Bool, Hash) = {
+Bool_Hash};
+
+instance(Bool, AsChar) = {
+Bool_AsChar};
+
+instance(Bool, AsLong) = {
+Bool_AsLong};
+
+instance(Bool, AsDouble) = {
+Bool_AsDouble};
+
+instance(Bool, AsStr) = {
+Bool_AsStr};
+
+instance(Bool, Show) = {
+Bool_Show, NULL};
 
 #endif

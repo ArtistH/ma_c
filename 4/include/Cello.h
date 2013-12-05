@@ -40,4 +40,3 @@
 #include "Cello/Pool.h"
 
 #endif
-

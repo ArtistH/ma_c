@@ -18,57 +18,59 @@ static bool suite_passing = false;
 /* Colors */
 
 enum {
-	BLACK		= 0x0,
-	BLUE		= 0x1,
-	GREEN		= 0x2,
-	AQUA		= 0x3,
-	RED			= 0x4,
-	PURPLE		= 0x5,
-	YELLOW		= 0x6,
-	WHITE		= 0x7,
-	GRAY		= 0x8,
-	LIGHT_BLUE		= 0x9,
-	LIGHT_GREEN		= 0xA,
-	LIGHT_AQUA		= 0xB,
-	LIGHT_RED		= 0xC,
-	LIGHT_PURPLE	= 0xD,
-	LIGHT_YELLOW	= 0xE,
-	LIGHT_WHITE		= 0xF,
+	BLACK = 0x0,
+	BLUE = 0x1,
+	GREEN = 0x2,
+	AQUA = 0x3,
+	RED = 0x4,
+	PURPLE = 0x5,
+	YELLOW = 0x6,
+	WHITE = 0x7,
+	GRAY = 0x8,
+	LIGHT_BLUE = 0x9,
+	LIGHT_GREEN = 0xA,
+	LIGHT_AQUA = 0xB,
+	LIGHT_RED = 0xC,
+	LIGHT_PURPLE = 0xD,
+	LIGHT_YELLOW = 0xE,
+	LIGHT_WHITE = 0xF,
 };
 
 #ifdef _WIN32
 
-	#include <windows.h>
+#include <windows.h>
 
-	static void pt_color(int color) {
-		HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hCon, color);
-	}
+static void pt_color(int color)
+{
+	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hCon, color);
+}
 
 #else
 
-	static const char* colors[] = {
-		"\x1B[0m",
-		"\x1B[34m",
-		"\x1B[32m",
-		"\x1B[36m",
-		"\x1B[31m",
-		"\x1B[35m",
-		"\x1B[33m",
-		"\x1B[37m",
-		"",
-		"\x1B[34m",
-		"\x1B[32m",
-		"\x1B[36m",
-		"\x1B[31m",
-		"\x1B[35m",
-		"\x1B[33m",
-		"\x1B[37m"
-	};
+static const char *colors[] = {
+	"\x1B[0m",
+	"\x1B[34m",
+	"\x1B[32m",
+	"\x1B[36m",
+	"\x1B[31m",
+	"\x1B[35m",
+	"\x1B[33m",
+	"\x1B[37m",
+	"",
+	"\x1B[34m",
+	"\x1B[32m",
+	"\x1B[36m",
+	"\x1B[31m",
+	"\x1B[35m",
+	"\x1B[33m",
+	"\x1B[37m"
+};
 
-	static void pt_color(int color) {
-		printf("%s", colors[color]);
-	}
+static void pt_color(int color)
+{
+	printf("%s", colors[color]);
+}
 
 #endif
 
@@ -83,10 +85,9 @@ static char assert_err_buff[MAX_ERROR];
 static int assert_err_num = 0;
 
 void pt_assert_run(bool result,
-				   const char* expr,
-				   const char* func,
-				   const char* file,
-				   int line) {
+				   const char *expr,
+				   const char *func, const char *file, int line)
+{
 	num_asserts++;
 	test_passing = test_passing && result;
 
@@ -95,25 +96,29 @@ void pt_assert_run(bool result,
 	} else {
 		sprintf(assert_err_buff,
 				"\t%i. Assert [ %s ] (%s:%i):%s\n",
-				assert_err_num+1, expr, file, line, func);
+				assert_err_num + 1, expr, file, line, func);
 		strcat(assert_err, assert_err_buff);
 		assert_err_num++;
 		num_assert_fails++;
 	}
 }
 
-static void ptest_signal(int sig) {
+static void ptest_signal(int sig)
+{
 	test_passing = false;
 
-	switch(sig) {
+	switch (sig) {
 	case SIGFPE:
-		sprintf(assert_err_buff, "\t%i. Division by Zero\n", assert_err_num+1);
+		sprintf(assert_err_buff, "\t%i. Division by Zero\n",
+				assert_err_num + 1);
 		break;
 	case SIGILL:
-		sprintf(assert_err_buff, "\t%i. Illegal Instruction\n", assert_err_num+1);
+		sprintf(assert_err_buff, "\t%i. Illegal Instruction\n",
+				assert_err_num + 1);
 		break;
 	case SIGSEGV:
-		sprintf(assert_err_buff, "\t%i. Segmentation Fault\n", assert_err_num+1);
+		sprintf(assert_err_buff, "\t%i. Segmentation Fault\n",
+				assert_err_num + 1);
 		break;
 	}
 
@@ -131,7 +136,8 @@ static void ptest_signal(int sig) {
 
 /* Tests */
 
-static void pt_title_case(char* output, const char* input) {
+static void pt_title_case(char *output, const char *input)
+{
 	bool space = true;
 
 	strcpy(output, input);
@@ -142,7 +148,7 @@ static void pt_title_case(char* output, const char* input) {
 			output[i] = ' ';
 			continue;
 		}
-		
+
 		if (space) {
 			space = false;
 			output[i] = output[i] - 32;
@@ -152,7 +158,7 @@ static void pt_title_case(char* output, const char* input) {
 }
 
 typedef struct {
-	void (*func)(void);
+	void (*func) (void);
 	char name[MAX_NAME];
 	char suite[MAX_NAME];
 } test_t;
@@ -163,7 +169,8 @@ static int num_tests = 0;
 static int num_tests_passes = 0;
 static int num_tests_fails = 0;
 
-void pt_add_test(void (*func)(void), const char* name, const char* suite) {
+void pt_add_test(void (*func) (void), const char *name, const char *suite)
+{
 	if (num_tests == MAX_TESTS) {
 		printf("ERROR: Exceeded maximum test count of %i!\n", MAX_TESTS);
 		abort();
@@ -196,7 +203,8 @@ static int num_suites = 0;
 static int num_suites_passes = 0;
 static int num_suites_fails = 0;
 
-void pt_add_suite(void (*func)(void)) {
+void pt_add_suite(void (*func) (void))
+{
 	num_suites++;
 	func();
 }
@@ -206,7 +214,8 @@ void pt_add_suite(void (*func)(void)) {
 static clock_t start, end;
 static char current_suite[MAX_NAME];
 
-void pt_run() {
+void pt_run()
+{
 	printf("\t\n");
 	printf("\t+-------------------------------------------+\n");
 	printf("\t| ptest          MicroTesting Magic for C   |\n");
@@ -222,7 +231,7 @@ void pt_run() {
 	strcpy(current_suite, "");
 
 	int i = 0;
-	for(i = 0; i < num_tests; i++) {
+	for (i = 0; i < num_tests; i++) {
 		test_t test = tests[i];
 
 		/* Check for transition to a new suite. */
@@ -255,11 +264,13 @@ void pt_run() {
 
 		if (test_passing) {
 			num_tests_passes++;
-			pt_color(GREEN);  printf("Passed! \n");
+			pt_color(GREEN);
+			printf("Passed! \n");
 			pt_color(WHITE);
 		} else {
 			num_tests_fails++;
-			pt_color(RED);    printf("Failed! \n\n%s\n", assert_err);
+			pt_color(RED);
+			printf("Failed! \n\n%s\n", assert_err);
 			pt_color(WHITE);
 		}
 	}
@@ -278,28 +289,46 @@ void pt_run() {
 	printf("  +---------++------------+-------------+-------------+\n");
 
 	printf("  | Suites  ||");
-	pt_color(YELLOW);	printf(" Total %4d ", num_suites);
-	pt_color(WHITE);  printf("|");
-	pt_color(GREEN);	printf(" Passed %4d ", num_suites_passes);
-	pt_color(WHITE);  printf("|");
-	pt_color(RED);		printf(" Failed %4d ", num_suites_fails);
-	pt_color(WHITE);  printf("|\n");
-	
+	pt_color(YELLOW);
+	printf(" Total %4d ", num_suites);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(GREEN);
+	printf(" Passed %4d ", num_suites_passes);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(RED);
+	printf(" Failed %4d ", num_suites_fails);
+	pt_color(WHITE);
+	printf("|\n");
+
 	printf("  | Tests   ||");
-	pt_color(YELLOW);	printf(" Total %4d ",  num_tests);
-	pt_color(WHITE);  printf("|");
-	pt_color(GREEN);	printf(" Passed %4d ", num_tests_passes);
-	pt_color(WHITE);  printf("|");
-	pt_color(RED);		printf(" Failed %4d ", num_tests_fails);
-	pt_color(WHITE);  printf("|\n");
-	
+	pt_color(YELLOW);
+	printf(" Total %4d ", num_tests);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(GREEN);
+	printf(" Passed %4d ", num_tests_passes);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(RED);
+	printf(" Failed %4d ", num_tests_fails);
+	pt_color(WHITE);
+	printf("|\n");
+
 	printf("  | Asserts ||");
-	pt_color(YELLOW);	printf(" Total %4d ",  num_asserts);
-	pt_color(WHITE);  printf("|");
-	pt_color(GREEN);	printf(" Passed %4d ", num_assert_passes);
-	pt_color(WHITE);  printf("|");
-	pt_color(RED);		printf(" Failed %4d ", num_assert_fails);
-	pt_color(WHITE);  printf("|\n");
+	pt_color(YELLOW);
+	printf(" Total %4d ", num_asserts);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(GREEN);
+	printf(" Passed %4d ", num_assert_passes);
+	pt_color(WHITE);
+	printf("|");
+	pt_color(RED);
+	printf(" Failed %4d ", num_assert_fails);
+	pt_color(WHITE);
+	printf("|\n");
 
 	printf("  +---------++------------+-------------+-------------+\n");
 	printf("\n");

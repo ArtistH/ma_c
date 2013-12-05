@@ -1,7 +1,8 @@
 
 #include "Cello.h"
 
-int main() {
+int main()
+{
 
 	with(file in stream_open($(File, NULL), "test.bin", "w")) {
 		put(file, Int, $(Int, 1));

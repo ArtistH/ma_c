@@ -10,7 +10,7 @@
 
 #include "Prelude.h"
 
-local var Some = (var)1;
-local var None = (var)0;
+local var Some = (var) 1;
+local var None = (var) 0;
 
 #endif

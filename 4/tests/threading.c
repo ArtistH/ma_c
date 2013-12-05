@@ -12,7 +12,8 @@
 #define data typedef struct
 #endif
 
-void cello_sleep(int ms) {
+void cello_sleep(int ms)
+{
 #if defined(__unix__)
 	usleep(ms * 1000);
 #elif defined(_WIN32)
@@ -20,7 +21,8 @@ void cello_sleep(int ms) {
 #endif
 }
 
-PT_FUNC(test_new) {
+PT_FUNC(test_new)
+{
 
 	var in_func = $(Reference, False);
 
@@ -40,7 +42,8 @@ PT_FUNC(test_new) {
 
 }
 
-PT_FUNC(test_multiple) {
+PT_FUNC(test_multiple)
+{
 	var inside = new(List, False, False, False, False, False);
 
 	lambda(f, args) {
@@ -75,9 +78,10 @@ PT_FUNC(test_multiple) {
 	delete(inside);
 }
 
-PT_FUNC(test_mutex) {
+PT_FUNC(test_mutex)
+{
 	var mutex = new(Mutex);
-	var total =$(Int, 0);
+	var total = $(Int, 0);
 
 	lambda(f, args) {
 		with(m in mutex) {
@@ -108,12 +112,14 @@ PT_FUNC(test_mutex) {
 	delete(mutex);
 }
 
-PT_FUNC(test_exception) {
+PT_FUNC(test_exception)
+{
 	lambda(f, args) {
 		try {
 			cello_sleep(20);
-			PT_ASSERT(Exception_Depth() is 1);
-		} catch(e) {
+			PT_ASSERT(Exception_Depth()is 1);
+		}
+		catch(e) {
 		}
 		return None;
 	};
@@ -122,13 +128,14 @@ PT_FUNC(test_exception) {
 
 	call(t);
 	cello_sleep(10);
-	PT_ASSERT(Exception_Depth() is 0);
+	PT_ASSERT(Exception_Depth()is 0);
 	join(t);
 
 	delete(t);
 }
 
-PT_SUITE(suite_threading) {
+PT_SUITE(suite_threading)
+{
 
 	PT_REG(test_new);
 	PT_REG(test_multiple);

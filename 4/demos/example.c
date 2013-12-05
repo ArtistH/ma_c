@@ -4,7 +4,8 @@
 
 #include "Cello.h"
 
-int main() {
+int main()
+{
 
 	/* Stack objects are created using "$" */
 	var int_item = $(Int, 5);
@@ -26,9 +27,9 @@ int main() {
 
 	/* Hashtables require "Eq" and "Hash" on key type */
 	var prices = new(Table, String, Int);
-	put(prices, $(String, "Apple"),  $(Int, 12));
-	put(prices, $(String, "Banana"), $(Int,  6));
-	put(prices, $(String, "Pear"),   $(Int, 55));
+	put(prices, $(String, "Apple"), $(Int, 12));
+	put(prices, $(String, "Banana"), $(Int, 6));
+	put(prices, $(String, "Pear"), $(Int, 55));
 
 	var pear_price = get(prices, $(String, "Pear"));
 	print("Price of a 'Pear' is %$\n", pear_price);
@@ -60,4 +61,3 @@ int main() {
 
 	delete(prices);
 }
-

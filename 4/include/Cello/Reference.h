@@ -35,13 +35,28 @@ void Reference_Exit(var self);
 
 int Reference_Show(var self, var output, int pos);
 
-instance(Reference, New) = { Reference_New, Reference_Delete, Reference_Size };
-instance(Reference, Assign) = { Reference_Assign };
-instance(Reference, Copy) = { Reference_Copy };
-instance(Reference, Eq) = { Reference_Eq };
-instance(Reference, Hash) = { Reference_Hash };
-instance(Reference, At) = { Reference_At, Reference_Set };
-instance(Reference, With) = { NULL, Reference_Exit };
-instance(Reference, Show) = { Reference_Show, NULL };
+instance(Reference, New) = {
+Reference_New, Reference_Delete, Reference_Size};
+
+instance(Reference, Assign) = {
+Reference_Assign};
+
+instance(Reference, Copy) = {
+Reference_Copy};
+
+instance(Reference, Eq) = {
+Reference_Eq};
+
+instance(Reference, Hash) = {
+Reference_Hash};
+
+instance(Reference, At) = {
+Reference_At, Reference_Set};
+
+instance(Reference, With) = {
+NULL, Reference_Exit};
+
+instance(Reference, Show) = {
+Reference_Show, NULL};
 
 #endif

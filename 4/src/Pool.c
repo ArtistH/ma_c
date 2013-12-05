@@ -3,11 +3,13 @@
 #include "Cello/Reference.h"
 #include "Cello/Number.h"
 
-var retain(var p, var x) {
+var retain(var p, var x)
+{
 	return type_class_method(type_of(p), Retain, retain, p, x);
 }
 
-void release(var p, var x) {
+void release(var p, var x)
+{
 	type_class_method(type_of(p), Retain, release, p, x);
 }
 
@@ -25,14 +27,16 @@ var Pool = type_data {
 	type_end(Pool)
 };
 
-var Pool_New(var self, var_list vl) {
-	PoolData* pd = cast(self, Pool);
+var Pool_New(var self, var_list vl)
+{
+	PoolData *pd = cast(self, Pool);
 	pd->tab = new(Table, Reference, Int);
 	return self;
 }
 
-var Pool_Delete(var self) {
-	PoolData* pd = cast(self, Pool);
+var Pool_Delete(var self)
+{
+	PoolData *pd = cast(self, Pool);
 
 	foreach(k in pd->tab) {
 		delete(at(k, 0));
@@ -42,11 +46,13 @@ var Pool_Delete(var self) {
 	return self;
 }
 
-size_t Pool_Size(void) {
+size_t Pool_Size(void)
+{
 	return sizeof(PoolData);
 }
 
-var Pool_Retain(var self, var x) {
+var Pool_Retain(var self, var x)
+{
 	if (contains(self, x)) {
 		var c = get(self, x);
 		add(c, $(Int, 1));
@@ -57,7 +63,8 @@ var Pool_Retain(var self, var x) {
 	}
 }
 
-void Pool_Release(var self, var x) {
+void Pool_Release(var self, var x)
+{
 	if (contains(self, x)) {
 		var c = get(self, x);
 		sub(c, $(Int, 1));
@@ -69,32 +76,38 @@ void Pool_Release(var self, var x) {
 	}
 }
 
-int Pool_Len(var self) {
-	PoolData* pd = cast(self, Pool);
+int Pool_Len(var self)
+{
+	PoolData *pd = cast(self, Pool);
 	return len(pd->tab);
 }
 
-void Pool_Clear(var self) {
-	PoolData* pd = cast(self, Pool);
+void Pool_Clear(var self)
+{
+	PoolData *pd = cast(self, Pool);
 	clear(pd->tab);
 }
 
-var Pool_Contains(var self, var x) {
-	PoolData* pd = cast(self, Pool);
+var Pool_Contains(var self, var x)
+{
+	PoolData *pd = cast(self, Pool);
 	return contains(pd->tab, $(Reference, x));
 }
 
-void Pool_Discard(var self, var x) {
-	PoolData* pd = cast(self, Pool);
+void Pool_Discard(var self, var x)
+{
+	PoolData *pd = cast(self, Pool);
 	discard(pd->tab, $(Reference, x));
 }
 
-var Pool_Get(var self, var k) {
-	PoolData* pd = cast(self, Pool);
+var Pool_Get(var self, var k)
+{
+	PoolData *pd = cast(self, Pool);
 	return get(pd->tab, $(Reference, k));
 }
 
-void Pool_Put(var self, var k, var v) {
-	PoolData* pd = cast(self, Pool);
+void Pool_Put(var self, var k, var v)
+{
+	PoolData *pd = cast(self, Pool);
 	put(pd->tab, $(Reference, k), v);
 }

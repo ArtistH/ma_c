@@ -10,8 +10,8 @@
 struct TreeNode {
 	var leaf_key;
 	var leaf_val;
-	struct TreeNode* left;
-	struct TreeNode* right;
+	struct TreeNode *left;
+	struct TreeNode *right;
 };
 
 data {
@@ -19,7 +19,7 @@ data {
 	var key_type;
 	var val_type;
 	var keys;
-	struct TreeNode* root;
+	struct TreeNode *root;
 } TreeData;
 
 var Tree = type_data {
@@ -35,8 +35,9 @@ var Tree = type_data {
 	type_end(Tree),
 };
 
-var Tree_New(var self, var_list vl) {
-	TreeData* td = cast(self, Tree);
+var Tree_New(var self, var_list vl)
+{
+	TreeData *td = cast(self, Tree);
 	td->key_type = cast(var_list_get(vl), Type);
 	td->val_type = cast(var_list_get(vl), Type);
 	td->keys = new(Array, td->key_type);
@@ -44,19 +45,22 @@ var Tree_New(var self, var_list vl) {
 	return self;
 }
 
-var Tree_Delete(var self) {
-	TreeData* td = cast(self, Tree);
+var Tree_Delete(var self)
+{
+	TreeData *td = cast(self, Tree);
 	clear(self);
 	delete(td->keys);
 	return self;
 }
 
-size_t Tree_Size(void) {
+size_t Tree_Size(void)
+{
 	return sizeof(TreeData);
 }
 
-void Tree_Assign(var self, var obj) {
-	TreeData* other = cast(obj, Tree);
+void Tree_Assign(var self, var obj)
+{
+	TreeData *other = cast(obj, Tree);
 	clear(self);
 	foreach(key in other) {
 		var val = get(other, key);
@@ -64,8 +68,9 @@ void Tree_Assign(var self, var obj) {
 	}
 }
 
-var Tree_Copy(var self) {
-	TreeData* td = cast(self, Tree);
+var Tree_Copy(var self)
+{
+	TreeData *td = cast(self, Tree);
 
 	var newtree = new(Tree, td->key_type, td->val_type);
 
@@ -76,51 +81,64 @@ var Tree_Copy(var self) {
 	return newtree;
 }
 
-var Tree_Eq(var self, var obj) {
-	TreeData* td = cast(self, Tree);
+var Tree_Eq(var self, var obj)
+{
+	TreeData *td = cast(self, Tree);
 	if_neq(type_of(obj), Tree) {
 		return False;
 	}
 
 	foreach(key in obj) {
-		if (not contains(self, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(self, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
 
 	foreach(key in self) {
-		if (not contains(obj, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(obj, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
 
 	return True;
 }
 
-int Tree_Len(var self) {
-	TreeData* td = cast(self, Tree);
+int Tree_Len(var self)
+{
+	TreeData *td = cast(self, Tree);
 	return len(td->keys);
 }
 
-void Tree_Clear(var self) {
-	TreeData* td = cast(self, Tree);
+void Tree_Clear(var self)
+{
+	TreeData *td = cast(self, Tree);
 	while (not is_empty(self)) {
 		discard(self, at(td->keys, 0));
 	}
 }
 
-var Tree_Contains(var self, var key) {
-	TreeData* td = cast(self, Tree);
+var Tree_Contains(var self, var key)
+{
+	TreeData *td = cast(self, Tree);
 	return contains(td->keys, key);
 }
 
 local bool inorder_opt = true;
 
-local var Tree_Next_Inorder(struct TreeNode* node) {
+local var Tree_Next_Inorder(struct TreeNode * node)
+{
 	inorder_opt = not inorder_opt;
 
 	if (inorder_opt) {
-		struct TreeNode* rnode = node->left;
+		struct TreeNode *rnode = node->left;
 
-		while(1) {
+		while (1) {
 			if (rnode->right is NULL) {
 				return rnode->leaf_key;
 			} else {
@@ -128,9 +146,9 @@ local var Tree_Next_Inorder(struct TreeNode* node) {
 			}
 		}
 	} else {
-		struct TreeNode* lnode = node->right;
+		struct TreeNode *lnode = node->right;
 
-		while(1) {
+		while (1) {
 			if (lnode->left is NULL) {
 				return lnode->leaf_key;
 			} else {
@@ -140,42 +158,44 @@ local var Tree_Next_Inorder(struct TreeNode* node) {
 	}
 }
 
-local void Tree_Node_Delete(struct TreeNode* node) {
+local void Tree_Node_Delete(struct TreeNode *node)
+{
 	delete(node->leaf_key);
 	delete(node->leaf_val);
 	free(node);
 }
 
-void Tree_Discard(var self, var key) {
-	TreeData* td = cast(self, Tree);
+void Tree_Discard(var self, var key)
+{
+	TreeData *td = cast(self, Tree);
 
-	struct TreeNode** parent = &td->root;
-	struct TreeNode* node = td->root;
+	struct TreeNode **parent = &td->root;
+	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
 		if_eq(node->leaf_key, key) {
-			if ((node->left is NULL) and (node->right is NULL)) {
+			if ((node->left is NULL) and(node->right is NULL)) {
 				*parent = NULL;
 				Tree_Node_Delete(node);
 				discard(td->keys, key);
 				return;
 			}
 
-			if ((node->left is NULL) and not (node->right is NULL)) {
+			if ((node->left is NULL) and not(node->right is NULL)) {
 				*parent = node->right;
 				Tree_Node_Delete(node);
 				discard(td->keys, key);
 				return;
 			}
 
-			if ((node->right is NULL) and not (node->left is NULL)) {
+			if ((node->right is NULL) and not(node->left is NULL)) {
 				*parent = node->left;
 				Tree_Node_Delete(node);
 				discard(td->keys, key);
 				return;
 			}
 
-			if (not (node->right is NULL) and not (node->left is NULL)) {
+			if (not(node->right is NULL) and not(node->left is NULL)) {
 				var inorder_key = allocate(td->key_type);
 				var inorder_val = allocate(td->val_type);
 
@@ -198,17 +218,19 @@ void Tree_Discard(var self, var key) {
 		if_lt(node->leaf_key, key) {
 			parent = &node->left;
 			node = node->left;
-		} else {
+		}
+		else {
 			parent = &node->right;
 			node = node->right;
 		}
 	}
 }
 
-var Tree_Get(var self, var key) {
-	TreeData* td = cast(self, Tree);
+var Tree_Get(var self, var key)
+{
+	TreeData *td = cast(self, Tree);
 
-	struct TreeNode* node = td->root;
+	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
 		if_eq(node->leaf_key, key) {
@@ -217,7 +239,8 @@ var Tree_Get(var self, var key) {
 
 		if_lt(node->leaf_key, key) {
 			node = node->left;
-		} else {
+		}
+		else {
 			node = node->right;
 		}
 	}
@@ -225,10 +248,11 @@ var Tree_Get(var self, var key) {
 	return throw(KeyError, "Key '%$' not in Tree!", key);
 }
 
-local struct TreeNode* Tree_Node_New(var self, var key, var val) {
-	TreeData* td = cast(self, Tree);
+local struct TreeNode *Tree_Node_New(var self, var key, var val)
+{
+	TreeData *td = cast(self, Tree);
 
-	struct TreeNode* node = malloc(sizeof(struct TreeNode));
+	struct TreeNode *node = malloc(sizeof(struct TreeNode));
 
 	if (node == NULL) {
 		throw(OutOfMemoryError, "Cannot create Tree Node, Out of memory!");
@@ -244,11 +268,12 @@ local struct TreeNode* Tree_Node_New(var self, var key, var val) {
 	return node;
 }
 
-void Tree_Put(var self, var key, var val) {
-	TreeData* td = cast(self, Tree);
+void Tree_Put(var self, var key, var val)
+{
+	TreeData *td = cast(self, Tree);
 
-	struct TreeNode** parent = &td->root;
-	struct TreeNode* node = td->root;
+	struct TreeNode **parent = &td->root;
+	struct TreeNode *node = td->root;
 
 	while (node != NULL) {
 		if_eq(node->leaf_key, key) {
@@ -259,7 +284,8 @@ void Tree_Put(var self, var key, var val) {
 		if_lt(node->leaf_key, key) {
 			parent = &node->left;
 			node = node->left;
-		} else {
+		}
+		else {
 			parent = &node->right;
 			node = node->right;
 		}
@@ -270,23 +296,27 @@ void Tree_Put(var self, var key, var val) {
 	return;
 }
 
-var Tree_Iter_Start(var self) {
-	TreeData* td = cast(self, Tree);
+var Tree_Iter_Start(var self)
+{
+	TreeData *td = cast(self, Tree);
 	return iter_start(td->keys);
 }
 
-var Tree_Iter_End(var self) {
-	TreeData* td = cast(self, Tree);
+var Tree_Iter_End(var self)
+{
+	TreeData *td = cast(self, Tree);
 	return iter_end(td->keys);
 }
 
-var Tree_Iter_Next(var self, var curr) {
-	TreeData* td = cast(self, Tree);
+var Tree_Iter_Next(var self, var curr)
+{
+	TreeData *td = cast(self, Tree);
 	return iter_next(td->keys, curr);
 }
 
-int Tree_Show(var self, var output, int pos) {
-	TreeData* td = cast(self, Tree);
+int Tree_Show(var self, var output, int pos)
+{
+	TreeData *td = cast(self, Tree);
 
 	pos = print_to(output, pos, "<'Tree' At 0x%p {", self);
 
@@ -294,7 +324,7 @@ int Tree_Show(var self, var output, int pos) {
 		var key = at(td->keys, i);
 		var val = get(self, key);
 		pos = print_to(output, pos, "%$:%$", key, get(self, key));
-		if (i < len(self)-1) {
+		if (i < len(self) - 1) {
 			pos = print_to(output, pos, ", ");
 		}
 	}

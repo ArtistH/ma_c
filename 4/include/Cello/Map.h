@@ -39,14 +39,28 @@ var Map_Iter_Next(var self, var curr);
 
 int Map_Show(var self, var output, int pos);
 
-instance(Map, New) = { Map_New, Map_Delete, Map_Size };
-instance(Map, Assign) = { Map_Assign };
-instance(Map, Copy) = { Map_Copy };
-instance(Map, Eq) = { Map_Eq };
-instance(Map, Collection) = { Map_Len, Map_Clear, Map_Contains, Map_Discard };
-instance(Map, Dict) = { Map_Get, Map_Put };
-instance(Map, Iter) = { Map_Iter_Start, Map_Iter_End, Map_Iter_Next };
-instance(Map, Show) = { Map_Show, NULL };
+instance(Map, New) = {
+Map_New, Map_Delete, Map_Size};
 
+instance(Map, Assign) = {
+Map_Assign};
+
+instance(Map, Copy) = {
+Map_Copy};
+
+instance(Map, Eq) = {
+Map_Eq};
+
+instance(Map, Collection) = {
+Map_Len, Map_Clear, Map_Contains, Map_Discard};
+
+instance(Map, Dict) = {
+Map_Get, Map_Put};
+
+instance(Map, Iter) = {
+Map_Iter_Start, Map_Iter_End, Map_Iter_Next};
+
+instance(Map, Show) = {
+Map_Show, NULL};
 
 #endif

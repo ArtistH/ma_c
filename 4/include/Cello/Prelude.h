@@ -20,7 +20,7 @@
 **  $ lit
 */
 
-typedef void* var;
+typedef void *var;
 #define is ==
 #define isnt !=
 #define not !
@@ -55,7 +55,6 @@ typedef void* var;
 
 #define Singleton(T) type_data { type_begin(T), type_end(T) }
 
-
 /*
 ** == Data ==
 **
@@ -76,7 +75,6 @@ var type_of(var obj);
 */
 
 global var Undefined;
-
 
 /* 
 ** == Lit ==
@@ -118,14 +116,13 @@ global var Undefined;
 **  variable arguments and the macro `var_list_new`
 */
 
-typedef var* var_list;
+typedef var *var_list;
 
 #define var_list_parse(_, ...) (var[]){ __VA_ARGS__ }
 
 #define var_list_new(...) var_list_parse(_, ##__VA_ARGS__, Undefined)
 #define var_list_end(vl) (*vl is Undefined)
 #define var_list_get(vl) (*vl++)
-
 
 /*
 ** == Class ==
@@ -134,13 +131,12 @@ typedef var* var_list;
 **  Can be seen as interfaces or signatures.
 */
 
-
 /** New - heap allocation & constructor/destructor */
 
 class {
-	var (*construct_vl)(var, var_list);
-	var (*destruct)(var);
-	size_t (*size)(void);
+	var(*construct_vl) (var, var_list);
+	var(*destruct) (var);
+	size_t(*size) (void);
 } New;
 
 #define new(type, ...) new_vl(type, var_list_new(__VA_ARGS__))
@@ -158,7 +154,7 @@ var destruct(var self);
 /** Assign - assignment (copy constructor) */
 
 class {
-	void (*assign)(var, var);
+	void (*assign) (var, var);
 } Assign;
 
 void assign(var self, var obj);
@@ -166,7 +162,7 @@ void assign(var self, var obj);
 /** Copy - copyable */
 
 class {
-	var (*copy)(var);
+	var(*copy) (var);
 } Copy;
 
 var copy(var obj);
@@ -174,7 +170,7 @@ var copy(var obj);
 /** Eq - equality */
 
 class {
-	var (*eq)(var, var);
+	var(*eq) (var, var);
 } Eq;
 
 var eq(var self, var obj);
@@ -186,8 +182,8 @@ var neq(var self, var obj);
 /** Ord - ordering */
 
 class {
-	var (*gt)(var, var);
-	var (*lt)(var, var);
+	var(*gt) (var, var);
+	var(*lt) (var, var);
 } Ord;
 
 var gt(var self, var obj);
@@ -203,7 +199,7 @@ var le(var self, var obj);
 /** Hash - hashable */
 
 class {
-	long (*hash)(var);
+	long (*hash) (var);
 } Hash;
 
 long hash(var obj);
@@ -211,10 +207,10 @@ long hash(var obj);
 /** Collection - contains objects */
 
 class {
-	int (*len)(var);
-	void (*clear)(var);
-	var (*contains)(var, var);
-	void (*discard)(var, var);
+	int (*len) (var);
+	void (*clear) (var);
+	var(*contains) (var, var);
+	void (*discard) (var, var);
 } Collection;
 
 int len(var self);
@@ -230,7 +226,7 @@ var minimum(var self);
 /** Sort - can be sorted */
 
 class {
-	void (*sort)(var);
+	void (*sort) (var);
 } Sort;
 
 void sort(var self);
@@ -238,7 +234,7 @@ void sort(var self);
 /** Reverse - can be revered */
 
 class {
-	void (*reverse)(var);
+	void (*reverse) (var);
 } Reverse;
 
 void reverse(var self);
@@ -246,7 +242,7 @@ void reverse(var self);
 /** Append - can be appended to */
 
 class {
-	void (*append)(var, var);
+	void (*append) (var, var);
 } Append;
 
 void append(var self, var obj);
@@ -254,9 +250,9 @@ void append(var self, var obj);
 /** Iter - iterable */
 
 class {
-	var (*iter_start)(var);
-	var (*iter_end)(var);
-	var (*iter_next)(var, var);
+	var(*iter_start) (var);
+	var(*iter_end) (var);
+	var(*iter_next) (var, var);
 } Iter;
 
 var iter_start(var self);
@@ -269,14 +265,14 @@ var iter_next(var self, var curr);
 /** Push - insertion and removal abilities */
 
 class {
-	void (*push)(var, var);
-	void (*push_at)(var, var, int);
-	void (*push_back)(var, var);
-	void (*push_front)(var, var);
-	var (*pop)(var);
-	var (*pop_at)(var, int);
-	var (*pop_back)(var);
-	var (*pop_front)(var);
+	void (*push) (var, var);
+	void (*push_at) (var, var, int);
+	void (*push_back) (var, var);
+	void (*push_front) (var, var);
+	var(*pop) (var);
+	var(*pop_at) (var, int);
+	var(*pop_back) (var);
+	var(*pop_front) (var);
 } Push;
 
 void push(var self, var obj);
@@ -292,8 +288,8 @@ var pop_front(var self);
 /** At - positional access */
 
 class {
-	var (*at)(var, int);
-	void (*set)(var, int, var);
+	var(*at) (var, int);
+	void (*set) (var, int, var);
 } At;
 
 var at(var self, int i);
@@ -302,8 +298,8 @@ void set(var self, int i, var obj);
 /** Dict - dictionary access */
 
 class {
-	var (*get)(var, var);
-	void (*put)(var, var, var);
+	var(*get) (var, var);
+	void (*put) (var, var, var);
 } Dict;
 
 var get(var self, var key);
@@ -312,7 +308,7 @@ void put(var self, var key, var val);
 /** AsChar - as C char */
 
 class {
-	char (*as_char)(var);
+	char (*as_char) (var);
 } AsChar;
 
 char as_char(var self);
@@ -320,15 +316,15 @@ char as_char(var self);
 /** AsStr - as C string */
 
 class {
-	const char* (*as_str)(var);
+	const char *(*as_str) (var);
 } AsStr;
 
-const char* as_str(var self);
+const char *as_str(var self);
 
 /** AsLong - as C long */
 
 class {
-	long (*as_long)(var);
+	long (*as_long) (var);
 } AsLong;
 
 long as_long(var self);
@@ -336,17 +332,16 @@ long as_long(var self);
 /** AsDouble - as C double */
 
 class {
-	double (*as_double)(var);
+	double (*as_double) (var);
 } AsDouble;
 
 double as_double(var self);
 
-
 /** With - perform command on exit/enter of block */
 
 class {
-	void (*enter)(var);
-	void (*exit)(var);
+	void (*enter) (var);
+	void (*exit) (var);
 } With;
 
 void enter_with(var self);
@@ -361,30 +356,30 @@ var exit_for(var self);
 /** Stream - File like object */
 
 class {
-	var (*stream_open)(var, const char*, const char*);
-	void (*stream_close)(var);
-	void (*stream_seek)(var, int, int);
-	int (*stream_tell)(var);
-	void (*stream_flush)(var);
-	bool (*stream_eof)(var);
-	int (*stream_read)(var, void*, int);
-	int (*stream_write)(var, void*, int);
+	var(*stream_open) (var, const char *, const char *);
+	void (*stream_close) (var);
+	void (*stream_seek) (var, int, int);
+	int (*stream_tell) (var);
+	void (*stream_flush) (var);
+	bool(*stream_eof) (var);
+	int (*stream_read) (var, void *, int);
+	int (*stream_write) (var, void *, int);
 } Stream;
 
-var stream_open(var self, const char* name, const char* access);
+var stream_open(var self, const char *name, const char *access);
 void stream_close(var self);
 void stream_seek(var self, int pos, int origin);
 int stream_tell(var self);
 void stream_flush(var self);
 bool stream_eof(var self);
-int stream_read(var self, void* output, int size);
-int stream_write(var self, void* input, int size);
+int stream_read(var self, void *output, int size);
+int stream_write(var self, void *input, int size);
 
 /** Serialize - Serializable to Stream */
 
 class {
-	void (*serial_read)(var, var);
-	void (*serial_write)(var, var);
+	void (*serial_read) (var, var);
+	void (*serial_write) (var, var);
 } Serialize;
 
 void serial_read(var self, var input);

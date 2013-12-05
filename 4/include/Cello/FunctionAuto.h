@@ -1,7 +1,6 @@
 #ifndef CelloFunctionAuto_h
 #define CelloFunctionAuto_h
 
-
 #define auto_lambda0(func) \
 	var __Plus_##func(var self, var args) { return func(); }; __Plus_##func
 

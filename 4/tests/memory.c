@@ -2,12 +2,14 @@
 #include "ptest.h"
 #include "Cello.h"
 
-PT_FUNC(test_new) {
+PT_FUNC(test_new)
+{
 	var x = new(Int, $(Int, 0));
 	delete(x);
 }
 
-PT_FUNC(test_reference) {
+PT_FUNC(test_reference)
+{
 
 	var x = new(Int, $(Int, 1));
 	var y = new(Int, $(Int, 2));
@@ -30,24 +32,28 @@ PT_FUNC(test_reference) {
 
 }
 
-PT_FUNC(test_reference_with) {
+PT_FUNC(test_reference_with)
+{
 	with(r in $(Reference, new(String, $(String, "Almost like an Auto Ptr")))) {
 		PT_ASSERT(eq(at(r, 0), $(String, "Almost like an Auto Ptr")));
 		PT_ASSERT(neq(at(r, 0), $(String, "Blah")));
 	}
 }
 
-PT_FUNC(test_reference_with_many) {
+PT_FUNC(test_reference_with_many)
+{
 	with(liferef0 in $(Reference, new(String, $(String, "Life is Long"))))
-		with(liferef1 in $(Reference, new(String, $(String, "Life is Beautiful"))))
+		with(liferef1 in
+			 $(Reference, new(String, $(String, "Life is Beautiful"))))
 		with(liferef2 in $(Reference, new(String, $(String, "Life is Grand")))) {
-			PT_ASSERT(eq(at(liferef0, 0), $(String, "Life is Long")));
-			PT_ASSERT(eq(at(liferef1, 0), $(String, "Life is Beautiful")));
-			PT_ASSERT(eq(at(liferef2, 0), $(String, "Life is Grand")));
-		}
+		PT_ASSERT(eq(at(liferef0, 0), $(String, "Life is Long")));
+		PT_ASSERT(eq(at(liferef1, 0), $(String, "Life is Beautiful")));
+		PT_ASSERT(eq(at(liferef2, 0), $(String, "Life is Grand")));
+	}
 }
 
-PT_FUNC(test_pool) {
+PT_FUNC(test_pool)
+{
 	var p = new(Pool);
 
 	var x = retain(p, new(String, $(String, "Hello Everyone!")));
@@ -71,7 +77,8 @@ PT_FUNC(test_pool) {
 	delete(p);
 }
 
-PT_SUITE(suite_memory) {
+PT_SUITE(suite_memory)
+{
 
 	PT_REG(test_new);
 	PT_REG(test_reference);

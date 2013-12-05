@@ -1,7 +1,8 @@
 
 #include "Cello.h"
 
-int main() {
+int main()
+{
 
 	var values = new(List, $(Int, 1), $(Int, 10), None, $(Real, 87.2));
 

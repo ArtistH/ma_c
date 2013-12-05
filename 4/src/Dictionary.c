@@ -12,8 +12,8 @@ data {
 	var type;
 	int size;
 	var keys;
-	var* key_buckets;
-	var* val_buckets;
+	var *key_buckets;
+	var *val_buckets;
 } DictionaryData;
 
 var Dictionary = type_data {
@@ -29,8 +29,9 @@ var Dictionary = type_data {
 	type_end(Dictionary)
 };
 
-var Dictionary_New(var self, var_list vl) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_New(var self, var_list vl)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	dict->size = 1024;
 	dict->keys = new(List);
 
@@ -45,12 +46,13 @@ var Dictionary_New(var self, var_list vl) {
 	return self;
 }
 
-var Dictionary_Delete(var self) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Delete(var self)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 
 	delete(dict->keys);
 
-	for (int i = 0; i < dict->size; ++i){
+	for (int i = 0; i < dict->size; ++i) {
 		delete(dict->key_buckets[i]);
 		delete(dict->val_buckets[i]);
 	}
@@ -61,11 +63,13 @@ var Dictionary_Delete(var self) {
 	return self;
 }
 
-size_t Dictionary_Size(void) {
+size_t Dictionary_Size(void)
+{
 	return sizeof(DictionaryData);
 }
 
-void Dictionary_Assign(var self, var obj) {
+void Dictionary_Assign(var self, var obj)
+{
 	clear(self);
 
 	foreach(key in obj) {
@@ -74,7 +78,8 @@ void Dictionary_Assign(var self, var obj) {
 	}
 }
 
-var Dictionary_Copy(var self) {
+var Dictionary_Copy(var self)
+{
 	var cop = new(Dictionary);
 
 	foreach(key in self) {
@@ -85,32 +90,43 @@ var Dictionary_Copy(var self) {
 	return cop;
 }
 
-var Dictionary_Eq(var self, var obj) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Eq(var self, var obj)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	if_neq(type_of(obj), Dictionary) {
 		return False;
 	}
 
 	foreach(key in obj) {
-		if (not contains(self, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(self, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
 
 	foreach(key in self) {
-		if (not contains(obj, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(obj, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
-	
+
 	return True;
 }
 
-int Dictionary_Len(var self) {
-	DictionaryData* dict = cast(self, Dictionary);
+int Dictionary_Len(var self)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	return len(dict->keys);
 }
 
-void Dictionary_Clear(var self) {
-	DictionaryData* dict = cast(self, Dictionary);
+void Dictionary_Clear(var self)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 
 	for (int i = 0; i < dict->size; i++) {
 		clear(dict->key_buckets[i]);
@@ -120,13 +136,15 @@ void Dictionary_Clear(var self) {
 	clear(dict->keys);
 }
 
-var Dictionary_Contains(var self, var key) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Contains(var self, var key)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	return contains(dict->keys, key);
 }
 
-void Dictionary_Discard(var self, var key) {
-	DictionaryData* dict = cast(self, Dictionary);
+void Dictionary_Discard(var self, var key)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 
 	long i = abs(hash(key) % dict->size);
 
@@ -149,8 +167,9 @@ void Dictionary_Discard(var self, var key) {
 	}
 }
 
-var Dictionary_Get(var self, var key) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Get(var self, var key)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 
 	long i = abs(hash(key) % dict->size);
 
@@ -168,8 +187,9 @@ var Dictionary_Get(var self, var key) {
 	return throw(KeyError, "Key '%$' not in Dictionary!", key);
 }
 
-void Dictionary_Put(var self, var key, var val) {
-	DictionaryData* dict = cast(self, Dictionary);
+void Dictionary_Put(var self, var key, var val)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 
 	long i = abs(hash(key) % dict->size);
 
@@ -177,7 +197,7 @@ void Dictionary_Put(var self, var key, var val) {
 	var vals = dict->val_buckets[i];
 
 	int pos = -1;
-	
+
 	for (int i = 0; i < len(keys); i++) {
 		var k = at(keys, i);
 		if_eq(k, key) {
@@ -195,31 +215,37 @@ void Dictionary_Put(var self, var key, var val) {
 	push(dict->keys, key);
 }
 
-var Dictionary_Iter_Start(var self) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Iter_Start(var self)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	return iter_start(dict->keys);
 }
 
-var Dictionary_Iter_End(var self) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Iter_End(var self)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	return iter_end(dict->keys);
 }
 
-var Dictionary_Iter_Next(var self, var curr) {
-	DictionaryData* dict = cast(self, Dictionary);
+var Dictionary_Iter_Next(var self, var curr)
+{
+	DictionaryData *dict = cast(self, Dictionary);
 	return iter_next(dict->keys, curr);
 }
 
-int Dictionary_Show(var self, var output, int pos) {
-	DictionaryData* dd = cast(self, Dictionary);
+int Dictionary_Show(var self, var output, int pos)
+{
+	DictionaryData *dd = cast(self, Dictionary);
 
 	pos = print_to(output, pos, "<'Dictionary' At 0x%p {", self);
 
-	for(int i = 0; i < len(self); i++) {
+	for (int i = 0; i < len(self); i++) {
 		var key = at(dd->keys, i);
 		var val = get(self, key);
 		pos = print_to(output, pos, "%$:%$", key, get(self, key));
-		if (i < len(self)-1) { pos = print_to(output, pos, ", "); }
+		if (i < len(self) - 1) {
+			pos = print_to(output, pos, ", ");
+		}
 	}
 
 	pos = print_to(output, pos, "}>");

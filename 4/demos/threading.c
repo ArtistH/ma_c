@@ -3,7 +3,8 @@
 
 #include "Cello.h"
 
-int main() {
+int main()
+{
 	var mut = new(Mutex);
 
 	lambda(thread_function, args) {

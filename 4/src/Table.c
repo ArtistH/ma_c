@@ -15,8 +15,8 @@ data {
 	var val_type;
 	int size;
 	var keys;
-	var* key_buckets;
-	var* val_buckets;
+	var *key_buckets;
+	var *val_buckets;
 } TableData;
 
 var Table = type_data {
@@ -32,8 +32,9 @@ var Table = type_data {
 	type_end(Table)
 };
 
-var Table_New(var self, var_list vl) {
-	TableData* tab = cast(self, Table);
+var Table_New(var self, var_list vl)
+{
+	TableData *tab = cast(self, Table);
 
 	tab->key_type = cast(var_list_get(vl), Type);
 	tab->val_type = cast(var_list_get(vl), Type);
@@ -59,8 +60,9 @@ var Table_New(var self, var_list vl) {
 	return self;
 }
 
-var Table_Delete(var self) {
-	TableData* tab = cast(self, Table);
+var Table_Delete(var self)
+{
+	TableData *tab = cast(self, Table);
 
 	delete(tab->keys);
 
@@ -75,11 +77,13 @@ var Table_Delete(var self) {
 	return self;
 }
 
-size_t Table_Size(void) {
+size_t Table_Size(void)
+{
 	return sizeof(TableData);
 }
 
-void Table_Assign(var self, var obj) {
+void Table_Assign(var self, var obj)
+{
 
 	clear(self);
 
@@ -88,8 +92,9 @@ void Table_Assign(var self, var obj) {
 	}
 }
 
-var Table_Copy(var self) {
-	TableData* tab = cast(self, Table);
+var Table_Copy(var self)
+{
+	TableData *tab = cast(self, Table);
 
 	var cop = new(Table, tab->key_type, tab->val_type);
 
@@ -100,36 +105,46 @@ var Table_Copy(var self) {
 	return cop;
 }
 
-var Table_Eq(var self, var obj) {
-	TableData* tab = cast(self, Table);
+var Table_Eq(var self, var obj)
+{
+	TableData *tab = cast(self, Table);
 
 	if_neq(type_of(obj), Table) {
 		return False;
 	}
 
 	foreach(key in obj) {
-		if (not contains(self, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(self, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
 
 	foreach(key in self) {
-		if (not contains(obj, key)) { return False; }
-		if_neq(get(obj, key), get(self, key)) { return False; }
+		if (not contains(obj, key)) {
+			return False;
+		}
+		if_neq(get(obj, key), get(self, key)) {
+			return False;
+		}
 	}
 
 	return True;
 }
 
-int Table_Len(var self) {
-	TableData* tab = cast(self, Table);
+int Table_Len(var self)
+{
+	TableData *tab = cast(self, Table);
 	return len(tab->keys);
 }
 
-void Table_Clear(var self) {
-	TableData* tab = cast(self, Table);
-  
-	clear(tab->keys);
+void Table_Clear(var self)
+{
+	TableData *tab = cast(self, Table);
 
+	clear(tab->keys);
 
 	for (int i = 0; i < tab->size; i++) {
 		clear(tab->key_buckets[i]);
@@ -137,14 +152,16 @@ void Table_Clear(var self) {
 	}
 }
 
-var Table_Contains(var self, var key) {
-	TableData* tab = cast(self, Table);
+var Table_Contains(var self, var key)
+{
+	TableData *tab = cast(self, Table);
 	key = cast(key, tab->key_type);
 	return contains(tab->keys, key);
 }
 
-void Table_Discard(var self, var key) {
-	TableData* tab = cast(self, Table);
+void Table_Discard(var self, var key)
+{
+	TableData *tab = cast(self, Table);
 	key = cast(key, tab->key_type);
 
 	long i = abs(hash(key) % tab->size);
@@ -162,8 +179,9 @@ void Table_Discard(var self, var key) {
 	}
 }
 
-var Table_Get(var self, var key) {
-	TableData* tab = cast(self, Table);
+var Table_Get(var self, var key)
+{
+	TableData *tab = cast(self, Table);
 	key = cast(key, tab->key_type);
 
 	long i = abs(hash(key) % tab->size);
@@ -180,8 +198,9 @@ var Table_Get(var self, var key) {
 	return throw(KeyError, "Key '%$' not in Table!", key);
 }
 
-void Table_Put(var self, var key, var val) {
-	TableData* tab = cast(self, Table);
+void Table_Put(var self, var key, var val)
+{
+	TableData *tab = cast(self, Table);
 	key = cast(key, tab->key_type);
 	val = cast(val, tab->val_type);
 
@@ -197,23 +216,27 @@ void Table_Put(var self, var key, var val) {
 	push(tab->keys, key);
 }
 
-var Table_Iter_Start(var self) {
-	TableData* tab = cast(self, Table);
+var Table_Iter_Start(var self)
+{
+	TableData *tab = cast(self, Table);
 	return iter_start(tab->keys);
 }
 
-var Table_Iter_End(var self) {
-	TableData* tab = cast(self, Table);
+var Table_Iter_End(var self)
+{
+	TableData *tab = cast(self, Table);
 	return iter_end(tab->keys);
 }
 
-var Table_Iter_Next(var self, var curr) {
-	TableData* tab = cast(self, Table);
+var Table_Iter_Next(var self, var curr)
+{
+	TableData *tab = cast(self, Table);
 	return iter_next(tab->keys, curr);
 }
 
-int Table_Show(var self, var output, int pos) {
-	TableData* td = cast(self, Table);
+int Table_Show(var self, var output, int pos)
+{
+	TableData *td = cast(self, Table);
 
 	pos = print_to(output, pos, "<'Table' At 0x%p {", self);
 
@@ -221,7 +244,7 @@ int Table_Show(var self, var output, int pos) {
 		var key = at(td->keys, i);
 		var val = get(self, key);
 		pos = print_to(output, pos, "%$:%$", key, get(self, key));
-		if (i < len(self)-1) {
+		if (i < len(self) - 1) {
 			pos = print_to(output, pos, ", ");
 		}
 	}

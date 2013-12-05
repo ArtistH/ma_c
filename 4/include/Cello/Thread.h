@@ -7,15 +7,15 @@
 #define CelloThread_h
 
 #if defined(__unix__) || defined(__APPLE__)
-	#include <pthread.h>
+#include <pthread.h>
 #elif defined(_WIN32)
-	#undef data
-	#undef in
-	#include <windows.h>
-	#define data typedef struct
-	#define in ,
+#undef data
+#undef in
+#include <windows.h>
+#define data typedef struct
+#define in ,
 #else
-	#error "Unsupported Threading Environment"
+#error "Unsupported Threading Environment"
 #endif
 
 #include "Prelude.h"
@@ -24,12 +24,12 @@
 /* Process Like */
 
 class {
-	var (*current)(void);
-	void (*join)(var);
-	void (*terminate)(var);
+	var(*current) (void);
+	void (*join) (var);
+	void (*terminate) (var);
 } Process;
 
-var  current(var type);
+var current(var type);
 void join(var self);
 void terminate(var self);
 
@@ -65,11 +65,11 @@ data {
 
 	var exc_obj;
 	var exc_msg;
-	const char* exc_func;
-	const char* exc_file;
+	const char *exc_func;
+	const char *exc_file;
 	unsigned int exc_lineno;
 
-	void* exc_backtrace[25]; // why 25 ?
+	void *exc_backtrace[25];	// why 25 ?
 	int exc_backtrace_count;
 } ThreadData;
 
@@ -92,19 +92,30 @@ var Thread_Current(void);
 void Thread_Join(var self);
 void Thread_Terminate(var self);
 
-instance(Thread, New) = { Thread_New, Thread_Delete, Thread_Size };
-instance(Thread, Assign) = { Thread_Assign };
-instance(Thread, Copy) = { Thread_Copy };
-instance(Thread, Call) = { Thread_Call };
-instance(Thread, Process) = { Thread_Current, Thread_Join, Thread_Terminate };
-instance(Thread, AsLong) = { Thread_AsLong };
+instance(Thread, New) = {
+Thread_New, Thread_Delete, Thread_Size};
+
+instance(Thread, Assign) = {
+Thread_Assign};
+
+instance(Thread, Copy) = {
+Thread_Copy};
+
+instance(Thread, Call) = {
+Thread_Call};
+
+instance(Thread, Process) = {
+Thread_Current, Thread_Join, Thread_Terminate};
+
+instance(Thread, AsLong) = {
+Thread_AsLong};
 
 /* Lock */
 
 class {
-	void (*lock)(var);
-	void (*unlock)(var);
-	var (*lock_try)(var);
+	void (*lock) (var);
+	void (*unlock) (var);
+	var(*lock_try) (var);
 } Lock;
 
 void lock(var self);
@@ -125,10 +136,19 @@ void Mutex_Lock(var self);
 var Mutex_Lock_Try(var self);
 void Mutex_Unlock(var self);
 
-instance(Mutex, New) = { Mutex_New, Mutex_Delete, Mutex_Size };
-instance(Mutex, Assign) = { Mutex_Assign };
-instance(Mutex, Copy) = { Mutex_Copy };
-instance(Mutex, Lock) = { Mutex_Lock, Mutex_Unlock, Mutex_Lock_Try };
-instance(Mutex, With) = { Mutex_Lock, Mutex_Unlock };
+instance(Mutex, New) = {
+Mutex_New, Mutex_Delete, Mutex_Size};
+
+instance(Mutex, Assign) = {
+Mutex_Assign};
+
+instance(Mutex, Copy) = {
+Mutex_Copy};
+
+instance(Mutex, Lock) = {
+Mutex_Lock, Mutex_Unlock, Mutex_Lock_Try};
+
+instance(Mutex, With) = {
+Mutex_Lock, Mutex_Unlock};
 
 #endif

@@ -33,8 +33,9 @@ var Array = type_data {
 	type_end(Array)
 };
 
-var Array_New(var self, var_list vl) {
-	ArrayData* ad = cast(self, Array);
+var Array_New(var self, var_list vl)
+{
+	ArrayData *ad = cast(self, Array);
 	ad->item_type = cast(var_list_get(vl), Type);
 	ad->num_items = 0;
 	ad->num_slots = 0;
@@ -47,22 +48,25 @@ var Array_New(var self, var_list vl) {
 	return self;
 }
 
-var Array_Delete(var self) {
-	ArrayData* ad = cast(self, Array);
+var Array_Delete(var self)
+{
+	ArrayData *ad = cast(self, Array);
 
-  	foreach(item in self) {
+	foreach(item in self) {
 		destruct(item);
-}	
+	}
 	free(ad->items);
-  
+
 	return self;
 }
 
-size_t Array_Size(void) {
+size_t Array_Size(void)
+{
 	return sizeof(ArrayData);
 }
 
-void Array_Assign(var self, var obj) {
+void Array_Assign(var self, var obj)
+{
 	clear(self);
 
 	foreach(item in obj) {
@@ -70,8 +74,9 @@ void Array_Assign(var self, var obj) {
 	}
 }
 
-var Array_Copy(var self) {
-	ArrayData* ad = cast(self, Array);
+var Array_Copy(var self)
+{
+	ArrayData *ad = cast(self, Array);
 
 	var newarray = new(Array, ad->item_type);
 
@@ -82,13 +87,14 @@ var Array_Copy(var self) {
 	return newarray;
 }
 
-var Array_Eq(var self, var obj) {
+var Array_Eq(var self, var obj)
+{
 	if (len(self) != len(obj)) {
 		return False;
 	}
 
 	for (int i = 0; i < len(self); i++) {
-		if_neq(at(self,i), at(obj,i)) {
+		if_neq(at(self, i), at(obj, i)) {
 			return False;
 		}
 	}
@@ -96,13 +102,15 @@ var Array_Eq(var self, var obj) {
 	return True;
 }
 
-int Array_Len(var self) {
-	ArrayData* ad = cast(self, Array);
+int Array_Len(var self)
+{
+	ArrayData *ad = cast(self, Array);
 	return ad->num_items;
 }
 
-void Array_Clear(var self) {
-	ArrayData* ad = cast(self, Array);
+void Array_Clear(var self)
+{
+	ArrayData *ad = cast(self, Array);
 
 	foreach(item in self) {
 		destruct(item);
@@ -113,7 +121,8 @@ void Array_Clear(var self) {
 	ad->num_slots = 0;
 }
 
-var Array_Contains(var self, var obj) {
+var Array_Contains(var self, var obj)
+{
 	foreach(item in self) {
 		if_eq(item, obj) {
 			return True;
@@ -123,7 +132,8 @@ var Array_Contains(var self, var obj) {
 	return False;
 }
 
-void Array_Discard(var self, var obj) {
+void Array_Discard(var self, var obj)
+{
 	for (int i = 0; i < len(self); i++) {
 		if_eq(at(self, i), obj) {
 			pop_at(self, i);
@@ -132,7 +142,8 @@ void Array_Discard(var self, var obj) {
 	}
 }
 
-local void Array_Reserve_More(ArrayData* ad) {
+local void Array_Reserve_More(ArrayData * ad)
+{
 	if (ad->num_items > ad->num_slots) {
 		// int old_size = ad->num_slots;
 		ad->num_slots = ceil((ad->num_slots + 1) * 1.5);
@@ -143,53 +154,59 @@ local void Array_Reserve_More(ArrayData* ad) {
 	}
 }
 
-local void Array_Set_Type_At(ArrayData* ad, int i) {
+local void Array_Set_Type_At(ArrayData * ad, int i)
+{
 	memset(ad->items + (size(ad->item_type) * i), 0, size(ad->item_type));
-	ObjectData* template = ad->items + (size(ad->item_type) * i);
+	ObjectData *template = ad->items + (size(ad->item_type) * i);
 	template->type = ad->item_type;
 }
 
-void Array_Push_Back(var self, var obj) {
-	ArrayData* ad = cast(self, Array);
+void Array_Push_Back(var self, var obj)
+{
+	ArrayData *ad = cast(self, Array);
 	ad->num_items++;
 	Array_Reserve_More(ad);
 
-	Array_Set_Type_At(self, ad->num_items-1);
-	set(self, ad->num_items-1, obj);
+	Array_Set_Type_At(self, ad->num_items - 1);
+	set(self, ad->num_items - 1, obj);
 }
 
-void Array_Push_Front(var self, var obj) {
+void Array_Push_Front(var self, var obj)
+{
 	Array_Push_At(self, obj, 0);
 }
 
-void Array_Push_At(var self, var obj, int index) {
-	ArrayData* ad = cast(self, Array);
+void Array_Push_At(var self, var obj, int index)
+{
+	ArrayData *ad = cast(self, Array);
 	ad->num_items++;
 	Array_Reserve_More(ad);
 
-	memmove(ad->items + size(ad->item_type) * (index+1),
+	memmove(ad->items + size(ad->item_type) * (index + 1),
 			ad->items + size(ad->item_type) * index,
-			size(ad->item_type) * ((ad->num_items-1) - index));
+			size(ad->item_type) * ((ad->num_items - 1) - index));
 
 	Array_Set_Type_At(self, index);
 	set(self, index, obj);
 }
 
-local void Array_Reserve_Less(ArrayData* ad) {
-	if (ad->num_slots > pow(ad->num_items+1, 1.5)) {
-		ad->num_slots = floor((ad->num_slots-1) * (1.0/1.5));
+local void Array_Reserve_Less(ArrayData * ad)
+{
+	if (ad->num_slots > pow(ad->num_items + 1, 1.5)) {
+		ad->num_slots = floor((ad->num_slots - 1) * (1.0 / 1.5));
 		ad->items = realloc(ad->items, size(ad->item_type) * ad->num_slots);
 	}
 }
 
-var Array_Pop_Back(var self) {
-	ArrayData* ad = cast(self, Array);
+var Array_Pop_Back(var self)
+{
+	ArrayData *ad = cast(self, Array);
 
 	if (is_empty(self)) {
 		return throw(IndexOutOfBoundsError, "Cannot pop back. Array is empty!");
 	}
 
-	destruct(at(self, len(self)-1));
+	destruct(at(self, len(self) - 1));
 
 	ad->num_items--;
 	Array_Reserve_Less(ad);
@@ -197,22 +214,25 @@ var Array_Pop_Back(var self) {
 	return Undefined;
 }
 
-var Array_Pop_Front(var self) {
+var Array_Pop_Front(var self)
+{
 	return Array_Pop_At(self, 0);
 }
 
-var Array_Pop_At(var self, int index) {
-	ArrayData* ad = cast(self, Array);
+var Array_Pop_At(var self, int index)
+{
+	ArrayData *ad = cast(self, Array);
 
 	if (is_empty(self)) {
-		return throw(IndexOutOfBoundsError, "Cannot pop at %i. Array is empty!", $(Int, index));
+		return throw(IndexOutOfBoundsError, "Cannot pop at %i. Array is empty!",
+					 $(Int, index));
 	}
 
 	destruct(at(self, index));
 
 	memmove(ad->items + size(ad->item_type) * index,
-			ad->items + size(ad->item_type) * (index+1),
-			size(ad->item_type) * ((ad->num_items-1) - index));
+			ad->items + size(ad->item_type) * (index + 1),
+			size(ad->item_type) * ((ad->num_items - 1) - index));
 
 	ad->num_items--;
 	Array_Reserve_Less(ad);
@@ -220,74 +240,82 @@ var Array_Pop_At(var self, int index) {
 	return Undefined;
 }
 
-var Array_At(var self, int i) {
+var Array_At(var self, int i)
+{
 	if (i < 0 or i >= len(self)) {
 		return throw(IndexOutOfBoundsError,
 					 "Index %i out of bounds [%i-%i]",
 					 $(Int, i), $(Int, 0), $(Int, len(self)));
 	}
 
-	ArrayData* ad = cast(self, Array);
+	ArrayData *ad = cast(self, Array);
 	return ad->items + size(ad->item_type) * i;
 }
 
-void Array_Set(var self, int i, var obj) {
+void Array_Set(var self, int i, var obj)
+{
 	if (i < 0 or i >= len(self)) {
 		throw(IndexOutOfBoundsError,
-			 "Index %i out of bounds [%i-%i]",
-			 $(Int, i), $(Int, 0), $(Int, len(self)));
+			  "Index %i out of bounds [%i-%i]",
+			  $(Int, i), $(Int, 0), $(Int, len(self)));
 		return;
 	}
 
-	ArrayData* ad = cast(self, Array);
+	ArrayData *ad = cast(self, Array);
 	assign(ad->items + size(ad->item_type) * i, obj);
 }
 
-local const var ARRAY_ITER_END = (var)-1;
+local const var ARRAY_ITER_END = (var) - 1;
 
-var Array_Iter_Start(var self) {
+var Array_Iter_Start(var self)
+{
 	if (len(self) == 0) {
 		return ARRAY_ITER_END;
 	}
 
-	ArrayData* ad = cast(self, Array);
+	ArrayData *ad = cast(self, Array);
 	return ad->items;
 }
 
-var Array_Iter_End(var self) {
+var Array_Iter_End(var self)
+{
 	return ARRAY_ITER_END;
 }
 
-var Array_Iter_Next(var self, var curr) {
-	ArrayData* ad = cast(self, Array);
+var Array_Iter_Next(var self, var curr)
+{
+	ArrayData *ad = cast(self, Array);
 
-	if (curr >= ad->items + size(ad->item_type) * (ad->num_items-1)) {
+	if (curr >= ad->items + size(ad->item_type) * (ad->num_items - 1)) {
 		return ARRAY_ITER_END;
 	} else {
 		return curr + size(ad->item_type);
 	}
 }
 
-local void Array_Swap_Items(var self, var temp, int i0, int i1) {
+local void Array_Swap_Items(var self, var temp, int i0, int i1)
+{
 	assign(temp, at(self, i0));
 	set(self, i0, at(self, i1));
 	set(self, i1, temp);
 }
 
-void Array_Reverse(var self) {
-	ArrayData* ad = cast(self, Array);
+void Array_Reverse(var self)
+{
+	ArrayData *ad = cast(self, Array);
 
 	var temp = allocate(ad->item_type);
 
 	for (int i = 0; i < len(self) / 2; i++) {
-		Array_Swap_Items(self, temp, i, len(self)-1-i);
+		Array_Swap_Items(self, temp, i, len(self) - 1 - i);
 	}
 
 	delete(temp);
 }
 
-local int Array_Sort_Partition(var self, int left, int right, int pivot) {
-	ArrayData* ad = cast(self, Array);
+local int Array_Sort_Partition(var self, int left, int right, int pivot)
+{
+	ArrayData *ad = cast(self, Array);
 
 	var pival = allocate(ad->item_type);
 	var temp = allocate(ad->item_type);
@@ -305,7 +333,8 @@ local int Array_Sort_Partition(var self, int left, int right, int pivot) {
 				Array_Swap_Items(self, temp, i, storei);
 			}
 			storei++;
-		} else {
+		}
+		else {
 			fix = true;
 		}
 	}
@@ -320,24 +349,27 @@ local int Array_Sort_Partition(var self, int left, int right, int pivot) {
 	return storei;
 }
 
-local void Array_Sort_Part(var self, int left, int right) {
+local void Array_Sort_Part(var self, int left, int right)
+{
 	if (left < right) {
 		int pivot = left + (right - left) / 2;
 		int newpivot = Array_Sort_Partition(self, left, right, pivot);
-		Array_Sort_Part(self, left, newpivot-1);
-		Array_Sort_Part(self, newpivot+1, right);
+		Array_Sort_Part(self, left, newpivot - 1);
+		Array_Sort_Part(self, newpivot + 1, right);
 	}
 }
 
-void Array_Sort(var self) {
-	Array_Sort_Part(self, 0, len(self)-1);
+void Array_Sort(var self)
+{
+	Array_Sort_Part(self, 0, len(self) - 1);
 }
 
-int Array_Show(var self, var output, int pos) {
+int Array_Show(var self, var output, int pos)
+{
 	pos = print_to(output, pos, "<'Array' At 0x%p [", self);
 	for (int i = 0; i < len(self); i++) {
 		pos = print_to(output, pos, "%$", at(self, i));
-		if (i < len(self)-1) {
+		if (i < len(self) - 1) {
 			pos = print_to(output, pos, ", ");
 		}
 	}

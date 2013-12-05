@@ -1,7 +1,8 @@
 
 #include "Cello.h"
 
-int main() {
+int main()
+{
 
 	/*
 	 ** Basic method of lambda construction .
@@ -22,7 +23,8 @@ int main() {
 	call(hello_name, $(String, "Bob"));
 
 	/* Higher order functions supported */
-	var names = new(List, $(String, "Dan"), $(String, "Robert"), $(String, "Chris"));
+	var names =
+		new(List, $(String, "Dan"), $(String, "Robert"), $(String, "Chris"));
 	map(names, hello_name);
 	delete(names);
 
@@ -30,7 +32,7 @@ int main() {
 	lambda(add_print, args) {
 		int fst = as_long(cast(at(args, 0), Int));
 		int snd = as_long(cast(at(args, 1), Int));
-		printf("%i + %i = %i\n", fst, snd, fst+snd);
+		printf("%i + %i = %i\n", fst, snd, fst + snd);
 		return None;
 	};
 

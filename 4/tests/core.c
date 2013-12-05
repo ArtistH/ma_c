@@ -9,23 +9,27 @@ data {
 	int test_data;
 } TestTypeData;
 
-local var TestType_New(var self, var_list vl) {
-	TestTypeData* ttd = cast(self, TestType);
+local var TestType_New(var self, var_list vl)
+{
+	TestTypeData *ttd = cast(self, TestType);
 	ttd->test_data = as_long(var_list_get(vl));
 	return self;
 }
 
-local var TestType_Delete(var self) {
+local var TestType_Delete(var self)
+{
 	return self;
 }
 
-local size_t TestType_Size(void) {
+local size_t TestType_Size(void)
+{
 	return sizeof(TestTypeData);
 }
 
-local var TestType_Eq(var self, var obj) {
-	TestTypeData* lhs = cast(self, TestType);
-	TestTypeData* rhs = cast(obj, TestType);
+local var TestType_Eq(var self, var obj)
+{
+	TestTypeData *lhs = cast(self, TestType);
+	TestTypeData *rhs = cast(obj, TestType);
 	if (lhs->test_data == rhs->test_data) {
 		return True;
 	} else {
@@ -33,30 +37,39 @@ local var TestType_Eq(var self, var obj) {
 	}
 }
 
-instance(TestType, New) = { TestType_New, TestType_Delete, TestType_Size };
-instance(TestType, Eq) = { TestType_Eq };
+instance(TestType, New) = {
+TestType_New, TestType_Delete, TestType_Size};
+
+instance(TestType, Eq) = {
+TestType_Eq};
 
 class {
-	var (*return_true)(var);
-} ReturnTrue;
+	var(*return_true) (var);
+}
 
-local var return_true(var self) {
+ReturnTrue;
+
+local var return_true(var self)
+{
 	return type_class_method(self, ReturnTrue, return_true, self);
 }
 
-local var IntParent_ReturnTrue(var self) {
+local var IntParent_ReturnTrue(var self)
+{
 	return True;
 }
 
-instance(IntParent, ReturnTrue) = { IntParent_ReturnTrue };
+instance(IntParent, ReturnTrue) = {
+IntParent_ReturnTrue};
 
 var IntParent = type_data {
 	type_begin(IntParent),
-		type_entry(IntParent, ReturnTrue),
-		type_end(IntParent),
+	type_entry(IntParent, ReturnTrue),
+	type_end(IntParent),
 };
 
-PT_FUNC(test_type) {
+PT_FUNC(test_type)
+{
 	PT_ASSERT(type_of($(Int, 1)) is Int);
 	PT_ASSERT(type_of($(Real, 1.0)) is Real);
 	PT_ASSERT(type_of(True) is Bool);
@@ -66,7 +79,8 @@ PT_FUNC(test_type) {
 	PT_ASSERT(type_of(Type) is Type);
 }
 
-PT_FUNC(test_cast) {
+PT_FUNC(test_cast)
+{
 	var x = $(Int, 1);
 	var y = $(Real, 2.0);
 
@@ -77,7 +91,8 @@ PT_FUNC(test_cast) {
 	PT_ASSERT(y);
 }
 
-PT_FUNC(test_new) {
+PT_FUNC(test_new)
+{
 	var x = new(Int, $(Int, 1));
 
 	PT_ASSERT(x);
@@ -98,7 +113,8 @@ PT_FUNC(test_new) {
 	deallocate(z);
 }
 
-PT_FUNC(test_assign) {
+PT_FUNC(test_assign)
+{
 
 	/* Integers */
 
@@ -139,7 +155,8 @@ PT_FUNC(test_assign) {
 	delete(ys);
 }
 
-PT_FUNC(test_copy) {
+PT_FUNC(test_copy)
+{
 	var x = new(String, $(String, "Hello"));
 	var y = copy(x);
 
@@ -151,11 +168,12 @@ PT_FUNC(test_copy) {
 	delete(y);
 }
 
-PT_FUNC(test_eq) {
-	PT_ASSERT(  eq($(Int, 1), $(Int, 1 )) );
-	PT_ASSERT( neq($(Int, 2), $(Int, 20)) );
-	PT_ASSERT(  eq($(String, "Hello"), $(String, "Hello")) );
-	PT_ASSERT( neq($(String, "Hello"), $(String, "There")) );
+PT_FUNC(test_eq)
+{
+	PT_ASSERT(eq($(Int, 1), $(Int, 1)));
+	PT_ASSERT(neq($(Int, 2), $(Int, 20)));
+	PT_ASSERT(eq($(String, "Hello"), $(String, "Hello")));
+	PT_ASSERT(neq($(String, "Hello"), $(String, "There")));
 
 	var tab1 = new(Table, String, Int);
 	var tab2 = new(Table, String, Int);
@@ -216,8 +234,9 @@ PT_FUNC(test_eq) {
 
 }
 
-PT_FUNC(test_ord) {
-	PT_ASSERT(gt($(Int, 15), $(Int, 3 )));
+PT_FUNC(test_ord)
+{
+	PT_ASSERT(gt($(Int, 15), $(Int, 3)));
 	PT_ASSERT(lt($(Int, 70), $(Int, 81)));
 	PT_ASSERT(ge($(Int, 71), $(Int, 71)));
 	PT_ASSERT(ge($(Int, 78), $(Int, 71)));
@@ -225,7 +244,8 @@ PT_FUNC(test_ord) {
 	PT_ASSERT(le($(Int, 21), $(Int, 32)));
 }
 
-PT_FUNC(test_hash) {
+PT_FUNC(test_hash)
+{
 	long x = hash($(Int, 1));
 	long y = hash($(Int, 123));
 
@@ -233,7 +253,8 @@ PT_FUNC(test_hash) {
 	PT_ASSERT(y is 123);
 }
 
-PT_FUNC(test_collection_list) {
+PT_FUNC(test_collection_list)
+{
 	var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
 	PT_ASSERT(x);
@@ -258,8 +279,11 @@ PT_FUNC(test_collection_list) {
 	delete(x);
 }
 
-PT_FUNC(test_collection_array) {
-	var y = new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
+PT_FUNC(test_collection_array)
+{
+	var y =
+		new(Array, Real, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2),
+			$(Real, 1.1));
 
 	PT_ASSERT(y);
 	PT_ASSERT(len(y) is 4);
@@ -284,7 +308,8 @@ PT_FUNC(test_collection_array) {
 	delete(y);
 }
 
-PT_FUNC(test_collection_list_sort) {
+PT_FUNC(test_collection_list_sort)
+{
 	var z = new(List, $(Real, 5.2), $(Real, 7.1), $(Real, 2.2), $(Real, 1.1));
 
 	sort(z);
@@ -296,7 +321,9 @@ PT_FUNC(test_collection_list_sort) {
 
 	delete(z);
 
-	var w = new(List, $(Int, 135), $(Int, 11), $(Int, 254), $(Int, 123213), $(Int, 22), $(Int, 1));
+	var w =
+		new(List, $(Int, 135), $(Int, 11), $(Int, 254), $(Int, 123213),
+			$(Int, 22), $(Int, 1));
 
 	sort(w);
 
@@ -310,7 +337,8 @@ PT_FUNC(test_collection_list_sort) {
 	delete(w);
 }
 
-PT_FUNC(test_collection_map) {
+PT_FUNC(test_collection_map)
+{
 	var map1 = new(Map);
 	var map2 = new(Map);
 
@@ -336,11 +364,12 @@ PT_FUNC(test_collection_map) {
 	delete(map2);
 }
 
-PT_FUNC(test_iter) {
+PT_FUNC(test_iter)
+{
 
 	var x = new(List, $(Int, 1), $(Real, 2.0), $(String, "Hello"));
 
-	foreach (y in x) {
+	foreach(y in x) {
 		PT_ASSERT(y);
 		PT_ASSERT(type_of(y));
 	}
@@ -349,7 +378,8 @@ PT_FUNC(test_iter) {
 
 }
 
-PT_FUNC(test_push) {
+PT_FUNC(test_push)
+{
 	var x = new(Array, Int);
 	var y = new(List);
 
@@ -358,7 +388,7 @@ PT_FUNC(test_push) {
 		push(y, $(Int, 2));
 	}
 
-	for (int i = 0; i< 1000; i++) {
+	for (int i = 0; i < 1000; i++) {
 		pop(x);
 		pop(y);
 	}
@@ -380,7 +410,8 @@ PT_FUNC(test_push) {
 	delete(y);
 }
 
-PT_FUNC(test_at) {
+PT_FUNC(test_at)
+{
 
 	var fst = $(Int, 1);
 	var snd = $(Real, 2.0);
@@ -400,7 +431,8 @@ PT_FUNC(test_at) {
 
 }
 
-PT_FUNC(test_dict) {
+PT_FUNC(test_dict)
+{
 
 	var prices = new(Table, String, Int);
 	put(prices, $(String, "Apple"), $(Int, 12));
@@ -431,7 +463,8 @@ PT_FUNC(test_dict) {
 
 }
 
-PT_FUNC(test_as_ctype) {
+PT_FUNC(test_as_ctype)
+{
 	PT_ASSERT(as_char($(Char, 'a')) is 'a');
 	PT_ASSERT(as_char($(Char, 'b')) is 'b');
 
@@ -450,7 +483,8 @@ PT_FUNC(test_as_ctype) {
 	PT_ASSERT(as_double($(Int, 7)) is 7.0);
 }
 
-PT_FUNC(test_stream) {
+PT_FUNC(test_stream)
+{
 
 	var f = $(File, NULL);
 	PT_ASSERT(f);
@@ -478,11 +512,12 @@ PT_FUNC(test_stream) {
 	PT_ASSERT(f);
 }
 
-PT_FUNC(test_type_new) {
+PT_FUNC(test_type_new)
+{
 
-	TestType = new(Type, $(String, "TestType"), $(Int, 2),
-				   (var[]){ &TestTypeNew, &TestTypeEq },
-				   (const char* []){ "New", "Eq" });
+	TestType = new(Type, $(String, "TestType"), $(Int, 2), (var[]) {
+				   &TestTypeNew, &TestTypeEq}, (const char *[]) {
+				   "New", "Eq"});
 
 	PT_ASSERT(TestType);
 	PT_ASSERT_STR_EQ(as_str(TestType), "TestType");
@@ -506,7 +541,8 @@ PT_FUNC(test_type_new) {
 
 }
 
-PT_FUNC(test_type_implements) {
+PT_FUNC(test_type_implements)
+{
 	PT_ASSERT(type_implements(Int, New));
 	PT_ASSERT(type_implements(Real, Num));
 	PT_ASSERT(type_implements(String, Eq));
@@ -516,7 +552,8 @@ PT_FUNC(test_type_implements) {
 	PT_ASSERT(type_class(Type, AsStr));
 }
 
-PT_FUNC(test_type_parent) {
+PT_FUNC(test_type_parent)
+{
 	PT_ASSERT(not type_implements(Int, ReturnTrue));
 	PT_ASSERT(not type_implements(Real, ReturnTrue));
 	PT_ASSERT(type_implements(IntParent, ReturnTrue));
@@ -532,7 +569,8 @@ PT_FUNC(test_type_parent) {
 	PT_ASSERT(return_true(Int));
 }
 
-PT_FUNC(test_show) {
+PT_FUNC(test_show)
+{
 	var out = new(String, $(String, ""));
 
 	print_to(out, 0, "This is an %s %i %i",
@@ -543,7 +581,8 @@ PT_FUNC(test_show) {
 	delete(out);
 }
 
-PT_FUNC(test_look) {
+PT_FUNC(test_look)
+{
 	var x = $(Int, 0);
 	var y = $(Int, 0);
 	var z = $(Int, 0);
@@ -557,14 +596,18 @@ PT_FUNC(test_look) {
 	PT_ASSERT(eq(w, $(Int, 0)));
 }
 
-PT_FUNC(test_module) {
+PT_FUNC(test_module)
+{
 
 #ifdef _WIN32
 	with(python in module("python27.dll")) {
 
-		const char* (*Py_GetVersion)(void) = get(python, $(String, "Py_GetVersion"));
-		const char* (*Py_GetPlatform)(void) = get(python, $(String, "Py_GetPlatform"));
-		const char* (*Py_GetCopyright)(void) = get(python, $(String, "Py_GetCopyright"));
+		const char *(*Py_GetVersion) (void) =
+			get(python, $(String, "Py_GetVersion"));
+		const char *(*Py_GetPlatform) (void) =
+			get(python, $(String, "Py_GetPlatform"));
+		const char *(*Py_GetCopyright) (void) =
+			get(python, $(String, "Py_GetCopyright"));
 
 		//println("");
 		//println("Python Version is '%s'", $(String, (char*)Py_GetVersion()));
@@ -588,7 +631,8 @@ PT_FUNC(test_module) {
 
 }
 
-PT_SUITE(suite_core) {
+PT_SUITE(suite_core)
+{
 
 	PT_REG(test_type);
 	PT_REG(test_cast);

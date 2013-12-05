@@ -2,15 +2,14 @@
 #define CelloModule_h
 
 #ifdef _WIN32
-  #undef data
-  #undef in
-  #include <windows.h>
-  #define data typedef struct
-  #define in ,
+#undef data
+#undef in
+#include <windows.h>
+#define data typedef struct
+#define in ,
 #else
-  #include <dlfcn.h>
+#include <dlfcn.h>
 #endif
-
 
 #include "Prelude.h"
 #include "Function.h"
@@ -19,15 +18,15 @@
 global var Module;
 
 data {
-  var type;
-  char* name;
-  
-  #ifdef _WIN32
-    HINSTANCE lib;
-  #else
-    void* lib;
-  #endif
-  
+	var type;
+	char *name;
+
+#ifdef _WIN32
+	HINSTANCE lib;
+#else
+	void *lib;
+#endif
+
 } ModuleData;
 
 #define module(name) $(Module, name, NULL)
@@ -46,11 +45,22 @@ var Module_Get(var self, var k);
 
 var Module_Call(var self, var args);
 
-instance(Module, New) = { Module_New, Module_Delete, Module_Size };
-instance(Module, Copy) = { Module_Copy };
-instance(Module, Assign) = { Module_Assign };
-instance(Module, With) = { Module_Enter, Module_Exit };
-instance(Module, Dict) = { Module_Get, NULL };
-instance(Module, Call) = { Module_Call };
+instance(Module, New) = {
+Module_New, Module_Delete, Module_Size};
+
+instance(Module, Copy) = {
+Module_Copy};
+
+instance(Module, Assign) = {
+Module_Assign};
+
+instance(Module, With) = {
+Module_Enter, Module_Exit};
+
+instance(Module, Dict) = {
+Module_Get, NULL};
+
+instance(Module, Call) = {
+Module_Call};
 
 #endif

@@ -2,24 +2,34 @@
 #include "ptest.h"
 #include "Cello.h"
 
-PT_FUNC(test_stack_function) {
+PT_FUNC(test_stack_function)
+{
 
 #if defined(__clang__)
-	var (^empty_function)(var) = ^ var (var args) { return None; };
+	var(^empty_function) (var) = ^var(var args) {
+		return None;
+	};
 #else
-	var empty_function(var args) { return None; }
+	var empty_function(var args) {
+		return None;
+	}
 #endif
 
 	var f = $(Function, empty_function);
 	PT_ASSERT(f);
 }
 
-PT_FUNC(test_heap_function) {
+PT_FUNC(test_heap_function)
+{
 
 #if defined(__clang__)
-	var (^empty_function)(var) = ^ var (var args) { return None; };
+	var(^empty_function) (var) = ^var(var args) {
+		return None;
+	};
 #else
-	var empty_function(var args) { return None; }
+	var empty_function(var args) {
+		return None;
+	}
 #endif
 
 	var f = new(Function, $(Function, empty_function));
@@ -27,55 +37,78 @@ PT_FUNC(test_heap_function) {
 	delete(f);
 }
 
-PT_FUNC(test_function_assign) {
-  
+PT_FUNC(test_function_assign)
+{
+
 #if defined(__clang__)
-	var (^empty_function)(var) = ^ var (var args) { return None; };
-	var (^empty_function2)(var) = ^ var (var args) { return Some; };
+	var(^empty_function) (var) = ^var(var args) {
+		return None;
+	};
+	var(^empty_function2) (var) = ^var(var args) {
+		return Some;
+	};
 #else
-	var empty_function(var args) { return None; }
-	var empty_function2(var args) { return Some; }
+	var empty_function(var args) {
+		return None;
+	}
+	var empty_function2(var args) {
+		return Some;
+	}
 #endif
 
 	var f1 = new(Function, $(Function, empty_function));
 	var f2 = new(Function, $(Function, empty_function2));
 
-	PT_ASSERT(((FunctionData *)f1)->func isnt ((FunctionData *)f2)->func);
+	PT_ASSERT(((FunctionData *) f1)->func isnt((FunctionData *) f2)->func);
 
 	assign(f1, f2);
 
-	PT_ASSERT(((FunctionData *)f1)->func == ((FunctionData *)f2)->func);
+	PT_ASSERT(((FunctionData *) f1)->func == ((FunctionData *) f2)->func);
 
 	delete(f1);
 	delete(f2);
 }
 
-PT_FUNC(test_function_copy) {
+PT_FUNC(test_function_copy)
+{
 
 #if defined(__clang__)
-	var (^empty_function)(var) = ^ var (var args) { return None; };
+	var(^empty_function) (var) = ^var(var args) {
+		return None;
+	};
 #else
-	var empty_function(var args) { return None; };
+	var empty_function(var args) {
+		return None;
+	};
 #endif
 
 	var f1 = new(Function, $(Function, empty_function));
 	var f2 = copy(f1);
 
-	PT_ASSERT(((FunctionData *)f1)->func is ((FunctionData *)f2)->func);
+	PT_ASSERT(((FunctionData *) f1)->func is((FunctionData *) f2)->func);
 
 	delete(f1);
 	delete(f2);
 
 }
 
-PT_FUNC(test_call) {
+PT_FUNC(test_call)
+{
 
 #if defined(__clang__)
-	var (^empty_function)(var) = ^ var (var args) { return None; };
-	var (^empty_function2)(var) = ^ var (var args) { return Some; };
+	var(^empty_function) (var) = ^var(var args) {
+		return None;
+	};
+	var(^empty_function2) (var) = ^var(var args) {
+		return Some;
+	};
 #else
-	var empty_function(var args) { return None; }
-	var empty_function2(var args) { return Some; }
+	var empty_function(var args) {
+		return None;
+	}
+	var empty_function2(var args) {
+		return Some;
+	}
 #endif
 
 	var result1 = call($(Function, empty_function));
@@ -85,11 +118,12 @@ PT_FUNC(test_call) {
 	PT_ASSERT(result2 is Some);
 }
 
-PT_FUNC(test_call_with) {
+PT_FUNC(test_call_with)
+{
 
 #if defined(__clang__)
 
-	var (^asserts_args)(var) = ^ var (var args) {
+	var(^asserts_args) (var) = ^var(var args) {
 		PT_ASSERT(at(args, 0));
 		PT_ASSERT(at(args, 1));
 		return None;
@@ -112,11 +146,12 @@ PT_FUNC(test_call_with) {
 	delete(args);
 }
 
-PT_FUNC(test_call_vl) {
+PT_FUNC(test_call_vl)
+{
 
 #if defined(__clang__)
 
-	var (^asserts_args)(var) = ^ var (var args) {
+	var(^asserts_args) (var) = ^var(var args) {
 		PT_ASSERT(at(args, 0));
 		PT_ASSERT(at(args, 1));
 		return None;
@@ -138,7 +173,8 @@ PT_FUNC(test_call_vl) {
 	PT_ASSERT(result is None);
 }
 
-PT_FUNC(test_lambda) {
+PT_FUNC(test_lambda)
+{
 	var out = new(String, $(String, ""));
 
 	lambda(hello_name, args) {
@@ -149,11 +185,12 @@ PT_FUNC(test_lambda) {
 	};
 
 	call(hello_name, $(String, "Hello Bob!"), out);
-	PT_ASSERT( eq(out, $(String, "Hello Bob!")) );
+	PT_ASSERT(eq(out, $(String, "Hello Bob!")));
 	delete(out);
 }
 
-PT_FUNC(test_lambda_id) {
+PT_FUNC(test_lambda_id)
+{
 	lambda(return_new_int1, args) {
 		return new(Int, $(Int, 1));
 	};
@@ -171,18 +208,20 @@ PT_FUNC(test_lambda_id) {
 	delete(res2);
 }
 
-PT_FUNC(test_lambda_const) {
+PT_FUNC(test_lambda_const)
+{
 	lambda_const(return_some, Some);
 	var res = call(return_some, None);
 	PT_ASSERT(res is Some);
 }
 
-PT_FUNC(test_lambda_compose) {
+PT_FUNC(test_lambda_compose)
+{
 	lambda(return_some, args) {
 		return new(List, Some);
 	};
 
-	lambda (return_arg0, args) {
+	lambda(return_arg0, args) {
 		var fst = at(args, 0);
 		delete(args);
 		return fst;
@@ -193,7 +232,8 @@ PT_FUNC(test_lambda_compose) {
 	PT_ASSERT(res is Some);
 }
 
-PT_FUNC(test_lambda_flip) {
+PT_FUNC(test_lambda_flip)
+{
 	lambda(return_first, args) {
 		return at(args, 0);
 	};
@@ -210,7 +250,8 @@ PT_FUNC(test_lambda_flip) {
 	PT_ASSERT(res2 is arg2);
 }
 
-PT_FUNC(test_lambda_pipe) {
+PT_FUNC(test_lambda_pipe)
+{
 	var total = $(Int, 0);
 
 	lambda(add_one, args) {
@@ -230,12 +271,13 @@ PT_FUNC(test_lambda_pipe) {
 
 	lambda_pipe(add_all, add_one, add_ten, add_hundred);
 
-	var res =  call(add_all, total);
+	var res = call(add_all, total);
 
 	PT_ASSERT(as_long(total) is 111);
 }
 
-PT_FUNC(test_lambda_method_pipe) {
+PT_FUNC(test_lambda_method_pipe)
+{
 	var str = new(String, $(String, ""));
 
 	lambda(cat_fizz, args) {
@@ -262,7 +304,8 @@ PT_FUNC(test_lambda_method_pipe) {
 	delete(str);
 }
 
-PT_FUNC(test_lambda_partial_l) {
+PT_FUNC(test_lambda_partial_l)
+{
 	lambda(add_to_first, args) {
 		add(at(args, 0), at(args, 1));
 		add(at(args, 0), at(args, 2));
@@ -279,7 +322,8 @@ PT_FUNC(test_lambda_partial_l) {
 	PT_ASSERT(as_long(total) is 111);
 }
 
-PT_FUNC(test_lambda_partial_r) {
+PT_FUNC(test_lambda_partial_r)
+{
 	lambda(add_to_last, args) {
 		add(at(args, 3), at(args, 0));
 		add(at(args, 3), at(args, 1));
@@ -296,11 +340,13 @@ PT_FUNC(test_lambda_partial_r) {
 	PT_ASSERT(as_long(total) is 111);
 }
 
-local var return_snd(var fst, var snd) {
+local var return_snd(var fst, var snd)
+{
 	return snd;
 }
 
-PT_FUNC(test_lambda_uncurry) {
+PT_FUNC(test_lambda_uncurry)
+{
 	lambda_uncurry(return_snd_uncurried, return_snd, 2);
 
 	var res = call(return_snd_uncurried, None, Some);
@@ -308,11 +354,13 @@ PT_FUNC(test_lambda_uncurry) {
 	PT_ASSERT(res is Some);
 }
 
-void snd_to_fst(var fst, var snd) {
+void snd_to_fst(var fst, var snd)
+{
 	assign(fst, snd);
 }
 
-PT_FUNC(test_lambda_void_uncurry) {
+PT_FUNC(test_lambda_void_uncurry)
+{
 
 	lambda_void_uncurry(snd_to_fst_uncurried, snd_to_fst, 2);
 
@@ -325,7 +373,8 @@ PT_FUNC(test_lambda_void_uncurry) {
 
 }
 
-PT_FUNC(test_map) {
+PT_FUNC(test_map)
+{
 	lambda(add_one, args) {
 		add(at(args, 0), $(Int, 1));
 		return None;
@@ -342,7 +391,8 @@ PT_FUNC(test_map) {
 	delete(values);
 }
 
-PT_FUNC(test_new_map) {
+PT_FUNC(test_new_map)
+{
 
 	lambda(copy_values, args) {
 		return at(args, 0);
@@ -360,7 +410,8 @@ PT_FUNC(test_new_map) {
 
 }
 
-PT_FUNC(test_new_filter) {
+PT_FUNC(test_new_filter)
+{
 	lambda(only_some, args) {
 		return bool_var(at(args, 0) is Some);
 	};
@@ -374,7 +425,8 @@ PT_FUNC(test_new_filter) {
 	delete(somes);
 }
 
-PT_FUNC(test_new_sum) {
+PT_FUNC(test_new_sum)
+{
 
 	var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
 	var total = new_sum(values);
@@ -386,7 +438,8 @@ PT_FUNC(test_new_sum) {
 
 }
 
-PT_FUNC(test_new_product) {
+PT_FUNC(test_new_product)
+{
 	var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
 	var total = new_product(values);
 
@@ -396,7 +449,8 @@ PT_FUNC(test_new_product) {
 	delete(values);
 }
 
-PT_FUNC(test_new_foldl) {
+PT_FUNC(test_new_foldl)
+{
 
 	lambda(fold_sum, args) {
 		var base = at(args, 0);
@@ -405,7 +459,7 @@ PT_FUNC(test_new_foldl) {
 		return None;
 	};
 
-	var values = new(List, $(Int, 5), $(Int,3), $(Int, 10));
+	var values = new(List, $(Int, 5), $(Int, 3), $(Int, 10));
 	var total = new_foldl(values, fold_sum, $(Int, 0));
 
 	PT_ASSERT(as_long(total) is 18);
@@ -415,7 +469,8 @@ PT_FUNC(test_new_foldl) {
 
 }
 
-PT_FUNC(test_new_foldr) {
+PT_FUNC(test_new_foldr)
+{
 
 	lambda(fold_sum, args) {
 		var base = at(args, 0);
@@ -434,7 +489,8 @@ PT_FUNC(test_new_foldr) {
 
 }
 
-PT_SUITE(suite_functional) {
+PT_SUITE(suite_functional)
+{
 
 	PT_REG(test_stack_function);
 	PT_REG(test_heap_function);

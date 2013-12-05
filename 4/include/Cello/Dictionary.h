@@ -38,13 +38,28 @@ var Dictionary_Iter_Next(var self, var curr);
 
 int Dictionary_Show(var self, var output, int pos);
 
-instance(Dictionary, New) = { Dictionary_New, Dictionary_Delete, Dictionary_Size };
-instance(Dictionary, Assign) = { Dictionary_Assign };
-instance(Dictionary, Copy) = { Dictionary_Copy };
-instance(Dictionary, Eq) = { Dictionary_Eq };
-instance(Dictionary, Collection) = { Dictionary_Len, Dictionary_Clear, Dictionary_Contains, Dictionary_Discard };
-instance(Dictionary, Dict) = { Dictionary_Get, Dictionary_Put };
-instance(Dictionary, Iter) = { Dictionary_Iter_Start, Dictionary_Iter_End, Dictionary_Iter_Next };
-instance(Dictionary, Show) = { Dictionary_Show, NULL };
+instance(Dictionary, New) = {
+Dictionary_New, Dictionary_Delete, Dictionary_Size};
+
+instance(Dictionary, Assign) = {
+Dictionary_Assign};
+
+instance(Dictionary, Copy) = {
+Dictionary_Copy};
+
+instance(Dictionary, Eq) = {
+Dictionary_Eq};
+
+instance(Dictionary, Collection) = {
+Dictionary_Len, Dictionary_Clear, Dictionary_Contains, Dictionary_Discard};
+
+instance(Dictionary, Dict) = {
+Dictionary_Get, Dictionary_Put};
+
+instance(Dictionary, Iter) = {
+Dictionary_Iter_Start, Dictionary_Iter_End, Dictionary_Iter_Next};
+
+instance(Dictionary, Show) = {
+Dictionary_Show, NULL};
 
 #endif

@@ -38,14 +38,28 @@ var Table_Iter_Next(var self, var curr);
 
 int Table_Show(var self, var output, int pos);
 
-instance(Table, New) = { Table_New, Table_Delete, Table_Size };
-instance(Table, Assign) = { Table_Assign };
-instance(Table, Copy) = { Table_Copy };
-instance(Table, Eq) = { Table_Eq };
-instance(Table, Collection) = { Table_Len, Table_Clear, Table_Contains, Table_Discard };
-instance(Table, Dict) = { Table_Get, Table_Put };
-instance(Table, Iter) = { Table_Iter_Start, Table_Iter_End, Table_Iter_Next };
-instance(Table, Show) = { Table_Show, NULL };
+instance(Table, New) = {
+Table_New, Table_Delete, Table_Size};
 
+instance(Table, Assign) = {
+Table_Assign};
+
+instance(Table, Copy) = {
+Table_Copy};
+
+instance(Table, Eq) = {
+Table_Eq};
+
+instance(Table, Collection) = {
+Table_Len, Table_Clear, Table_Contains, Table_Discard};
+
+instance(Table, Dict) = {
+Table_Get, Table_Put};
+
+instance(Table, Iter) = {
+Table_Iter_Start, Table_Iter_End, Table_Iter_Next};
+
+instance(Table, Show) = {
+Table_Show, NULL};
 
 #endif
