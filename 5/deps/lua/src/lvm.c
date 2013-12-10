@@ -164,3 +164,128 @@ void luaV_settable (lua_State *L, const TValue *t, TValue *key, StkId val) {
 	}
 	luaG_runerror(L, "loop in settable");
 }
+
+
+static int call_binTM (lua_State *L, const TValue *p1, const TValue *p2,
+					   StkId res, TMS event) {
+	const TValue *tm = luaT_gettmbyobj(L, p1, event);  /* try first operand */
+	if (ttisnil(tm)) {
+		tm = luaT_gettmbyobj(L, p2, event);  /* try second operand */
+	}
+	if (ttisnil(tm)) {
+		return 0;
+	}
+	callTMres(L, res, tm, p1, p2);
+	return 1;
+}
+
+static const TValue *get_compTM (lua_State *L, Table *mt1, Table *mt2,
+								 TMS event) {
+	const TValue *tm1 = fasttm(L, mt1, event);
+	const TValue *tm2;
+	if (tm1 == NULL) return NULL;  /* no metamethod */
+	if (mt1 == mt2) return tm1;  /* same metatables => same metamethods */
+	tm2 = fasttm(L, mt2, event);
+	if (tm1 == NULL) return NULL;  /* no metamethod */
+	if (luaO_rawequalObj(tm1, tm2))  return tm1;  /* same metamethods? */
+	return NULL;
+}
+
+
+static int call_orderTM (lua_State *L, const TValue *p1, const TValue *p2,
+						 TMS event) {
+	const TValue *tm1 = luaT_gettmbyobj(L, p1, event);
+	const TValue *tm2;
+	if (ttisnil(tm1)) return -1;  /* no metamethod? */
+	tm2 = luaT_gettmbyobj(L, p2, event);
+	if (!luaO_rawequalObj(tm1, tm2))  /* different metamethods? */
+		return -1;
+	callTMres(L, L->top, tm1, p1, p2);
+	return !l_isfalse(L->top);
+}
+
+
+static int l_strcmp (const TString *ls, const TString *rs) {
+	const char *l = getstr(ls);
+	size_t ll = ls->tsv.len;
+	const char *r = getstr(rs);
+	size_t lr = rs->tsv.len;
+	for (;;) {
+		int temp = strcoll(l, r);
+		if (temp != 0) {
+			return temp;
+		} else {  /* strings are equal up to a `\0' */
+			size_t len = strlen(l);  /* index of first `\0' in both strings */
+			if (len == lr) {  /* r is finished? */
+				return (len == ll) ? 0 : 1;
+			} else if (len == ll) {  /* l is finished? */
+				/* l is smaller than r (because r is not finished) */
+				return -1;
+			}
+			/* both strings longer than `len';
+			 * go on comparing (after the `\0') */
+			len++;
+			l += len; ll -= len; r += len; lr -= len;
+		}
+	}
+}
+
+
+int luaV_lessthan (lua_State *L, const TValue *l, const TValue *r) {
+	int res;
+	if (ttype(l) != ttype(r)) {
+		return luaG_ordererror(L, l, r);
+	} else if (ttisnumber(l)) {
+		return luai_numlt(nvalue(l), nvalue(r));
+	} else if (ttisstring(l)) {
+		return l_strcmp(rawtsvalue(l), rawtsvalue(r)) < 0;
+	} else if ((res = call_orderTM(L, l, r, TM_LT)) != -1) {
+		return res;
+	}
+	return luaG_ordererror(L, l, r);
+}
+
+
+static int lessequal (lua_State *L, const TValue *l, const TValue *r) {
+	int res;
+	if (ttype(l) != ttype(r)) {
+		return luaG_ordererror(L, l, r);
+	} else if (ttisnumber(l)) {
+		return luai_numle(nvalue(l), nvalue(r));
+	} else if (ttisstring(l)) {
+		return l_strcmp(rawtsvalue(l), rawtsvalue(r)) <= 0;
+	} else if ((res = call_orderTM(L, l, r, TM_LE)) != -1) {
+		/* first try `le' */
+		return res;
+	} else if ((res = call_orderTM(L, l, r, TM_LT)) != -1) {
+		/* else try `lt' */
+		return !res;
+	}
+	return luaG_ordererror(L, l, r);
+}
+
+
+int luaV_equalval (lua_State *L, const TValue *t1, const TValue *t2) {
+	const TValue *tm;
+	lua_assert(ttype(t1) == ttype(t2));
+	switch (ttype(t1)) {
+	case LUA_TNIL: return 1;
+	case LUA_TNUMBER: return luai_numeq(nvalue(t1), nvalue(t2));
+	case LUA_TBOOLEAN: return bvalue(t1) == bvalue(t2);  /* true must be 1 */
+	case LUA_TLIGHTUSERDATA: return pvalue(t1) == pvalue(t2);
+	case LUA_TUSERDATA: {
+		if (uvalue(t1) == uvalue(t2)) return 1;
+		tm = get_compTM(L, uvalue(t1)->metatable, uvalue(t2)->metatable,TM_EQ);
+		break;  /* will try TM */
+						}
+	case LUA_TTABLE: {
+		if (hvalue(t1) == hvalue(t2)) return 1;
+		tm = get_compTM(L, hvalue(t1)->metatable, hvalue(t2)->metatable,TM_EQ);
+		break;  /* will try TM */
+					 }
+	default: return gcvalue(t1) == gcvalue(t2);
+	}
+	if (tm == NULL) return 0;  /* no TM? */
+	callTMres(L, L->top, tm, t1, t2);  /* call TM */
+	return !l_isfalse(L->top);
+}
